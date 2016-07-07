@@ -1,0 +1,17 @@
+
+*.xcuserstate
+*.xcbkptlist
+*.xcscmblueprint
+*.xcscheme
+*.xccheckout
+*.xcworkspacedata
+*.xcworkspace
+.DS_Store?
+Thumbs.db
+Pods/
+xcuserdata/
+*.ipa
+*.zip
+*.mobileprovision
+*.cer
+report.xml
