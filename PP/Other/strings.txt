@@ -1,0 +1,25 @@
+[[Uncategorized]]
+[BLE Dashboard]
+en = BLE Title
+ja = BLE通信テスト
+comment = comment
+[Weather Dashboard]
+en = Weather Title
+ja = お天気ダッシュボードテスト
+comment = comment
+[Log3D Dashboard]
+en = Log3D Title
+ja = ログ表示テスト(3D地図含む)
+comment = comment
+[SNS Dashboard]
+en = SNS Title
+ja = SNS投稿フォーム作成テスト
+comment = comment
+[Shutter Dashboard]
+en = Shutter Title
+ja = ウオッチからシャッター機能テスト
+comment = comment
+[PositionInfo Dashboard]
+en = PositionInfo Title
+ja = 位置情報/いまここログ機能テスト
+comment = comment
