@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E8A23D2CD2A884AD9938D1D /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74268CB3FBB5037641C48E49 /* libPods-PP.a */; };
+		17289BEA1D3378DF007C93CE /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BE91D3378DF007C93CE /* OpenGLView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		17289BF61D337928007C93CE /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BED1D337928007C93CE /* CC3Foundation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BEF1D337928007C93CE /* CC3GLMatrix.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 17289BF01D337928007C93CE /* CC3Kazmath.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		17289BF91D337928007C93CE /* CC3Math.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BF41D337928007C93CE /* CC3Math.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		17289BFD1D3379A7007C93CE /* UIColor+CC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BFC1D3379A7007C93CE /* UIColor+CC3.m */; };
+		17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17289BFE1D337B5D007C93CE /* OpenGLES.framework */; };
 		263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 263CBC111D2E62B200AEB3A3 /* AppDelegate.m */; };
 		263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263CBC191D2E62B200AEB3A3 /* Assets.xcassets */; };
 		26F4B7CA1D2FAA1A007FD43C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7B51D2FAA1A007FD43C /* Info.plist */; };
@@ -21,10 +27,26 @@
 		26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C51D2FAA1A007FD43C /* PositionViewController.m */; };
 		26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C71D2FAA1A007FD43C /* ViewController.m */; };
 		26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */; };
+		701CB672B089361513939308 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE0A53A4B2967B41E38DE04 /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1FDBF9ADBFF0242ECC3BD87F /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
+		17289BE81D3378DF007C93CE /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
+		17289BE91D3378DF007C93CE /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
+		17289BEC1D337928007C93CE /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Foundation.h; path = 3DMath/CC3Foundation.h; sourceTree = "<group>"; };
+		17289BED1D337928007C93CE /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3Foundation.m; path = 3DMath/CC3Foundation.m; sourceTree = "<group>"; };
+		17289BEE1D337928007C93CE /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3GLMatrix.h; path = 3DMath/CC3GLMatrix.h; sourceTree = "<group>"; };
+		17289BEF1D337928007C93CE /* CC3GLMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3GLMatrix.m; path = 3DMath/CC3GLMatrix.m; sourceTree = "<group>"; };
+		17289BF01D337928007C93CE /* CC3Kazmath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CC3Kazmath.c; path = 3DMath/CC3Kazmath.c; sourceTree = "<group>"; };
+		17289BF11D337928007C93CE /* CC3Kazmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Kazmath.h; path = 3DMath/CC3Kazmath.h; sourceTree = "<group>"; };
+		17289BF21D337928007C93CE /* CC3Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Logging.h; path = 3DMath/CC3Logging.h; sourceTree = "<group>"; };
+		17289BF31D337928007C93CE /* CC3Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Math.h; path = 3DMath/CC3Math.h; sourceTree = "<group>"; };
+		17289BF41D337928007C93CE /* CC3Math.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3Math.m; path = 3DMath/CC3Math.m; sourceTree = "<group>"; };
+		17289BF51D337928007C93CE /* ccTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ccTypes.h; path = 3DMath/ccTypes.h; sourceTree = "<group>"; };
+		17289BFB1D3379A7007C93CE /* UIColor+CC3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+CC3.h"; path = "3DMath/UIColor+CC3.h"; sourceTree = "<group>"; };
+		17289BFC1D3379A7007C93CE /* UIColor+CC3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+CC3.m"; path = "3DMath/UIColor+CC3.m"; sourceTree = "<group>"; };
+		17289BFE1D337B5D007C93CE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		1EE0A53A4B2967B41E38DE04 /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263CBC0A1D2E62B200AEB3A3 /* PP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		263CBC101D2E62B200AEB3A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		263CBC111D2E62B200AEB3A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -46,8 +68,8 @@
 		26F4B7C71D2FAA1A007FD43C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		26F4B7C81D2FAA1A007FD43C /* WeatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherViewController.h; sourceTree = "<group>"; };
 		26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherViewController.m; sourceTree = "<group>"; };
-		74268CB3FBB5037641C48E49 /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CC1F9FA6111801B424D3F3DE /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		289584DAB9CEE24831589A0D /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
+		36995E60473200DDCA9BF15D /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,20 +77,49 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E8A23D2CD2A884AD9938D1D /* libPods-PP.a in Frameworks */,
+				17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */,
+				701CB672B089361513939308 /* libPods-PP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		17289BEB1D3378E5007C93CE /* 3DItems */ = {
+			isa = PBXGroup;
+			children = (
+				17289BE81D3378DF007C93CE /* OpenGLView.h */,
+				17289BE91D3378DF007C93CE /* OpenGLView.m */,
+			);
+			name = 3DItems;
+			sourceTree = "<group>";
+		};
+		17289BFA1D33792E007C93CE /* 3DMath */ = {
+			isa = PBXGroup;
+			children = (
+				17289BEC1D337928007C93CE /* CC3Foundation.h */,
+				17289BED1D337928007C93CE /* CC3Foundation.m */,
+				17289BEE1D337928007C93CE /* CC3GLMatrix.h */,
+				17289BEF1D337928007C93CE /* CC3GLMatrix.m */,
+				17289BF01D337928007C93CE /* CC3Kazmath.c */,
+				17289BF11D337928007C93CE /* CC3Kazmath.h */,
+				17289BF21D337928007C93CE /* CC3Logging.h */,
+				17289BF31D337928007C93CE /* CC3Math.h */,
+				17289BF41D337928007C93CE /* CC3Math.m */,
+				17289BF51D337928007C93CE /* ccTypes.h */,
+				17289BFB1D3379A7007C93CE /* UIColor+CC3.h */,
+				17289BFC1D3379A7007C93CE /* UIColor+CC3.m */,
+			);
+			name = 3DMath;
+			sourceTree = "<group>";
+		};
 		263CBC011D2E62B200AEB3A3 = {
 			isa = PBXGroup;
 			children = (
 				263CBC0C1D2E62B200AEB3A3 /* PP */,
 				263CBC0B1D2E62B200AEB3A3 /* Products */,
-				F58948E420CAC5DE671299B1 /* Pods */,
-				8B23ADD2A9B47E13CB0ABB43 /* Frameworks */,
+				9398F978804A29FB220A87AD /* Pods */,
+				C9F635770A372A9307CC5A0A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,6 +134,8 @@
 		263CBC0C1D2E62B200AEB3A3 /* PP */ = {
 			isa = PBXGroup;
 			children = (
+				17289BFA1D33792E007C93CE /* 3DMath */,
+				17289BEB1D3378E5007C93CE /* 3DItems */,
 				26F4B7B41D2FAA1A007FD43C /* Other */,
 				26F4B7BC1D2FAA1A007FD43C /* Storyboards */,
 				26F4B7BF1D2FAA1A007FD43C /* ViewController */,
@@ -138,21 +191,22 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		8B23ADD2A9B47E13CB0ABB43 /* Frameworks */ = {
+		9398F978804A29FB220A87AD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				74268CB3FBB5037641C48E49 /* libPods-PP.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		F58948E420CAC5DE671299B1 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1FDBF9ADBFF0242ECC3BD87F /* Pods-PP.debug.xcconfig */,
-				CC1F9FA6111801B424D3F3DE /* Pods-PP.release.xcconfig */,
+				289584DAB9CEE24831589A0D /* Pods-PP.debug.xcconfig */,
+				36995E60473200DDCA9BF15D /* Pods-PP.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C9F635770A372A9307CC5A0A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				17289BFE1D337B5D007C93CE /* OpenGLES.framework */,
+				1EE0A53A4B2967B41E38DE04 /* libPods-PP.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,13 +216,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 263CBC211D2E62B200AEB3A3 /* Build configuration list for PBXNativeTarget "PP" */;
 			buildPhases = (
-				56A3B9343DF0A12C7C647657 /* Check Pods Manifest.lock */,
+				80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */,
 				263CBC061D2E62B200AEB3A3 /* Sources */,
 				263CBC071D2E62B200AEB3A3 /* Frameworks */,
 				263CBC081D2E62B200AEB3A3 /* Resources */,
-				07E73AEC7C899F32D9A608E1 /* Embed Pods Frameworks */,
-				2BECDD6FA7614ACF45A46F86 /* Copy Pods Resources */,
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
+				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
+				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,14 +283,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		07E73AEC7C899F32D9A608E1 /* Embed Pods Frameworks */ = {
+		01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,34 +311,34 @@
 			shellPath = /bin/sh;
 			shellScript = "twine generate-all-string-files PP/Other/strings.txt PP/Other/Strings";
 		};
-		2BECDD6FA7614ACF45A46F86 /* Copy Pods Resources */ = {
+		80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		56A3B9343DF0A12C7C647657 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -294,13 +348,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17289BFD1D3379A7007C93CE /* UIColor+CC3.m in Sources */,
 				26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */,
 				26F4B7D11D2FAA1A007FD43C /* MapDetailViewController.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
+				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
+				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,
 				26F4B7CB1D2FAA1A007FD43C /* main.m in Sources */,
 				26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */,
 				26F4B7D01D2FAA1A007FD43C /* BLEViewController.m in Sources */,
 				263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */,
+				17289BEA1D3378DF007C93CE /* OpenGLView.m in Sources */,
+				17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */,
+				17289BF61D337928007C93CE /* CC3Foundation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +465,7 @@
 		};
 		263CBC221D2E62B200AEB3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1FDBF9ADBFF0242ECC3BD87F /* Pods-PP.debug.xcconfig */;
+			baseConfigurationReference = 289584DAB9CEE24831589A0D /* Pods-PP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PP/Other/Info.plist;
@@ -417,7 +477,7 @@
 		};
 		263CBC231D2E62B200AEB3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CC1F9FA6111801B424D3F3DE /* Pods-PP.release.xcconfig */;
+			baseConfigurationReference = 36995E60473200DDCA9BF15D /* Pods-PP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PP/Other/Info.plist;
