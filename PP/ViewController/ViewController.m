@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "DBCameraContainerViewController.h"
+#import "DBCameraView.h"
 
-@interface ViewController ()
+@interface ViewController () <DBCameraViewControllerDelegate>
 
 @end
 
@@ -116,6 +118,7 @@
         case 4:
             //start camera;
             //TODO
+            [self willOpenCamera];
             break;
         case 5:
             [self.navigationController performSegueWithIdentifier:@"toPositionInfoView" sender:self];
@@ -126,6 +129,45 @@
     }
 
     
+}
+
+- (void)willOpenCamera {
+    DBCameraContainerViewController *cameraContainer =
+    [[DBCameraContainerViewController alloc] initWithDelegate:self
+                                          cameraSettingsBlock:
+     ^(DBCameraView *cameraView, DBCameraContainerViewController *container) {
+        [cameraView.photoLibraryButton setHidden:YES];
+         [cameraView.gridButton setHidden:YES];
+         UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRect){ 0, 0, 30, 30 }];
+         [imageView setBackgroundColor:[UIColor redColor]];
+         [imageView setCenter:(CGPoint){ CGRectGetMidX(cameraView.topContainerBar.bounds), CGRectGetMidY(cameraView.topContainerBar.bounds) }];
+         [imageView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+         [cameraView addSubview:imageView];
+    }];
+    
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:cameraContainer];
+    [nav setNavigationBarHidden:YES];
+    
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)dismissCamera:(id)cameraViewController {
+    [cameraViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)camera:(id)cameraViewController didFinishWithImage:(UIImage *)image withMetadata:(NSDictionary *)metadata {
+    [cameraViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        //save with error
+    } else {
+        //save success
+        
+    }
 }
 
 @end
