@@ -113,6 +113,27 @@
             </objects>
             <point key="canvasLocation" x="1042" y="327"/>
         </scene>
+        <!--OpenGL View Controller-->
+        <scene sceneID="6u6-wB-mV6">
+            <objects>
+                <viewController id="vuI-rk-aoX" customClass="OpenGLViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="PVw-PE-rHT"/>
+                        <viewControllerLayoutGuide type="bottom" id="j8g-3f-2f9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ir1-HS-D2B" customClass="OpenGLView">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="glView" destination="Ir1-HS-D2B" id="WaX-SC-1Ge"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mAc-K9-6SP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="125" y="2343"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="SyW-NG-RzY">
             <objects>
@@ -129,6 +150,7 @@
                         <segue destination="2uw-uF-xaG" kind="show" identifier="toPositionInfoView" id="Uzb-n2-VKo"/>
                         <segue destination="G2J-rU-Yv7" kind="show" identifier="toMapDetailView" id="vIl-nL-K4H"/>
                         <segue destination="qNH-df-6Pl" kind="show" identifier="toBLEView" id="Pxn-d6-Wl4"/>
+                        <segue destination="vuI-rk-aoX" kind="show" identifier="toMapView" id="j7w-qq-OWR"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zVy-Kq-ode" userLabel="First Responder" sceneMemberID="firstResponder"/>
