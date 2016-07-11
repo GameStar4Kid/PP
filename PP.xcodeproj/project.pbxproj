@@ -23,6 +23,9 @@
 		17C151861D3394730084CF31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151851D3394730084CF31 /* UIKit.framework */; };
 		263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 263CBC111D2E62B200AEB3A3 /* AppDelegate.m */; };
 		263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263CBC191D2E62B200AEB3A3 /* Assets.xcassets */; };
+		269C13C01D339604004865EA /* BLEHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BB1D339604004865EA /* BLEHelper.m */; };
+		269C13C11D339604004865EA /* LeDiscovery.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BD1D339604004865EA /* LeDiscovery.m */; };
+		269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BF1D339604004865EA /* LeValueAlarmService.m */; };
 		26F4B7CA1D2FAA1A007FD43C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7B51D2FAA1A007FD43C /* Info.plist */; };
 		26F4B7CB1D2FAA1A007FD43C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7B61D2FAA1A007FD43C /* main.m */; };
 		26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7B81D2FAA1A007FD43C /* Localizable.strings */; };
@@ -65,6 +68,12 @@
 		263CBC101D2E62B200AEB3A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		263CBC111D2E62B200AEB3A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		263CBC191D2E62B200AEB3A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		269C13BA1D339604004865EA /* BLEHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEHelper.h; sourceTree = "<group>"; };
+		269C13BB1D339604004865EA /* BLEHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEHelper.m; sourceTree = "<group>"; };
+		269C13BC1D339604004865EA /* LeDiscovery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeDiscovery.h; sourceTree = "<group>"; };
+		269C13BD1D339604004865EA /* LeDiscovery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeDiscovery.m; sourceTree = "<group>"; };
+		269C13BE1D339604004865EA /* LeValueAlarmService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeValueAlarmService.h; sourceTree = "<group>"; };
+		269C13BF1D339604004865EA /* LeValueAlarmService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeValueAlarmService.m; sourceTree = "<group>"; };
 		26F4B7B51D2FAA1A007FD43C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26F4B7B61D2FAA1A007FD43C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		26F4B7B91D2FAA1A007FD43C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -173,6 +182,7 @@
 				17C1517D1D33919A0084CF31 /* 3DData */,
 				17289BFA1D33792E007C93CE /* 3DMath */,
 				17289BEB1D3378E5007C93CE /* 3DItems */,
+				269C13B91D339604004865EA /* BLE */,
 				26F4B7B41D2FAA1A007FD43C /* Other */,
 				26F4B7BC1D2FAA1A007FD43C /* Storyboards */,
 				26F4B7BF1D2FAA1A007FD43C /* ViewController */,
@@ -181,6 +191,19 @@
 				263CBC191D2E62B200AEB3A3 /* Assets.xcassets */,
 			);
 			path = PP;
+			sourceTree = "<group>";
+		};
+		269C13B91D339604004865EA /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				269C13BA1D339604004865EA /* BLEHelper.h */,
+				269C13BB1D339604004865EA /* BLEHelper.m */,
+				269C13BC1D339604004865EA /* LeDiscovery.h */,
+				269C13BD1D339604004865EA /* LeDiscovery.m */,
+				269C13BE1D339604004865EA /* LeValueAlarmService.h */,
+				269C13BF1D339604004865EA /* LeValueAlarmService.m */,
+			);
+			path = BLE;
 			sourceTree = "<group>";
 		};
 		26F4B7B41D2FAA1A007FD43C /* Other */ = {
@@ -259,8 +282,10 @@
 			buildPhases = (
 				80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */,
 				263CBC061D2E62B200AEB3A3 /* Sources */,
-				263CBC071D2E62B200AEB3A3 /* Frameworks */,
 				263CBC081D2E62B200AEB3A3 /* Resources */,
+				07E73AEC7C899F32D9A608E1 /* Embed Pods Frameworks */,
+				2BECDD6FA7614ACF45A46F86 /* Copy Pods Resources */,
+				263CBC071D2E62B200AEB3A3 /* Frameworks */,
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
 				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
@@ -395,8 +420,11 @@
 			files = (
 				17289BFD1D3379A7007C93CE /* UIColor+CC3.m in Sources */,
 				26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */,
+				269C13C01D339604004865EA /* BLEHelper.m in Sources */,
 				26F4B7D11D2FAA1A007FD43C /* MapDetailViewController.m in Sources */,
 				17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */,
+				269C13C11D339604004865EA /* LeDiscovery.m in Sources */,
+				269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
 				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,
