@@ -23,3 +23,23 @@ comment = comment
 en = PositionInfo Title
 ja = 位置情報/いまここログ機能テスト
 comment = comment
+[BLE Title Section 1]
+en = BLE Title Section 1
+ja = ペアリング情報
+comment = comment
+[BLE Title Section 2]
+en = BLE Title Section 2
+ja = 同期状態
+comment = comment
+[BLE.Section1.Title1]
+en = Name
+ja = 機種名
+comment = comment
+[BLE.Section1.Title2]
+en = UUID
+ja = UUID
+comment = comment
+[BLE.Section2.Title1]
+en = Next Sync
+ja = 受信コマンド
+comment = comment

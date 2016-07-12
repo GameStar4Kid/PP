@@ -190,7 +190,7 @@ NSString *kAlarmServiceEnteredForegroundNotification = @"kAlarmServiceEnteredFor
     NSLog(@"didDiscoverCharacteristicsForService");
 	NSArray		*characteristics	= [service characteristics];
 	CBCharacteristic *characteristic;
-    NSLog(@"number of characteristics = %d", characteristics.count);
+    NSLog(@"number of characteristics = %ld", characteristics.count);
 
 	if (peripheral != servicePeripheral) {
 		NSLog(@"Wrong Peripheral.\n");
@@ -240,7 +240,7 @@ NSString *kAlarmServiceEnteredForegroundNotification = @"kAlarmServiceEnteredFor
     unsigned char whole_byte;
     char byte_chars[3] = {'\0','\0','\0'};
     int i = 0;
-    int length = string.length;
+    int length = (int)string.length;
     while (i < length-1) {
         char c = [string characterAtIndex:i++];
         if (c < '0' || (c > '9' && c < 'a') || c > 'f')

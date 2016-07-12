@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BLEViewController : UIViewController
-
+@interface BLEViewController : UITableViewController
+@property(nonatomic,strong) NSMutableArray* dataList;
 @end

@@ -19,5 +19,5 @@
 -(void) start_ble_scan_background;
 -(void) stop_ble_scan_for_foreground;
 -(void) restart_ble_scan:(BOOL)loadViewFlg;
--(void) do_automatic_24H_time_syncing;
+-(void)startUpdateLocationInfo;
 @end

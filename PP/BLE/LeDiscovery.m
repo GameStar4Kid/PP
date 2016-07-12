@@ -362,14 +362,14 @@
 {
     static CBCentralManagerState previousState = -1;
     
-	switch ([centralManager state]) {
+	switch ((int)[centralManager state]) {
 		case CBCentralManagerStatePoweredOff:
 		{
             [self clearDevices];
             [discoveryDelegate discoveryDidRefresh];
             
 			/* Tell user to power ON BT for functionality, but not on first run - the Framework will alert in that instance. */
-            if (previousState != -1) {
+            if ((int)previousState != -1) {
                 [discoveryDelegate discoveryStatePoweredOff];
             }
 			break;

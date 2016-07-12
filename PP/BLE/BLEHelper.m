@@ -13,6 +13,8 @@
 #define AUTOMATIC_TIME_SYNC_PERIOD_SECONDS 86400.0 // 24 hours
 #define ALLOWED_24H_SYNC_AFTER_TIME  300 // 5 minutes
 #define ALLOWED_24H_SYNC_BEFORE_TIME 120 // 2 minutes
+#define K472_DEVICE_NAME_FIRST_4_CHARS @"S830"
+#define K474_DEVICE_NAME_FIRST_4_CHARS @"S810"
 typedef enum WATCH_MODEL
 {
     MODEL_S830 = 0,
@@ -21,7 +23,7 @@ typedef enum WATCH_MODEL
 } E_WATCH_MODEL ;
 #define BLE_SCAN_TIME_OUT_SECONDS 30.0
 #define BLE_SCAN_TIME_OUT_SECONDS_AUTOMATIC_TIME_SYNC 600.0
-@interface BLEHelper()<LeValueAlarmProtocol>
+@interface BLEHelper()<LeValueAlarmProtocol,CLLocationManagerDelegate,LeDiscoveryDelegate>
 {
     LeDiscovery* my_BLE_discovery;
     uint8_t current_sync_type ;
@@ -53,6 +55,7 @@ typedef enum WATCH_MODEL
 }
 @property (nonatomic, assign) int WatchModel_24H_Sync ;
 @property (nonatomic, strong) CLLocation *m_currentLocation;
+@property (nonatomic , strong) CLLocationManager *locationManager;
 @end
 __strong static BLEHelper* _sharedInstance = nil;
 @implementation BLEHelper
@@ -66,6 +69,17 @@ __strong static BLEHelper* _sharedInstance = nil;
         }
     }
     return _sharedInstance;
+}
+- (id)init
+{
+    if(self=[super init])
+    {
+        my_BLE_discovery = [[LeDiscovery alloc] init];
+        [my_BLE_discovery setDiscoveryDelegate:self];
+        [my_BLE_discovery setPeripheralDelegate:self];
+        _connectedServices = [NSMutableArray new];
+    }
+    return self;
 }
 -(void) start_ble_scan_background
 {
@@ -216,33 +230,6 @@ __strong static BLEHelper* _sharedInstance = nil;
     [self stop_timeout_timer];
 }
 
-- (void) discoveryServiceDisconnected
-{
-    NSLog(@"----- discoveryServiceDisconnected -----");
-    [timeout_timer invalidate];
-    timeout_timer = nil;
-    if(current_sync_type == SYNC_TYPE_MANUAL && syncing_in_progress == TRUE )
-    {
-        //[self close_progress_dialog];
-    }
-    if( communication_stopped == FALSE && sync_done == FALSE )
-    {
-        NSLog(@"ERROR: unexpected disconect from watch");
-        
-        if(current_sync_type == SYNC_TYPE_AUTO )
-        {
-            [self skip_and_delay_to_next_automatic_sync];
-        }
-        
-        if(current_sync_type == SYNC_TYPE_MANUAL )
-        {
-//            [self BLE_communication_error:@"ERROR: unexpected disconect from watch"];
-        }
-    }
-    self.WatchModel_24H_Sync = MODEL_MAX;
-   	syncing_in_progress = FALSE;	
-    
-}
 - (void) Check_Next_Sync_Time
 {
     if( syncing_in_progress == FALSE )
@@ -279,7 +266,7 @@ __strong static BLEHelper* _sharedInstance = nil;
 {
     NSLog(@"WatchMenuTableController check_and_set_a_timer_for_next_sync");
     
-    NSString* device_name = [[NSUserDefaults standardUserDefaults] stringForKey:@"last_used_model_name"];
+//    NSString* device_name = [[NSUserDefaults standardUserDefaults] stringForKey:@"last_used_model_name"];
     UIApplicationState applicationState = [[UIApplication sharedApplication] applicationState];
     if(applicationState == UIApplicationStateBackground)
     {
@@ -304,79 +291,25 @@ __strong static BLEHelper* _sharedInstance = nil;
     }
     [self check_auto_24H_sync_time:watch_model];
 }
--(bool) check_auto_24H_sync_time: (int)Target_model
+- (LeValueAlarmService*) serviceForPeripheral:(CBPeripheral *)peripheral
 {
-    NSLog(@"----- check_auto_24H_sync_time -----");
-    bool result = false;
-    //TODO
-    NSDate* last_date = [NSDate date];
-    NSDate* next_date = [NSDate date];
-    
-    //TODO
-    E_WATCH_MODEL my_watch_model = MODEL_S830;
-    E_WATCH_MODEL watch_model;
-    NSLog(@"1.----- check_auto_24H_sync_time -----");
-    if(Target_model != my_watch_model)
-    {
-        watch_model = Target_model ;
-        //TODO
-        last_date = [NSDate date];
-        next_date = [NSDate date];
-    }
-    //value_of_time_sync_24H = [setting Get_24H_Sync_Value:watch_model ];
-    //TODO
-    BOOL value_of_time_sync_24H =true;
-    if(last_date==nil)
-    {
-        NSLog(@"----- Skip.check_auto_24H_sync_time -----");
-        return false ;
-    }
-    
-    if(value_of_time_sync_24H == TRUE)
-    {
-        NSDate* current_date = [NSDate date];
-        
-        NSLog(@"last_time_sync_date = %@", last_date);
-        NSLog(@"current_date        = %@", current_date);
-        NSLog(@"next_date           = %@", next_date);
-        NSTimeInterval last_secs = [current_date timeIntervalSinceDate:last_date];
-        
-        int i_last_secs = (int)last_secs;
-        NSLog(@"----- 1.i_last_secs = %d sec=====",i_last_secs);
-        if(i_last_secs <= 0)
-        {
-            return false;
-        }
-        
-        int i_secs_work = i_last_secs / (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
-        int i_secs_mod  = i_last_secs % (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
-        NSLog(@"----- 2.i_last_secs / AUTOMATIC_TIME_SYNC_PERIOD_SECONDS = %d -----",i_secs_work);
-        NSLog(@"----- 2.i_last_secs MOD AUTOMATIC_TIME_SYNC_PERIOD_SECONDS = %d sec-----",i_secs_mod);
-        int sync_before_time = (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
-        sync_before_time = sync_before_time - ALLOWED_24H_SYNC_BEFORE_TIME ;
-        
-        if(i_secs_work == 0)
-        {
-            if(i_secs_mod >= sync_before_time)
-            {
-                NSLog(@"---- (TRUE)current time > ALLOWED_24H_SYNC_BEFORE_TIME ----");
-                result = true;
-            }
-        }
-        else
-        {
-            if( (i_secs_mod >= sync_before_time) ||
-               (i_secs_mod <= ALLOWED_24H_SYNC_AFTER_TIME) )
-            {
-                NSLog(@"---- (TRUE)ALLOWED_24H_SYNC_BEFORE_TIME < current time < ALLOWED_24H_SYNC_AFTER_TIME ----");
-                result = true;
-            }
+    for (LeValueAlarmService *service in _connectedServices) {
+        if ( [[service peripheral] isEqual:peripheral] ) {
+            return service;
         }
     }
     
-    return result;
+    return nil;
 }
 #pragma mark LeValueAlarmProtocol
+- (void) BLEService:(LeValueAlarmService*)service didSoundAlarmOfType:(AlarmType)alarm
+{
+    
+}
+- (void) BLEServiceDidStopAlarm:(LeValueAlarmService*)service
+{
+    
+}
 /** Peripheral connected or disconnected */
 - (void) BLEServiceDidChangeStatus:(LeValueAlarmService*)service
 {
@@ -409,7 +342,7 @@ __strong static BLEHelper* _sharedInstance = nil;
     unsigned char whole_byte;
     char byte_chars[3] = {'\0','\0','\0'};
     int i = 0;
-    int length = string.length;
+    int length = (int)string.length;
     while (i < length-1) {
         char c = [string characterAtIndex:i++];
         if (c < '0' || (c > '9' && c < 'a') || c > 'f')
@@ -608,5 +541,366 @@ __strong static BLEHelper* _sharedInstance = nil;
     NSLog(@"_____ start ble_ready_timeout_timer Timer _____");
    	ble_ready_timeout_timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(ble_scan_time_out_check) userInfo:nil repeats:NO];
     
+}
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    if (self.m_currentLocation == nil)
+    {
+        self.m_currentLocation = [(CLLocation *)[locations lastObject] copy];
+        
+        
+        NSLog(@"didUpdateToLocation: %@", self.m_currentLocation);
+        
+        NSLog(@"current longitude = %@",[NSString stringWithFormat:@"%.8f", self.m_currentLocation.coordinate.longitude]);
+        NSLog(@"current latitude = %@",[NSString stringWithFormat:@"%.8f", self.m_currentLocation.coordinate.latitude]);
+        
+       	[_locationManager stopUpdatingLocation];
+       	_locationManager.delegate = nil;
+       	_locationManager = nil;
+        NSLog(@"[locationManager stopUpdatingLocation]");
+        
+        if( _currentlyDisplayingService != nil )
+        {
+            NSLog(@"watch connected ---> start_watch_app_synchronization ");
+            
+            /* ----- 2016.02.05 debug -----*/
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+            [self start_watch_app_synchronization];
+            //			[self performSelector:@selector(start_watch_app_synchronization) withObject:nil afterDelay:5.0];
+            /* ----- 2016.02.05 debug -----*/
+        }
+        else
+        {
+            NSLog(@"watch not connected yet ");
+        }
+    }
+}
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    NSLog(@"Error while getting core location : %@",[error localizedFailureReason]);
+    if ([error code] == kCLErrorDenied) {
+        //you had denied
+    }
+    [manager stopUpdatingLocation];
+}
+-(void)startUpdateLocationInfo
+{
+    
+    NSLog( @"-----[startUpdateLocationInfo]-----");
+    self.m_currentLocation = nil;
+    
+    GPS_Failed = FALSE;
+    
+    if(_locationManager==nil)
+    {
+        _locationManager = [[CLLocationManager alloc] init];
+    }
+    
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [_locationManager requestWhenInUseAuthorization];
+    }
+    
+    [_locationManager startUpdatingLocation];
+    
+}
+#pragma mark LeDiscoveryDelegate
+- (void) discoveryStatePoweredOff
+{
+    NSLog(@"WatchMenuTableController discoveryStatePoweredOff");
+    bluetooth_state_enable = FALSE;
+    
+}
+
+- (void) discoveryStatePoweredOn
+{
+    NSLog(@"WatchMenuTableController discoveryStatePoweredOn");
+    
+    bluetooth_state_enable = TRUE;
+    if(my_BLE_discovery.ResdtoreState==false)
+    {
+        NSLog(@"----- Restart BLE scan -----");
+        [self restart_ble_scan:FALSE];
+    }
+}
+- (void) discoveryServiceDisconnected
+{
+    NSLog(@"----- discoveryServiceDisconnected -----");
+    [timeout_timer invalidate];
+    timeout_timer = nil;
+    if(current_sync_type == SYNC_TYPE_MANUAL && syncing_in_progress == TRUE )
+    {
+        //[self close_progress_dialog];
+    }
+    if( communication_stopped == FALSE && sync_done == FALSE )
+    {
+        NSLog(@"ERROR: unexpected disconect from watch");
+        
+        if(current_sync_type == SYNC_TYPE_AUTO )
+        {
+            [self skip_and_delay_to_next_automatic_sync];
+        }
+        
+        if(current_sync_type == SYNC_TYPE_MANUAL )
+        {
+            //            [self BLE_communication_error:@"ERROR: unexpected disconect from watch"];
+        }
+    }
+    self.WatchModel_24H_Sync = MODEL_MAX;
+   	syncing_in_progress = FALSE;
+    
+}
+- (bool) check_auto_24H_sync_time
+{
+    return true;
+}
+-(bool) check_auto_24H_sync_time: (int)Target_model
+{
+    NSLog(@"----- check_auto_24H_sync_time -----");
+    bool result = false;
+    //TODO
+    NSDate* last_date = [NSDate date];
+    NSDate* next_date = [NSDate date];
+    
+    //TODO
+    E_WATCH_MODEL my_watch_model = MODEL_S830;
+    E_WATCH_MODEL watch_model;
+    NSLog(@"1.----- check_auto_24H_sync_time -----");
+    if(Target_model != my_watch_model)
+    {
+        watch_model = Target_model ;
+        //TODO
+        last_date = [NSDate date];
+        next_date = [NSDate date];
+    }
+    //value_of_time_sync_24H = [setting Get_24H_Sync_Value:watch_model ];
+    //TODO
+    BOOL value_of_time_sync_24H =true;
+    if(last_date==nil)
+    {
+        NSLog(@"----- Skip.check_auto_24H_sync_time -----");
+        return false ;
+    }
+    
+    if(value_of_time_sync_24H == TRUE)
+    {
+        NSDate* current_date = [NSDate date];
+        
+        NSLog(@"last_time_sync_date = %@", last_date);
+        NSLog(@"current_date        = %@", current_date);
+        NSLog(@"next_date           = %@", next_date);
+        NSTimeInterval last_secs = [current_date timeIntervalSinceDate:last_date];
+        
+        int i_last_secs = (int)last_secs;
+        NSLog(@"----- 1.i_last_secs = %d sec=====",i_last_secs);
+        if(i_last_secs <= 0)
+        {
+            return false;
+        }
+        
+        int i_secs_work = i_last_secs / (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
+        int i_secs_mod  = i_last_secs % (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
+        NSLog(@"----- 2.i_last_secs / AUTOMATIC_TIME_SYNC_PERIOD_SECONDS = %d -----",i_secs_work);
+        NSLog(@"----- 2.i_last_secs MOD AUTOMATIC_TIME_SYNC_PERIOD_SECONDS = %d sec-----",i_secs_mod);
+        int sync_before_time = (int)AUTOMATIC_TIME_SYNC_PERIOD_SECONDS ;
+        sync_before_time = sync_before_time - ALLOWED_24H_SYNC_BEFORE_TIME ;
+        
+        if(i_secs_work == 0)
+        {
+            if(i_secs_mod >= sync_before_time)
+            {
+                NSLog(@"---- (TRUE)current time > ALLOWED_24H_SYNC_BEFORE_TIME ----");
+                result = true;
+            }
+        }
+        else
+        {
+            if( (i_secs_mod >= sync_before_time) ||
+               (i_secs_mod <= ALLOWED_24H_SYNC_AFTER_TIME) )
+            {
+                NSLog(@"---- (TRUE)ALLOWED_24H_SYNC_BEFORE_TIME < current time < ALLOWED_24H_SYNC_AFTER_TIME ----");
+                result = true;
+            }
+        }
+    }
+    
+    return result;
+}
+- (void) discoveryDidRefresh
+{
+    NSLog(@"discoveryDidRefresh");
+    
+    if(my_BLE_discovery.ResdtoreState)
+    {
+        current_sync_type = SYNC_TYPE_AUTO ;
+    }
+    
+    //	CBPeripheral	*peripheral;
+    NSArray			*devices;
+    devices = [my_BLE_discovery foundPeripherals];
+    
+    NSLog( @"Device Count = %ld", devices.count);
+    
+    
+    //TODO
+    E_WATCH_MODEL watch_model = MODEL_S830;
+    
+    if( devices.count > 0 && _currentlyDisplayingService == nil )
+    {
+        for( CBPeripheral* peripheral in devices )
+        {
+            //peripheral = (CBPeripheral*)[devices objectAtIndex:0];
+            NSLog( @"Device UUID = %@", peripheral.identifier.UUIDString );
+            NSLog( @"Device name = %@", peripheral.name);
+            
+            //TODO
+//            if(nil != [user_rejected_device_UUIDs_dictionary valueForKey:peripheral.identifier.UUIDString])
+//            {
+//                NSLog(@"This device UUID has been rejected by user..skip it..");
+//                continue;
+//            }
+            
+            NSString* first_4_chars_of_found_device_name = [peripheral.name substringToIndex:4];
+            NSString* first_4_chars_of_targeted_model_name = K472_DEVICE_NAME_FIRST_4_CHARS;
+//            NSString* first_4_chars_of_targeted_model_name1 = K474_DEVICE_NAME_FIRST_4_CHARS;
+            
+//            if( [app_controller.my_watch_model_name isEqualToString:@"K474"] )
+//            {
+                first_4_chars_of_targeted_model_name = K472_DEVICE_NAME_FIRST_4_CHARS;
+//            }
+            
+            BOOL this_is_current_targeted_watch_model = [first_4_chars_of_found_device_name isEqualToString:first_4_chars_of_targeted_model_name];  // アプリで選択中の機種の機種名を比較した結果
+//            BOOL this_is_current_targeted_watch_model1 = [first_4_chars_of_found_device_name isEqualToString:first_4_chars_of_targeted_model_name1];
+            
+            BOOL this_is_targeted_auto_sync_device_UUID = TRUE;
+            BOOL this_is_user_selected_device_UUID = FALSE;
+            
+            if(current_sync_type == SYNC_TYPE_AUTO)
+            {
+                NSLog(@"This is an auto synchronization..checking for last_time_sync_24H_enabled_device_UUID");
+                // 検出した時計の機種を取得する
+//                watch_model = [ setting Check_Device_Name:first_4_chars_of_found_device_name ] ;
+                //TODO
+                watch_model = MODEL_S830;
+                if(watch_model == MODEL_MAX)
+                {
+                    continue;
+                }
+                
+                
+                NSLog(@"===== 2.check_auto_24H_sync_time =====");
+                if([self check_auto_24H_sync_time:watch_model] == true)
+                {
+                    // 前回同期した時計のUUIDを取得
+//                    NSString* last_device_UUID = [ setting Get_last_24H_Sync_UUID:watch_model ] ;
+                    //TODO
+                    NSString* last_device_UUID = @"";
+                    // 検出したデバイスとUUIDを比較した結果をセットする
+                    this_is_targeted_auto_sync_device_UUID = [peripheral.identifier.UUIDString isEqualToString:last_device_UUID];
+                    
+                    this_is_current_targeted_watch_model = FALSE;
+                    
+                    // Check Device name and UUID
+                    //                    if ( this_is_current_targeted_watch_model && this_is_targeted_auto_sync_device_UUID )
+                    if ( this_is_targeted_auto_sync_device_UUID )
+                    {
+                        // 24時間時刻同期では前回同期したデバイスと同じUUIDであればモデルも同じはずなので
+                        // 機種名のチェックをTRUEにする
+                        this_is_current_targeted_watch_model = TRUE ;
+                        // Start Location Data
+                        NSLog( @"discoveryDidRefresh / startUpdateLocationInfo");
+                        [self startUpdateLocationInfo];
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    NSLog(@"----- 1.else restart ble scan -----");
+                    [self stop_ble_scan];
+                    [self restart_ble_scan:TRUE];
+                    return;
+                }
+            }
+            else
+            {
+                NSLog(@"This is an synchronization..checking for last_time_sync_24H_enabled_device_UUID");
+                
+                NSLog(@"----- watch_model = %d",watch_model);
+//                NSString* user_selected_device_UUID = [ setting Get_last_24H_Sync_UUID:watch_model ] ;
+                //FIXME
+                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
+                NSLog(@"user_selected_device_UUID = %@", user_selected_device_UUID);
+                
+                if( !user_selected_device_UUID )
+                {
+                    NSLog(@"This is the first ---- device has been connected with Prospex app..");
+                    this_is_user_selected_device_UUID = TRUE;
+                    //TODO
+//                    [ setting Set_24H_Sync_UUID:watch_model :peripheral.identifier.UUIDString];
+                }
+                else
+                {
+                    this_is_user_selected_device_UUID = [peripheral.identifier.UUIDString isEqualToString:user_selected_device_UUID];
+                    
+                    if((this_is_current_targeted_watch_model== TRUE) && ( this_is_user_selected_device_UUID == FALSE ))
+                    {
+                        [self stop_ble_scan];
+                        NSLog(@"--> Show new watch confirm dialog");
+                        current_considering_peripheral = peripheral;
+                        
+                        return;
+                    }
+                    else
+                    {
+                        NSLog(@"This last user selected device UUID..check and do syncing with it..");
+                        
+                    }
+                    
+                }
+            }
+            
+            // ===== UUIDや同期時刻のチェック後の接続するかどうかを判断する処理 =====
+            if ( this_is_current_targeted_watch_model && this_is_targeted_auto_sync_device_UUID )
+            {
+                if ( [peripheral state] != CBPeripheralStateConnected ) {
+                    NSLog(@"This is currently targeted watch model --> Connect to device");
+                    [self stop_ble_scan];
+                    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+                    [my_BLE_discovery connectPeripheral:peripheral];
+                    // 接続したデバイスの機種を保持する
+                    self.WatchModel_24H_Sync = watch_model ;
+                    current_watch_device_UUID = peripheral.identifier.UUIDString;
+                }
+                else {
+                    NSLog(@"WatchMenuTableController set currentlyDisplayingService");
+                    _currentlyDisplayingService = [self serviceForPeripheral:peripheral];
+                }
+                
+                return ;
+            }
+            {
+                NSLog(@"This device is not currently targeted device");
+            }
+        }
+        
+        if(current_sync_type == SYNC_TYPE_AUTO)
+        {
+            NSLog(@"----- 2. restart ble scan -----");
+            [self stop_ble_scan];
+            [self restart_ble_scan:TRUE];
+            
+        }
+        
+    }
+    else
+    {
+        NSLog(@"There is no device");
+    }
 }
 @end

@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "DBCameraContainerViewController.h"
 #import "DBCameraView.h"
-
+#import "BLEHelper.h"
 @interface ViewController () <DBCameraViewControllerDelegate>
 
 @end
@@ -24,6 +24,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [[BLEHelper sharedInstance] startUpdateLocationInfo];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -29,7 +29,7 @@
 		269C13C01D339604004865EA /* BLEHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BB1D339604004865EA /* BLEHelper.m */; };
 		269C13C11D339604004865EA /* LeDiscovery.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BD1D339604004865EA /* LeDiscovery.m */; };
 		269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BF1D339604004865EA /* LeValueAlarmService.m */; };
-		26F4B7CA1D2FAA1A007FD43C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7B51D2FAA1A007FD43C /* Info.plist */; };
+		26E555011D35490400B1BE52 /* BLEItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E555001D35490400B1BE52 /* BLEItem.m */; };
 		26F4B7CB1D2FAA1A007FD43C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7B61D2FAA1A007FD43C /* main.m */; };
 		26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7B81D2FAA1A007FD43C /* Localizable.strings */; };
 		26F4B7CD1D2FAA1A007FD43C /* strings.txt in Resources */ = {isa = PBXBuildFile; fileRef = 26F4B7BB1D2FAA1A007FD43C /* strings.txt */; };
@@ -81,6 +81,8 @@
 		269C13BD1D339604004865EA /* LeDiscovery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeDiscovery.m; sourceTree = "<group>"; };
 		269C13BE1D339604004865EA /* LeValueAlarmService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeValueAlarmService.h; sourceTree = "<group>"; };
 		269C13BF1D339604004865EA /* LeValueAlarmService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeValueAlarmService.m; sourceTree = "<group>"; };
+		26E554FF1D35490400B1BE52 /* BLEItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEItem.h; sourceTree = "<group>"; };
+		26E555001D35490400B1BE52 /* BLEItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEItem.m; sourceTree = "<group>"; };
 		26F4B7B51D2FAA1A007FD43C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26F4B7B61D2FAA1A007FD43C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		26F4B7B91D2FAA1A007FD43C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -213,6 +215,8 @@
 				269C13BD1D339604004865EA /* LeDiscovery.m */,
 				269C13BE1D339604004865EA /* LeValueAlarmService.h */,
 				269C13BF1D339604004865EA /* LeValueAlarmService.m */,
+				26E554FF1D35490400B1BE52 /* BLEItem.h */,
+				26E555001D35490400B1BE52 /* BLEItem.m */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -348,7 +352,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26F4B7CA1D2FAA1A007FD43C /* Info.plist in Resources */,
 				17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */,
 				26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */,
 				17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */,
@@ -446,6 +449,7 @@
 				263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */,
 				17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */,
 				17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */,
+				26E555011D35490400B1BE52 /* BLEItem.m in Sources */,
 				17289BF61D337928007C93CE /* CC3Foundation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,6 +564,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
@@ -576,6 +581,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
