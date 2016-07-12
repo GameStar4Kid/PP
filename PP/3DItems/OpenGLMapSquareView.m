@@ -6,10 +6,19 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "OpenGLView.h"
+#import "OpenGLMapSquareView.h"
 #import "CC3GLMatrix.h"
 
-@implementation OpenGLView
+@interface OpenGLMapSquareView() {
+    
+}
+
+@property Boolean mShouldLoadTexture;
+@property int mTextureId;
+
+@end
+
+@implementation OpenGLMapSquareView
 
 typedef struct {
     float Position[3];
@@ -31,70 +40,35 @@ const GLubyte Indices[] = {
 
 #define TEX_COORD_MAX   4
 
-const Vertex Vertices[] = {
-    // Front
-    {{1, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-    {{1, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-    {{-1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
-    // Back
-    {{1, 1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-    {{-1, -1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{1, -1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-    {{-1, 1, -2}, {0, 0, 0, 1}, {0, 0}},
-    // Left
-    {{-1, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}}, 
-    {{-1, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-    {{-1, -1, -2}, {0, 0, 0, 1}, {0, 0}},
-//    // Right
-//    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-//    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-//    {{1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-//    {{1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
-//    // Top
-//    {{1, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-//    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-//    {{-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-//    {{-1, 1, 0}, {0, 0, 0, 1}, {0, 0}},
-//    // Bottom
-//    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-//    {{1, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-//    {{-1, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}}, 
-//    {{-1, -1, -2}, {0, 0, 0, 1}, {0, 0}}
+const Vertex Vertices1[] = {
+    -1.0f, 1.0f, 0.0f, // 0, Top Left
+    -1.0f, -1.0f, 0.0f, // 1, Bottom Left
+    1.0f, -1.0f, 0.0f, // 2, Bottom Right
+    1.0f, 1.0f, 0.0f, // 3, Top Right
 };
 
-const GLubyte Indices[] = {
-    // Front
-    0, 1, 2,
-    2, 3, 0,
-    // Back
-    4, 5, 6,
-    6, 7, 4,
-    // Left
-    8, 9, 10,
-    10, 11, 8,
-    // Right
-    12, 13, 14,
-    14, 15, 12,
-    // Top
-    16, 17, 18,
-    18, 19, 16,
-    // Bottom
-    20, 21, 22,
-    22, 23, 20
+const GLubyte Indices1[] = {0, 1, 2, 0, 2, 3 };
+
+const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
+    0.0f, 1.0f, //
+    1.0f, 1.0f, //
+    1.0f, 0.0f, //
 };
 
-const Vertex Vertices2[] = {
-    {{0.5, -0.5, 0.01}, {1, 1, 1, 1}, {1, 1}},
-    {{0.5, 0.5, 0.01}, {1, 1, 1, 1}, {1, 0}},
-    {{-0.5, 0.5, 0.01}, {1, 1, 1, 1}, {0, 0}},
-    {{-0.5, -0.5, 0.01}, {1, 1, 1, 1}, {0, 1}},
-};
+const GLfloat vertexBuffer;
+const GLshort indexBuffer;
+const GLfloat mTextureBuffer;
 
-const GLubyte Indices2[] = {
-    1, 0, 2, 3
-};
+//const Vertex Vertices2[] = {
+//    {{0.5, -0.5, 0.01}, {1, 1, 1, 1}, {1, 1}},
+//    {{0.5, 0.5, 0.01}, {1, 1, 1, 1}, {1, 0}},
+//    {{-0.5, 0.5, 0.01}, {1, 1, 1, 1}, {0, 0}},
+//    {{-0.5, -0.5, 0.01}, {1, 1, 1, 1}, {0, 1}},
+//};
+
+//const GLubyte Indices2[] = {
+//    1, 0, 2, 3
+//};
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -106,7 +80,7 @@ const GLubyte Indices2[] = {
 }
 
 - (void)setupContext {   
-    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
+    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES1;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context) {
         NSLog(@"Failed to initialize OpenGLES 2.0 context");
@@ -221,20 +195,20 @@ const GLubyte Indices2[] = {
     
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices1), Vertices1, GL_STATIC_DRAW);
     
     glGenBuffers(1, &_indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices1), Indices1, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &_vertexBuffer2);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
+//    glGenBuffers(1, &_vertexBuffer2);
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &_indexBuffer2);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices2), Indices2, GL_STATIC_DRAW);
-        
+//    glGenBuffers(1, &_indexBuffer2);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices2), Indices2, GL_STATIC_DRAW);
+    
 }
 
 - (void)render:(CADisplayLink*)displayLink {
@@ -273,7 +247,7 @@ const GLubyte Indices2[] = {
     glUniform1i(_textureUniform, 0); 
     
     // 3
-    glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
@@ -288,7 +262,7 @@ const GLubyte Indices2[] = {
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
 
-    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices2)/sizeof(Indices2[0]), GL_UNSIGNED_BYTE, 0);
+//    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices2)/sizeof(Indices2[0]), GL_UNSIGNED_BYTE, 0);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -337,9 +311,12 @@ const GLubyte Indices2[] = {
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {        
+    if (self) {
+        [self initParams];
         [self setupLayer];        
-        [self setupContext];    
+        [self setupContext];
+        [self loadBitmap];
+        [self loadGLTexture];
         [self setupDepthBuffer];
         [self setupRenderBuffer];        
         [self setupFrameBuffer];     
@@ -354,9 +331,75 @@ const GLubyte Indices2[] = {
 
 - (void)dealloc
 {
-    [_context release];
     _context = nil;
-    [super dealloc];
 }
 
+- (void)initParams {
+    self.mShouldLoadTexture = false;
+    self.mTextureId = -1;
+}
+
+- (void)loadBitmap {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"tile_floor" ofType:@"png"];
+    NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
+    UIImage *localImage = [[UIImage alloc] initWithData:texData];
+    if (localImage == nil)
+        NSLog(@"Do real error checking here");
+    
+    _image = localImage;
+    self.mShouldLoadTexture = true;
+}
+
+- (void)loadGLTexture {
+    // Generate one texture pointer...
+    GLuint textures[1];
+    glGenTextures(1, &textures[0]);
+    
+    self.mTextureId = textures[0];
+    
+    // ...and bind it to our array
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    
+    // Create Nearest Filtered Texture
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    // Use the Android GLUtils to specify a two-dimensional texture image
+    // from our bitmap
+    GLuint iWidth = CGImageGetWidth(_image.CGImage);
+    GLuint iHeight = CGImageGetHeight(_image.CGImage);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    void *imageData = malloc( iHeight * iWidth * 4 );
+    CGContextRef localContext = CGBitmapContextCreate( imageData, iWidth, iHeight, 8, 4 * iWidth, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+    CGColorSpaceRelease( colorSpace );
+    CGContextClearRect( localContext, CGRectMake( 0, 0, iWidth, iHeight ) );
+    CGContextTranslateCTM( localContext, 0, iHeight - iHeight );
+    CGContextDrawImage( localContext, CGRectMake( 0, 0, iWidth, iHeight ), _image.CGImage );
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+}
+
+- (void)setTextureCoordinates {
+    
+}
+
+- (NSOutputStream*)outputStream {
+    if (_outputStream == nil) {
+        _outputStream = [[NSOutputStream alloc] initToMemory];
+        [_outputStream open];
+    }
+    return _outputStream;
+}
+
+- (void)putInt:(NSInteger)value {
+    [self.outputStream write:(uint8_t*)&value maxLength:sizeof(NSInteger)];
+}
+
+- (NSData*)data {
+    return [self.outputStream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
+}
 @end

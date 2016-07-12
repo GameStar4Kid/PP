@@ -121,13 +121,13 @@
                         <viewControllerLayoutGuide type="top" id="PVw-PE-rHT"/>
                         <viewControllerLayoutGuide type="bottom" id="j8g-3f-2f9"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ir1-HS-D2B" customClass="OpenGLView">
+                    <view key="view" contentMode="scaleToFill" id="Ir1-HS-D2B" customClass="OpenGLMapSquareView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="glView" destination="Ir1-HS-D2B" id="WaX-SC-1Ge"/>
+                        <outlet property="glView" destination="Ir1-HS-D2B" id="pBo-lG-dbt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mAc-K9-6SP" userLabel="First Responder" sceneMemberID="firstResponder"/>

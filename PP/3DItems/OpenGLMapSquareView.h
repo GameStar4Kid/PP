@@ -11,10 +11,13 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 
-@interface OpenGLView : UIView {
+@interface OpenGLMapSquareView : UIView {
+    UIImage* _image;
+    NSOutputStream* _outputStream;
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
+    
     GLuint _positionSlot;
     GLuint _colorSlot;
     GLuint _projectionUniform;

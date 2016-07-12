@@ -7,20 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		17289BEA1D3378DF007C93CE /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BE91D3378DF007C93CE /* OpenGLView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF61D337928007C93CE /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BED1D337928007C93CE /* CC3Foundation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BEF1D337928007C93CE /* CC3GLMatrix.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 17289BF01D337928007C93CE /* CC3Kazmath.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF91D337928007C93CE /* CC3Math.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BF41D337928007C93CE /* CC3Math.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BFD1D3379A7007C93CE /* UIColor+CC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BFC1D3379A7007C93CE /* UIColor+CC3.m */; };
 		17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17289BFE1D337B5D007C93CE /* OpenGLES.framework */; };
+		178F77251D34D3BB00596B38 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151851D3394730084CF31 /* UIKit.framework */; };
+		178F77261D34D3CD00596B38 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F77231D34D34100596B38 /* CoreGraphics.framework */; };
+		178F77271D34D3E400596B38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F77211D34D33500596B38 /* Foundation.framework */; };
 		17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151771D33878E0084CF31 /* OpenGLViewController.m */; };
 		17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C151791D3391950084CF31 /* SimpleFragment.glsl */; };
 		17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517A1D3391950084CF31 /* SimpleVertex.glsl */; };
 		17C151801D3392430084CF31 /* item_powerup_fish.png in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517E1D3392430084CF31 /* item_powerup_fish.png */; };
 		17C151811D3392430084CF31 /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517F1D3392430084CF31 /* tile_floor.png */; };
 		17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151831D33943C0084CF31 /* QuartzCore.framework */; };
-		17C151861D3394730084CF31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151851D3394730084CF31 /* UIKit.framework */; };
+		17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */; };
+		17D932361D34D56600EA323B /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D932351D34D56600EA323B /* OpenGLView.m */; };
 		263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 263CBC111D2E62B200AEB3A3 /* AppDelegate.m */; };
 		263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263CBC191D2E62B200AEB3A3 /* Assets.xcassets */; };
 		269C13C01D339604004865EA /* BLEHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BB1D339604004865EA /* BLEHelper.m */; };
@@ -37,12 +40,10 @@
 		26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C51D2FAA1A007FD43C /* PositionViewController.m */; };
 		26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C71D2FAA1A007FD43C /* ViewController.m */; };
 		26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */; };
-		276508A9962DD381B337ADC4 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 99E4A94007DD2839AE379CA8 /* libPods-PP.a */; };
+		5885BACA5EBFB577458BFF89 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		17289BE81D3378DF007C93CE /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
-		17289BE91D3378DF007C93CE /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
 		17289BEC1D337928007C93CE /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Foundation.h; path = 3DMath/CC3Foundation.h; sourceTree = "<group>"; };
 		17289BED1D337928007C93CE /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3Foundation.m; path = 3DMath/CC3Foundation.m; sourceTree = "<group>"; };
 		17289BEE1D337928007C93CE /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3GLMatrix.h; path = 3DMath/CC3GLMatrix.h; sourceTree = "<group>"; };
@@ -56,6 +57,8 @@
 		17289BFB1D3379A7007C93CE /* UIColor+CC3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+CC3.h"; path = "3DMath/UIColor+CC3.h"; sourceTree = "<group>"; };
 		17289BFC1D3379A7007C93CE /* UIColor+CC3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+CC3.m"; path = "3DMath/UIColor+CC3.m"; sourceTree = "<group>"; };
 		17289BFE1D337B5D007C93CE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		178F77211D34D33500596B38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		178F77231D34D34100596B38 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		17C151761D33878E0084CF31 /* OpenGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLViewController.h; sourceTree = "<group>"; };
 		17C151771D33878E0084CF31 /* OpenGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLViewController.m; sourceTree = "<group>"; };
 		17C151791D3391950084CF31 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = 3DData/SimpleFragment.glsl; sourceTree = "<group>"; };
@@ -64,6 +67,10 @@
 		17C1517F1D3392430084CF31 /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = 3DImages/tile_floor.png; sourceTree = "<group>"; };
 		17C151831D33943C0084CF31 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		17C151851D3394730084CF31 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		17C151871D339ECF0084CF31 /* OpenGLMapSquareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLMapSquareView.h; path = 3DItems/OpenGLMapSquareView.h; sourceTree = "<group>"; };
+		17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLMapSquareView.m; path = 3DItems/OpenGLMapSquareView.m; sourceTree = "<group>"; };
+		17D932341D34D56600EA323B /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
+		17D932351D34D56600EA323B /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
 		263CBC0A1D2E62B200AEB3A3 /* PP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		263CBC101D2E62B200AEB3A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		263CBC111D2E62B200AEB3A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -91,9 +98,9 @@
 		26F4B7C71D2FAA1A007FD43C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		26F4B7C81D2FAA1A007FD43C /* WeatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherViewController.h; sourceTree = "<group>"; };
 		26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherViewController.m; sourceTree = "<group>"; };
-		2FD885588A303E28C369BC68 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
-		6EC4BC7494CC7EBEDA913820 /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
-		99E4A94007DD2839AE379CA8 /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
+		D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +108,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				17C151861D3394730084CF31 /* UIKit.framework in Frameworks */,
+				178F77271D34D3E400596B38 /* Foundation.framework in Frameworks */,
+				178F77261D34D3CD00596B38 /* CoreGraphics.framework in Frameworks */,
+				178F77251D34D3BB00596B38 /* UIKit.framework in Frameworks */,
 				17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */,
 				17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */,
-				276508A9962DD381B337ADC4 /* libPods-PP.a in Frameworks */,
+				5885BACA5EBFB577458BFF89 /* libPods-PP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +123,10 @@
 		17289BEB1D3378E5007C93CE /* 3DItems */ = {
 			isa = PBXGroup;
 			children = (
-				17289BE81D3378DF007C93CE /* OpenGLView.h */,
-				17289BE91D3378DF007C93CE /* OpenGLView.m */,
+				17D932341D34D56600EA323B /* OpenGLView.h */,
+				17D932351D34D56600EA323B /* OpenGLView.m */,
+				17C151871D339ECF0084CF31 /* OpenGLMapSquareView.h */,
+				17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */,
 			);
 			name = 3DItems;
 			sourceTree = "<group>";
@@ -163,7 +174,7 @@
 				263CBC0C1D2E62B200AEB3A3 /* PP */,
 				263CBC0B1D2E62B200AEB3A3 /* Products */,
 				C9F635770A372A9307CC5A0A /* Frameworks */,
-				DD50994A5789E4EBDD22941A /* Pods */,
+				A8261E4400D52F2EDDC2B294 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -253,24 +264,26 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		A8261E4400D52F2EDDC2B294 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */,
+				7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		C9F635770A372A9307CC5A0A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				178F77231D34D34100596B38 /* CoreGraphics.framework */,
+				178F77211D34D33500596B38 /* Foundation.framework */,
 				17C151851D3394730084CF31 /* UIKit.framework */,
 				17C151831D33943C0084CF31 /* QuartzCore.framework */,
 				17289BFE1D337B5D007C93CE /* OpenGLES.framework */,
-				99E4A94007DD2839AE379CA8 /* libPods-PP.a */,
+				D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DD50994A5789E4EBDD22941A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6EC4BC7494CC7EBEDA913820 /* Pods-PP.debug.xcconfig */,
-				2FD885588A303E28C369BC68 /* Pods-PP.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,8 +296,6 @@
 				80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */,
 				263CBC061D2E62B200AEB3A3 /* Sources */,
 				263CBC081D2E62B200AEB3A3 /* Resources */,
-				07E73AEC7C899F32D9A608E1 /* Embed Pods Frameworks */,
-				2BECDD6FA7614ACF45A46F86 /* Copy Pods Resources */,
 				263CBC071D2E62B200AEB3A3 /* Frameworks */,
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
@@ -425,6 +436,7 @@
 				17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */,
 				269C13C11D339604004865EA /* LeDiscovery.m in Sources */,
 				269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */,
+				17D932361D34D56600EA323B /* OpenGLView.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
 				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,
@@ -432,7 +444,7 @@
 				26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */,
 				26F4B7D01D2FAA1A007FD43C /* BLEViewController.m in Sources */,
 				263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */,
-				17289BEA1D3378DF007C93CE /* OpenGLView.m in Sources */,
+				17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */,
 				17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */,
 				17289BF61D337928007C93CE /* CC3Foundation.m in Sources */,
 			);
@@ -539,25 +551,32 @@
 		};
 		263CBC221D2E62B200AEB3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6EC4BC7494CC7EBEDA913820 /* Pods-PP.debug.xcconfig */;
+			baseConfigurationReference = 994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PP/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
 		};
 		263CBC231D2E62B200AEB3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2FD885588A303E28C369BC68 /* Pods-PP.release.xcconfig */;
+			baseConfigurationReference = 7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PP/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
 		};
