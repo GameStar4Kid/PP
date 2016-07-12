@@ -4,7 +4,7 @@
  * Language: ja
  */
 
-/********** Uncategorized **********/
+/********** Main Title **********/
 
 /* comment */
 "BLE Dashboard" = "BLE通信テスト";
@@ -24,6 +24,9 @@
 /* comment */
 "PositionInfo Dashboard" = "位置情報/いまここログ機能テスト";
 
+
+/********** BLE Features **********/
+
 /* comment */
 "BLE Title Section 1" = "ペアリング情報";
 
@@ -38,3 +41,27 @@
 
 /* comment */
 "BLE.Section2.Title1" = "受信コマンド";
+
+
+/********** PositionInfo Features **********/
+
+/* comment */
+"PositionInfo.LogName" = "ログ名";
+
+/* comment */
+"PositionInfo.StartLog" = "ログ取得開始";
+
+/* comment */
+"PositionInfo.StopLog" = "ログ取得停止";
+
+/* comment */
+"PositionInfo.GPSSetting" = "GPS設定";
+
+/* comment */
+"PositionInfo.LogControlPolicy" = "ログ取得の制御方針";
+
+/* comment */
+"PositionInfo.Interval" = "インターバル";
+
+/* comment */
+"PositionInfo.MaxRecordingTime" = "最大記録時間";

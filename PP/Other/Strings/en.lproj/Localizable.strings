@@ -4,7 +4,7 @@
  * Language: en
  */
 
-/********** Uncategorized **********/
+/********** Main Title **********/
 
 /* comment */
 "BLE Dashboard" = "BLE Title";
@@ -24,6 +24,9 @@
 /* comment */
 "PositionInfo Dashboard" = "PositionInfo Title";
 
+
+/********** BLE Features **********/
+
 /* comment */
 "BLE Title Section 1" = "BLE Title Section 1";
 
@@ -38,3 +41,27 @@
 
 /* comment */
 "BLE.Section2.Title1" = "Next Sync";
+
+
+/********** PositionInfo Features **********/
+
+/* comment */
+"PositionInfo.LogName" = "Log Name";
+
+/* comment */
+"PositionInfo.StartLog" = "Start Log";
+
+/* comment */
+"PositionInfo.StopLog" = "Stop Log";
+
+/* comment */
+"PositionInfo.GPSSetting" = "GPS Setting";
+
+/* comment */
+"PositionInfo.LogControlPolicy" = "Log Control Policy";
+
+/* comment */
+"PositionInfo.Interval" = "Interval";
+
+/* comment */
+"PositionInfo.MaxRecordingTime" = "Max Recording Time";

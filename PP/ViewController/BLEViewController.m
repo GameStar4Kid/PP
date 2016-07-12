@@ -8,6 +8,7 @@
 
 #import "BLEViewController.h"
 #import "BLEItem.h"
+#import "BLEHelper.h"
 @interface BLEDeviceCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *lblTitleName;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitleUDID;
@@ -38,10 +39,20 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.navigationItem.title = NSLocalizedString(@"BLE Dashboard", nil);
-    //test
-    _dataList = [NSMutableArray arrayWithCapacity:0];
-    BLEItem*item = [[BLEItem alloc] initWithName:@"S830" UDID:@"1234123123123"];
-    [_dataList addObject:item];
+    [self loadDevicesList];
+}
+- (void) loadDevicesList
+{
+    if(!_dataList)
+    {
+        _dataList = [NSMutableArray arrayWithCapacity:0];
+    }
+    NSMutableArray*arr = [BLEHelper sharedInstance].connectedServices;
+    for (LeValueAlarmService* service in arr)
+    {
+        BLEItem*item = [[BLEItem alloc] initWithName:service.peripheral.name UDID:service.peripheral.identifier.UUIDString];
+        [_dataList addObject:item];
+    }
     [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning {
