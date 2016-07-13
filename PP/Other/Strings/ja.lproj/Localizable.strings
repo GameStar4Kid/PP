@@ -66,6 +66,9 @@
 /* comment */
 "PositionInfo.MaxRecordingTime" = "最大記録時間";
 
+
+/********** Weather Features **********/
+
 /* comment */
 "Position information acquisition time" = "位置情報取得時刻：";
 
