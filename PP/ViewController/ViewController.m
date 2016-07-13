@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "DBCameraContainerViewController.h"
 #import "DBCameraView.h"
-
+#import "BLEHelper.h"
 @interface ViewController () <DBCameraViewControllerDelegate>
 
 @end
@@ -24,6 +24,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [[BLEHelper sharedInstance] startUpdateLocationInfo];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -111,6 +112,8 @@
             break;
         case 2:
             [self.navigationController performSegueWithIdentifier:@"toMapDetailView" sender:self];
+            // Testing only
+//            [self.navigationController performSegueWithIdentifier:@"toMapView" sender:self];
             break;
         case 3:
             //start SNS, don't implement in prototype

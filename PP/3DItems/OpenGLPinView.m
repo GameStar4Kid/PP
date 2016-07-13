@@ -47,21 +47,21 @@ const Vertex Vertices[] = {
     {{-1, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
     {{-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
     {{-1, -1, -2}, {0, 0, 0, 1}, {0, 0}},
-    // Right
-    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-    {{1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
-    // Top
-    {{1, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-    {{-1, 1, 0}, {0, 0, 0, 1}, {0, 0}},
-    // Bottom
-    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-    {{1, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}}, 
-    {{-1, -1, -2}, {0, 0, 0, 1}, {0, 0}}
+//    // Right
+//    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//    {{1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//    {{1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
+//    // Top
+//    {{1, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//    {{1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//    {{-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//    {{-1, 1, 0}, {0, 0, 0, 1}, {0, 0}},
+//    // Bottom
+//    {{1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//    {{1, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//    {{-1, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}}, 
+//    {{-1, -1, -2}, {0, 0, 0, 1}, {0, 0}}
 };
 
 const GLubyte Indices[] = {
@@ -327,7 +327,7 @@ const GLubyte Indices2[] = {
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
     free(spriteData);        
     return texName;
@@ -354,7 +354,9 @@ const GLubyte Indices2[] = {
 
 - (void)dealloc
 {
+    [_context release];
     _context = nil;
+    [super dealloc];
 }
 
 @end

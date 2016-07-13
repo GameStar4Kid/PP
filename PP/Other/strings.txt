@@ -1,28 +1,79 @@
-[[Uncategorized]]
-[BLE Dashboard]
-en = BLE Title
-ja = BLE通信テスト
-comment = comment
-[Weather Dashboard]
-en = Weather Title
-ja = お天気ダッシュボードテスト
-comment = comment
-[Log3D Dashboard]
-en = Log3D Title
-ja = ログ表示テスト(3D地図含む)
-comment = comment
-[SNS Dashboard]
-en = SNS Title
-ja = SNS投稿フォーム作成テスト
-comment = comment
-[Shutter Dashboard]
-en = Shutter Title
-ja = ウオッチからシャッター機能テスト
-comment = comment
-[PositionInfo Dashboard]
-en = PositionInfo Title
-ja = 位置情報/いまここログ機能テスト
-comment = comment
+[[Main Title]]
+    [BLE Dashboard]
+        en = BLE Title
+        ja = BLE通信テスト
+        comment = comment
+    [Weather Dashboard]
+        en = Weather Title
+        ja = お天気ダッシュボードテスト
+        comment = comment
+    [Log3D Dashboard]
+        en = Log3D Title
+        ja = ログ表示テスト(3D地図含む)
+        comment = comment
+    [SNS Dashboard]
+        en = SNS Title
+        ja = SNS投稿フォーム作成テスト
+        comment = comment
+    [Shutter Dashboard]
+        en = Shutter Title
+        ja = ウオッチからシャッター機能テスト
+        comment = comment
+    [PositionInfo Dashboard]
+        en = PositionInfo Title
+        ja = 位置情報/いまここログ機能テスト
+        comment = comment
+[[BLE Features]]
+    [BLE Title Section 1]
+        en = BLE Title Section 1
+        ja = ペアリング情報
+        comment = comment
+    [BLE Title Section 2]
+        en = BLE Title Section 2
+        ja = 同期状態
+        comment = comment
+    [BLE.Section1.Title1]
+        en = Name
+        ja = 機種名
+        comment = comment
+    [BLE.Section1.Title2]
+        en = UUID
+        ja = UUID
+        comment = comment
+    [BLE.Section2.Title1]
+        en = Next Sync
+        ja = 受信コマンド
+        comment = comment
+[[PositionInfo Features]]
+    [PositionInfo.LogName]
+        en = Log Name
+        ja = ログ名
+        comment = comment
+    [PositionInfo.StartLog]
+        en = Start Log
+        ja = ログ取得開始
+        comment = comment
+    [PositionInfo.StopLog]
+        en = Stop Log
+        ja = ログ取得停止
+        comment = comment
+    [PositionInfo.GPSSetting]
+        en = GPS Setting
+        ja = GPS設定
+        comment = comment
+    [PositionInfo.LogControlPolicy]
+        en = Log Control Policy
+        ja = ログ取得の制御方針
+        comment = comment
+    [PositionInfo.Interval]
+        en = Interval
+        ja = インターバル
+        comment = comment
+    [PositionInfo.MaxRecordingTime]
+        en = Max Recording Time
+        ja = 最大記録時間
+        comment = comment
+[[Weather Features]]
 [Position information acquisition time]
 en = Position information acquisition time:
 ja = 位置情報取得時刻：
