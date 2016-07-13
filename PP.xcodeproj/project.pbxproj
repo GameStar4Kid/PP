@@ -27,6 +27,9 @@
 		26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C51D2FAA1A007FD43C /* PositionViewController.m */; };
 		26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C71D2FAA1A007FD43C /* ViewController.m */; };
 		26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */; };
+		3C8605331D361A5E00A57326 /* UITableViewCellFixed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8605321D361A5E00A57326 /* UITableViewCellFixed.m */; };
+		3CD374381D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */; };
+		3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */; };
 		701CB672B089361513939308 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE0A53A4B2967B41E38DE04 /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +73,13 @@
 		26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherViewController.m; sourceTree = "<group>"; };
 		289584DAB9CEE24831589A0D /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
 		36995E60473200DDCA9BF15D /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		3C8605311D361A5E00A57326 /* UITableViewCellFixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellFixed.h; sourceTree = "<group>"; };
+		3C8605321D361A5E00A57326 /* UITableViewCellFixed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellFixed.m; sourceTree = "<group>"; };
+		3CD374361D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunOrMoonDataTableViewCell.h; sourceTree = "<group>"; };
+		3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunOrMoonDataTableViewCell.m; sourceTree = "<group>"; };
+		3CD3743A1D34D2B50087B2F4 /* WeatherInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherInfoTableViewCell.h; sourceTree = "<group>"; };
+		3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoTableViewCell.m; sourceTree = "<group>"; };
+		3CD3743E1D34E8B90087B2F4 /* Enums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enums.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +144,8 @@
 		263CBC0C1D2E62B200AEB3A3 /* PP */ = {
 			isa = PBXGroup;
 			children = (
+				3CD3743D1D34E8A80087B2F4 /* Enums */,
+				3CD374331D34C6590087B2F4 /* Views */,
 				17289BFA1D33792E007C93CE /* 3DMath */,
 				17289BEB1D3378E5007C93CE /* 3DItems */,
 				26F4B7B41D2FAA1A007FD43C /* Other */,
@@ -189,6 +201,59 @@
 				26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		3C8605301D361A4700A57326 /* UITableViewCellFixed */ = {
+			isa = PBXGroup;
+			children = (
+				3C8605311D361A5E00A57326 /* UITableViewCellFixed.h */,
+				3C8605321D361A5E00A57326 /* UITableViewCellFixed.m */,
+			);
+			path = UITableViewCellFixed;
+			sourceTree = "<group>";
+		};
+		3CD374331D34C6590087B2F4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3CD374341D34C6590087B2F4 /* CustomViewCell */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3CD374341D34C6590087B2F4 /* CustomViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				3C8605301D361A4700A57326 /* UITableViewCellFixed */,
+				3CD374391D34D2A60087B2F4 /* WeatherInfoCell */,
+				3CD374351D34C6590087B2F4 /* SunriseAndSunsetDataCell */,
+			);
+			path = CustomViewCell;
+			sourceTree = "<group>";
+		};
+		3CD374351D34C6590087B2F4 /* SunriseAndSunsetDataCell */ = {
+			isa = PBXGroup;
+			children = (
+				3CD374361D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.h */,
+				3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */,
+			);
+			path = SunriseAndSunsetDataCell;
+			sourceTree = "<group>";
+		};
+		3CD374391D34D2A60087B2F4 /* WeatherInfoCell */ = {
+			isa = PBXGroup;
+			children = (
+				3CD3743A1D34D2B50087B2F4 /* WeatherInfoTableViewCell.h */,
+				3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */,
+			);
+			path = WeatherInfoCell;
+			sourceTree = "<group>";
+		};
+		3CD3743D1D34E8A80087B2F4 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				3CD3743E1D34E8B90087B2F4 /* Enums.h */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		9398F978804A29FB220A87AD /* Pods */ = {
@@ -349,10 +414,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				17289BFD1D3379A7007C93CE /* UIColor+CC3.m in Sources */,
+				3CD374381D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m in Sources */,
+				3C8605331D361A5E00A57326 /* UITableViewCellFixed.m in Sources */,
 				26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */,
 				26F4B7D11D2FAA1A007FD43C /* MapDetailViewController.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
+				3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */,
 				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,
 				26F4B7CB1D2FAA1A007FD43C /* main.m in Sources */,
 				26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */,
@@ -416,7 +484,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -455,7 +523,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
