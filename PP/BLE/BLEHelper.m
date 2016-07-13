@@ -220,6 +220,7 @@ __strong static BLEHelper* _sharedInstance = nil;
         {
 //            [self close_progress_dialog];
 //            [self show_ble_scan_failed_dialog];
+            [self start_watch_app_synchronization];
         }
         else
         {
@@ -540,6 +541,8 @@ __strong static BLEHelper* _sharedInstance = nil;
     [_currentlyDisplayingService do_notification_subscribing];
     NSLog(@"_____ start ble_ready_timeout_timer Timer _____");
    	ble_ready_timeout_timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(ble_scan_time_out_check) userInfo:nil repeats:NO];
+    [self start_ble_scan];
+    [self startUpdateLocationInfo];
     
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -832,17 +835,19 @@ __strong static BLEHelper* _sharedInstance = nil;
                 NSLog(@"This is an synchronization..checking for last_time_sync_24H_enabled_device_UUID");
                 
                 NSLog(@"----- watch_model = %d",watch_model);
-//                NSString* user_selected_device_UUID = [ setting Get_last_24H_Sync_UUID:watch_model ] ;
+                NSString* user_selected_device_UUID = [SettingUtils sharedInstance].deviceUDID ;
                 //FIXME
-                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
+//                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
                 NSLog(@"user_selected_device_UUID = %@", user_selected_device_UUID);
                 
                 if( !user_selected_device_UUID )
                 {
                     NSLog(@"This is the first ---- device has been connected with Prospex app..");
                     this_is_user_selected_device_UUID = TRUE;
+                    [SettingUtils sharedInstance].deviceUDID=peripheral.identifier.UUIDString;
                     //TODO
 //                    [ setting Set_24H_Sync_UUID:watch_model :peripheral.identifier.UUIDString];
+                    
                 }
                 else
                 {

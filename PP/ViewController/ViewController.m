@@ -18,13 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [BLEHelper sharedInstance];
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [[BLEHelper sharedInstance] startUpdateLocationInfo];
+//    [[BLEHelper sharedInstance] start_ble_scan];
+//    [[BLEHelper sharedInstance] startUpdateLocationInfo];
+    [[BLEHelper sharedInstance] start_watch_app_synchronization];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

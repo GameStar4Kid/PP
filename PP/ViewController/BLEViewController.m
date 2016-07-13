@@ -53,6 +53,11 @@
         BLEItem*item = [[BLEItem alloc] initWithName:service.peripheral.name UDID:service.peripheral.identifier.UUIDString];
         [_dataList addObject:item];
     }
+    if(_dataList.count==0)
+    {
+        BLEItem*item = [[BLEItem alloc] initWithName:@"" UDID:@""];
+        [_dataList addObject:item];
+    }
     [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning {
@@ -79,7 +84,8 @@
 {
     if(section==0)
     {
-        return (_dataList.count>0)?NSLocalizedString(@"BLE Title Section 1", ):@"";
+//        return (_dataList.count>0)?NSLocalizedString(@"BLE Title Section 1", ):@"";
+        return NSLocalizedString(@"BLE Title Section 1", );
     }
     else
     {
@@ -87,10 +93,10 @@
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(indexPath.section==0&&_dataList.count==0)
-    {
-        return 0;
-    }
+//    if(indexPath.section==0&&_dataList.count==0)
+//    {
+//        return 0;
+//    }
     return 60;
 }
 
@@ -100,8 +106,6 @@
         BLEDeviceCell *cell = [tableView dequeueReusableCellWithIdentifier:@"deviceCell"];
         if (!cell) {
             cell = [[BLEDeviceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"deviceCell"];
-            //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            //        cell.backgroundColor=[UIColor yellowColor];
         }
         cell.lblTitleName.text= NSLocalizedString(@"BLE.Section1.Title1", nil);
         cell.lblTitleUDID.text= NSLocalizedString(@"BLE.Section1.Title2", nil);
