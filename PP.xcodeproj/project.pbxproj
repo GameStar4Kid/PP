@@ -19,11 +19,22 @@
 		17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151771D33878E0084CF31 /* OpenGLViewController.m */; };
 		17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C151791D3391950084CF31 /* SimpleFragment.glsl */; };
 		17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517A1D3391950084CF31 /* SimpleVertex.glsl */; };
-		17C151801D3392430084CF31 /* item_powerup_fish.png in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517E1D3392430084CF31 /* item_powerup_fish.png */; };
-		17C151811D3392430084CF31 /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517F1D3392430084CF31 /* tile_floor.png */; };
 		17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151831D33943C0084CF31 /* QuartzCore.framework */; };
 		17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */; };
 		17D932361D34D56600EA323B /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D932351D34D56600EA323B /* OpenGLView.m */; };
+		17D932601D374EA800EA323B /* OpenGLMapSquareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */; };
+		17D9326C1D379C5100EA323B /* compass_.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932611D379C5100EA323B /* compass_.png */; };
+		17D9326D1D379C5100EA323B /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932621D379C5100EA323B /* compass.png */; };
+		17D9326E1D379C5100EA323B /* map_marker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932631D379C5100EA323B /* map_marker_icon.png */; };
+		17D932711D379C5100EA323B /* compass_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932661D379C5100EA323B /* compass_bottom.png */; };
+		17D932721D379C5100EA323B /* compass_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932671D379C5100EA323B /* compass_left.png */; };
+		17D932731D379C5100EA323B /* compass_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932681D379C5100EA323B /* compass_right.png */; };
+		17D932741D379C5100EA323B /* compass_top.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932691D379C5100EA323B /* compass_top.png */; };
+		17D932751D379C5100EA323B /* rotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D9326A1D379C5100EA323B /* rotate.png */; };
+		17D932761D379C5100EA323B /* staticmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D9326B1D379C5100EA323B /* staticmap.png */; };
+		17D932791D37A07F00EA323B /* staticmap1.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932771D37A07F00EA323B /* staticmap1.png */; };
+		17D9327A1D37A07F00EA323B /* staticmap2.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932781D37A07F00EA323B /* staticmap2.png */; };
+		17D9327C1D37A1C600EA323B /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D9327B1D37A1C600EA323B /* tile_floor.png */; };
 		263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 263CBC111D2E62B200AEB3A3 /* AppDelegate.m */; };
 		263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263CBC191D2E62B200AEB3A3 /* Assets.xcassets */; };
 		269C13C01D339604004865EA /* BLEHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BB1D339604004865EA /* BLEHelper.m */; };
@@ -63,14 +74,26 @@
 		17C151771D33878E0084CF31 /* OpenGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLViewController.m; sourceTree = "<group>"; };
 		17C151791D3391950084CF31 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = 3DData/SimpleFragment.glsl; sourceTree = "<group>"; };
 		17C1517A1D3391950084CF31 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = 3DData/SimpleVertex.glsl; sourceTree = "<group>"; };
-		17C1517E1D3392430084CF31 /* item_powerup_fish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = item_powerup_fish.png; path = 3DImages/item_powerup_fish.png; sourceTree = "<group>"; };
-		17C1517F1D3392430084CF31 /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = 3DImages/tile_floor.png; sourceTree = "<group>"; };
 		17C151831D33943C0084CF31 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		17C151851D3394730084CF31 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		17C151871D339ECF0084CF31 /* OpenGLMapSquareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLMapSquareView.h; path = 3DItems/OpenGLMapSquareView.h; sourceTree = "<group>"; };
 		17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLMapSquareView.m; path = 3DItems/OpenGLMapSquareView.m; sourceTree = "<group>"; };
 		17D932341D34D56600EA323B /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
 		17D932351D34D56600EA323B /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
+		17D9325E1D374EA800EA323B /* OpenGLMapSquareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLMapSquareViewController.h; sourceTree = "<group>"; };
+		17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLMapSquareViewController.m; sourceTree = "<group>"; };
+		17D932611D379C5100EA323B /* compass_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_.png; path = 3DImages/compass_.png; sourceTree = "<group>"; };
+		17D932621D379C5100EA323B /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass.png; path = 3DImages/compass.png; sourceTree = "<group>"; };
+		17D932631D379C5100EA323B /* map_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_icon.png; path = 3DImages/map_marker_icon.png; sourceTree = "<group>"; };
+		17D932661D379C5100EA323B /* compass_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_bottom.png; path = 3DImages/compass_bottom.png; sourceTree = "<group>"; };
+		17D932671D379C5100EA323B /* compass_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_left.png; path = 3DImages/compass_left.png; sourceTree = "<group>"; };
+		17D932681D379C5100EA323B /* compass_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_right.png; path = 3DImages/compass_right.png; sourceTree = "<group>"; };
+		17D932691D379C5100EA323B /* compass_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_top.png; path = 3DImages/compass_top.png; sourceTree = "<group>"; };
+		17D9326A1D379C5100EA323B /* rotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rotate.png; path = 3DImages/rotate.png; sourceTree = "<group>"; };
+		17D9326B1D379C5100EA323B /* staticmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = staticmap.png; path = 3DImages/staticmap.png; sourceTree = "<group>"; };
+		17D932771D37A07F00EA323B /* staticmap1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = staticmap1.png; path = 3DImages/staticmap1.png; sourceTree = "<group>"; };
+		17D932781D37A07F00EA323B /* staticmap2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = staticmap2.png; path = 3DImages/staticmap2.png; sourceTree = "<group>"; };
+		17D9327B1D37A1C600EA323B /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = 3DImages/tile_floor.png; sourceTree = "<group>"; };
 		263CBC0A1D2E62B200AEB3A3 /* PP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		263CBC101D2E62B200AEB3A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		263CBC111D2E62B200AEB3A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -162,8 +185,18 @@
 		17C151821D3392470084CF31 /* 3DArt */ = {
 			isa = PBXGroup;
 			children = (
-				17C1517E1D3392430084CF31 /* item_powerup_fish.png */,
-				17C1517F1D3392430084CF31 /* tile_floor.png */,
+				17D9327B1D37A1C600EA323B /* tile_floor.png */,
+				17D932771D37A07F00EA323B /* staticmap1.png */,
+				17D932781D37A07F00EA323B /* staticmap2.png */,
+				17D932611D379C5100EA323B /* compass_.png */,
+				17D932621D379C5100EA323B /* compass.png */,
+				17D932631D379C5100EA323B /* map_marker_icon.png */,
+				17D932661D379C5100EA323B /* compass_bottom.png */,
+				17D932671D379C5100EA323B /* compass_left.png */,
+				17D932681D379C5100EA323B /* compass_right.png */,
+				17D932691D379C5100EA323B /* compass_top.png */,
+				17D9326A1D379C5100EA323B /* rotate.png */,
+				17D9326B1D379C5100EA323B /* staticmap.png */,
 			);
 			name = 3DArt;
 			sourceTree = "<group>";
@@ -260,6 +293,8 @@
 				26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */,
 				17C151761D33878E0084CF31 /* OpenGLViewController.h */,
 				17C151771D33878E0084CF31 /* OpenGLViewController.m */,
+				17D9325E1D374EA800EA323B /* OpenGLMapSquareViewController.h */,
+				17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -351,12 +386,22 @@
 				26F4B7CA1D2FAA1A007FD43C /* Info.plist in Resources */,
 				17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */,
 				26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */,
+				17D932721D379C5100EA323B /* compass_left.png in Resources */,
+				17D932741D379C5100EA323B /* compass_top.png in Resources */,
 				17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */,
+				17D9326E1D379C5100EA323B /* map_marker_icon.png in Resources */,
+				17D9326D1D379C5100EA323B /* compass.png in Resources */,
+				17D932751D379C5100EA323B /* rotate.png in Resources */,
+				17D932731D379C5100EA323B /* compass_right.png in Resources */,
+				17D932791D37A07F00EA323B /* staticmap1.png in Resources */,
 				263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */,
-				17C151801D3392430084CF31 /* item_powerup_fish.png in Resources */,
-				17C151811D3392430084CF31 /* tile_floor.png in Resources */,
 				26F4B7CF1D2FAA1A007FD43C /* Main.storyboard in Resources */,
 				26F4B7CE1D2FAA1A007FD43C /* LaunchScreen.storyboard in Resources */,
+				17D9327A1D37A07F00EA323B /* staticmap2.png in Resources */,
+				17D932711D379C5100EA323B /* compass_bottom.png in Resources */,
+				17D9327C1D37A1C600EA323B /* tile_floor.png in Resources */,
+				17D9326C1D379C5100EA323B /* compass_.png in Resources */,
+				17D932761D379C5100EA323B /* staticmap.png in Resources */,
 				26F4B7CD1D2FAA1A007FD43C /* strings.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +482,7 @@
 				269C13C11D339604004865EA /* LeDiscovery.m in Sources */,
 				269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */,
 				17D932361D34D56600EA323B /* OpenGLView.m in Sources */,
+				17D932601D374EA800EA323B /* OpenGLMapSquareViewController.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
 				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,

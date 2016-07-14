@@ -127,12 +127,30 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="glView" destination="Ir1-HS-D2B" id="pBo-lG-dbt"/>
+                        <outlet property="glView" destination="Ir1-HS-D2B" id="yfe-fW-Svc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mAc-K9-6SP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="125" y="2343"/>
+        </scene>
+        <!--OpenGL Map Square View Controller-->
+        <scene sceneID="Ugf-Hn-xvh">
+            <objects>
+                <viewController id="yZC-nl-ZHz" customClass="OpenGLMapSquareViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Uup-pV-0Uj"/>
+                        <viewControllerLayoutGuide type="bottom" id="Swr-mG-BRJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ROn-v6-lQd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dbm-NR-tsL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="125" y="3019"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SyW-NG-RzY">
@@ -151,6 +169,7 @@
                         <segue destination="G2J-rU-Yv7" kind="show" identifier="toMapDetailView" id="vIl-nL-K4H"/>
                         <segue destination="qNH-df-6Pl" kind="show" identifier="toBLEView" id="Pxn-d6-Wl4"/>
                         <segue destination="vuI-rk-aoX" kind="show" identifier="toMapView" id="j7w-qq-OWR"/>
+                        <segue destination="yZC-nl-ZHz" kind="show" identifier="toMapSquare" id="0eH-UN-WDG"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zVy-Kq-ode" userLabel="First Responder" sceneMemberID="firstResponder"/>

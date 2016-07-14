@@ -11,6 +11,6 @@
 #include "OpenGLMapSquareView.h"
 
 @interface OpenGLViewController : UIViewController
+//@property (strong, nonatomic) IBOutlet OpenGLView *glView;
 @property (strong, nonatomic) IBOutlet OpenGLMapSquareView *glView;
-
 @end

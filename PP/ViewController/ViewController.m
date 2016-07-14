@@ -110,9 +110,10 @@
             [self.navigationController performSegueWithIdentifier:@"toWeatherView" sender:self];
             break;
         case 2:
-            [self.navigationController performSegueWithIdentifier:@"toMapDetailView" sender:self];
+//            [self.navigationController performSegueWithIdentifier:@"toMapDetailView" sender:self];
             // Testing only
-//            [self.navigationController performSegueWithIdentifier:@"toMapView" sender:self];
+            [self.navigationController performSegueWithIdentifier:@"toMapView" sender:self];
+//            [self.navigationController performSegueWithIdentifier:@"toMapSquare" sender:self];
             break;
         case 3:
             //start SNS, don't implement in prototype
