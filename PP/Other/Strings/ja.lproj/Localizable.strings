@@ -34,13 +34,13 @@
 "BLE Title Section 2" = "同期状態";
 
 /* comment */
-"BLE.Section1.Title1" = "機種名";
+"BLE.Section1.Title1" = "機種名 :";
 
 /* comment */
-"BLE.Section1.Title2" = "UUID";
+"BLE.Section1.Title2" = "UUID :";
 
 /* comment */
-"BLE.Section2.Title1" = "受信コマンド";
+"BLE.Section2.Title1" = "受信コマンド :";
 
 
 /********** PositionInfo Features **********/

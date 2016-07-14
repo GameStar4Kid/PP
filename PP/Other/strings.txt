@@ -1,136 +1,136 @@
 [[Main Title]]
     [BLE Dashboard]
-        en = BLE Title
+        en = BLE通信テスト
         ja = BLE通信テスト
         comment = comment
     [Weather Dashboard]
-        en = Weather Title
+        en = お天気ダッシュボードテスト
         ja = お天気ダッシュボードテスト
         comment = comment
     [Log3D Dashboard]
-        en = Log3D Title
+        en = ログ表示テスト(3D地図含む)
         ja = ログ表示テスト(3D地図含む)
         comment = comment
     [SNS Dashboard]
-        en = SNS Title
+        en = SNS投稿フォーム作成テスト
         ja = SNS投稿フォーム作成テスト
         comment = comment
     [Shutter Dashboard]
-        en = Shutter Title
+        en = ウオッチからシャッター機能テスト
         ja = ウオッチからシャッター機能テスト
         comment = comment
     [PositionInfo Dashboard]
-        en = PositionInfo Title
+        en = 位置情報/いまここログ機能テスト
         ja = 位置情報/いまここログ機能テスト
         comment = comment
 [[BLE Features]]
     [BLE Title Section 1]
-        en = BLE Title Section 1
+        en = ペアリング情報
         ja = ペアリング情報
         comment = comment
     [BLE Title Section 2]
-        en = BLE Title Section 2
+        en = 同期状態
         ja = 同期状態
         comment = comment
     [BLE.Section1.Title1]
-        en = Name
-        ja = 機種名
+        en = 機種名 :
+        ja = 機種名 :
         comment = comment
     [BLE.Section1.Title2]
-        en = UUID
-        ja = UUID
+        en = UUID :
+        ja = UUID :
         comment = comment
     [BLE.Section2.Title1]
-        en = Next Sync
-        ja = 受信コマンド
+        en = 受信コマンド :
+        ja = 受信コマンド :
         comment = comment
 [[PositionInfo Features]]
     [PositionInfo.LogName]
-        en = Log Name
+        en = ログ名
         ja = ログ名
         comment = comment
     [PositionInfo.StartLog]
-        en = Start Log
+        en = ログ取得開始
         ja = ログ取得開始
         comment = comment
     [PositionInfo.StopLog]
-        en = Stop Log
+        en = ログ取得停止
         ja = ログ取得停止
         comment = comment
     [PositionInfo.GPSSetting]
-        en = GPS Setting
+        en = GPS設定
         ja = GPS設定
         comment = comment
     [PositionInfo.LogControlPolicy]
-        en = Log Control Policy
+        en = ログ取得の制御方針
         ja = ログ取得の制御方針
         comment = comment
     [PositionInfo.Interval]
-        en = Interval
+        en = インターバル
         ja = インターバル
         comment = comment
     [PositionInfo.MaxRecordingTime]
-        en = Max Recording Time
+        en = 最大記録時間
         ja = 最大記録時間
         comment = comment
 [[Weather Features]]
-[Position information acquisition time]
-en = Position information acquisition time:
-ja = 位置情報取得時刻：
-comment = comment
-[Sunrise and sunset data]
-en = Sunrise and sunset data
-ja = 日の出・日の入データ
-comment = comment
-[De sunset data of the month]
-en = De sunset data of the month
-ja = 月の出・日の入データ
-comment = comment
-[Age (noon)]
-en = Age (noon)
-ja = 月齢（正午）
-comment = comment
-[Meteorological data]
-en = Meteorological data
-ja = 気象データ
-comment = comment
-[Sunrise time]
-en = Sunrise time:
-ja = 日の出時刻：
-comment = comment
-[Sunset time]
-en = Sunset time:
-ja = 日の入時刻：
-comment = comment
-[Moonrise time]
-en = Moonrise time:
-ja = 月の出時刻：
-comment = comment
-[Moonset time]
-en = Moonset time:
-ja = 月の入時刻：
-comment = comment
-[Age]
-en = Age:
-ja = 月齢：
-comment = comment
-[Weather alert]
-en = Weather alert
-ja = 天候アラート
-comment = comment
-[Weather]
-en = Weather:
-ja = 天気：
-comment = comment
-[ON (no blinking at the time of rain detection)]
-en = ON (no blinking at the time of rain detection)
-ja = ON(雨の検出時に点滅なし）
-comment = comment
-[Weather information acquisition]
-en = Weather information acquisition
-ja = 天気情報取得
-comment = comment
-[Background]
-en = Background
-ja = バックグランド
-comment = comment
+    [Position information acquisition time]
+        en = 位置情報取得時刻：
+        ja = 位置情報取得時刻：
+        comment = comment
+    [Sunrise and sunset data]
+        en = 日の出・日の入データ
+        ja = 日の出・日の入データ
+        comment = comment
+    [De sunset data of the month]
+        en = 月の出・日の入データ
+        ja = 月の出・日の入データ
+        comment = comment
+    [Age (noon)]
+        en = 月齢（正午）
+        ja = 月齢（正午）
+        comment = comment
+    [Meteorological data]
+        en = 気象データ
+        ja = 気象データ
+        comment = comment
+    [Sunrise time]
+        en = 日の出時刻：
+        ja = 日の出時刻：
+        comment = comment
+    [Sunset time]
+        en = 日の入時刻：
+        ja = 日の入時刻：
+        comment = comment
+    [Moonrise time]
+        en = 月の出時刻：
+        ja = 月の出時刻：
+        comment = comment
+    [Moonset time]
+        en = 月の入時刻：
+        ja = 月の入時刻：
+        comment = comment
+    [Age]
+        en = 月齢：
+        ja = 月齢：
+        comment = comment
+    [Weather alert]
+        en = 天候アラート
+        ja = 天候アラート
+        comment = comment
+    [Weather]
+        en = 天気：
+        ja = 天気：
+        comment = comment
+    [ON (no blinking at the time of rain detection)]
+        en = ON(雨の検出時に点滅なし）
+        ja = ON(雨の検出時に点滅なし）
+        comment = comment
+    [Weather information acquisition]
+        en = 天気情報取得
+        ja = 天気情報取得
+        comment = comment
+    [Background]
+        en = バックグランド
+        ja = バックグランド
+        comment = comment

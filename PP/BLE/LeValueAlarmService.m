@@ -302,6 +302,7 @@ NSString *kAlarmServiceEnteredForegroundNotification = @"kAlarmServiceEnteredFor
 
 - (void) notificationReceiveTimeout:(NSNumber*)request_tag
 {
+    NSLog(@"notificationReceiveTimeout");
     if( notification_received == FALSE && [request_tag intValue] == current_request_tag )
     {
         NSLog(@"LeValueAlarmService Notifications Receiving Timeout");

@@ -39,6 +39,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.navigationItem.title = NSLocalizedString(@"BLE Dashboard", nil);
+    [[BLEHelper sharedInstance] start_watch_app_synchronization];
     [self loadDevicesList];
 }
 - (void) loadDevicesList
@@ -53,9 +54,16 @@
         BLEItem*item = [[BLEItem alloc] initWithName:service.peripheral.name UDID:service.peripheral.identifier.UUIDString];
         [_dataList addObject:item];
     }
+    if(_dataList.count==0 && [SettingUtils sharedInstance].deviceName.length>0)
+    {
+        NSString*name = [SettingUtils sharedInstance].deviceName;
+        NSString*udid = [SettingUtils sharedInstance].deviceUDID;
+        BLEItem*item = [[BLEItem alloc] initWithName:name UDID:udid];
+        [_dataList addObject:item];
+    }
     if(_dataList.count==0)
     {
-        BLEItem*item = [[BLEItem alloc] initWithName:@"" UDID:@""];
+        BLEItem*item = [[BLEItem alloc] initWithName:@"...." UDID:@"...."];
         [_dataList addObject:item];
     }
     [self.tableView reloadData];
@@ -123,7 +131,7 @@
             //        cell.backgroundColor=[UIColor yellowColor];
         }
         cell.lblTitleSetting.text= NSLocalizedString(@"BLE.Section2.Title1", nil );
-        cell.lblDetailSetting.text= @"ABV";
+        cell.lblDetailSetting.text= @"....";
         return cell;
     }
 }

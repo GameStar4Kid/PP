@@ -25,9 +25,19 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    [[BLEHelper sharedInstance] start_ble_scan];
-//    [[BLEHelper sharedInstance] startUpdateLocationInfo];
-    [[BLEHelper sharedInstance] start_watch_app_synchronization];
+    
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    [[BLEHelper sharedInstance] stop_timeout_timer];
+//    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
+    [self performSelector:@selector(startService) withObject:nil afterDelay:1];
+}
+- (void)startService
+{
+    [[BLEHelper sharedInstance] stop_timeout_timer];
+    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

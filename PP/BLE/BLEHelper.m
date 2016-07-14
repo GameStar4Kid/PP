@@ -52,6 +52,7 @@ typedef enum WATCH_MODEL
     NSTimer *timeout_timer;
     NSTimer *ble_ready_timeout_timer;
     NSTimer *Check_24H_sync_timer;
+    NSDate* Sync_Date;
 }
 @property (nonatomic, assign) int WatchModel_24H_Sync ;
 @property (nonatomic, strong) CLLocation *m_currentLocation;
@@ -220,7 +221,7 @@ __strong static BLEHelper* _sharedInstance = nil;
         {
 //            [self close_progress_dialog];
 //            [self show_ble_scan_failed_dialog];
-            [self start_watch_app_synchronization];
+//            [self start_watch_app_synchronization];
         }
         else
         {
@@ -458,7 +459,7 @@ __strong static BLEHelper* _sharedInstance = nil;
             communication_ready_msg_received = TRUE;
             [self stop_ready_timeout_timer];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
-//            [self BLE_write_time_to_watch];
+            [self BLE_write_time_to_watch];
             break;
         }
         case BLE_APP_COMMAND_DATA_SUMMARY:
@@ -513,7 +514,11 @@ __strong static BLEHelper* _sharedInstance = nil;
         }
         case BLE_APP_COMMAND_BASIC_TIME_WRITE:
         {
-//            [self BLE_process_time_write_response:data];
+            [self BLE_process_time_write_response:data];
+            NSLog(@"Write time to watch success");
+            
+            //stop connect
+            [self BLE_write_stop_connecting_to_watch];
             break;
         }
             
@@ -523,6 +528,41 @@ __strong static BLEHelper* _sharedInstance = nil;
             NSLog(@"--> Show BLE Error Dialog");
             break;
         }													
+    }
+}
+- (void) BLE_write_time_to_watch
+{
+    NSLog(@"WatchMenuTableController BLE_write_time_to_watch");
+    NSLog(@"Write Sync Time Message...");
+    NSData *time_sync_message = [self generate_time_sync_message];
+    NSLog(@"time_sync_message = %@", time_sync_message);
+    [_currentlyDisplayingService writeMessageToCustomWriteCharacteristic_raw:time_sync_message];
+}
+-(void) BLE_write_stop_connecting_to_watch
+{
+    NSLog(@"Write Stop Communication Message");
+    [_currentlyDisplayingService writeMessageToCustomWriteCharacteristic:@"00 00 20 80"];
+    sync_done = YES;
+    syncing_in_progress = FALSE;
+    [self stop_timeout_timer];
+    [self check_and_set_a_timer_for_next_sync];
+    [self restart_ble_scan:TRUE];
+}
+- (void) BLE_process_time_write_response:(NSData*)data
+{
+    const unsigned char* data_bytes = (const unsigned char*)[data bytes];
+    NSDate* last_sync_date;
+    //TODO
+//    E_WATCH_MODEL watch_model = MODEL_S830 ;
+    
+    NSLog(@"WatchMenuTableController BLE_process_time_write_response data = %@", data);
+    if( data_bytes[ data.length -1 ] == BLE_RESULT_OK )
+    {
+        last_sync_date = [NSDate date];
+    }
+    else
+    {
+        NSLog(@"Response Error: could not write time to watch");
     }
 }
 - (void) start_watch_app_synchronization
@@ -541,9 +581,31 @@ __strong static BLEHelper* _sharedInstance = nil;
     [_currentlyDisplayingService do_notification_subscribing];
     NSLog(@"_____ start ble_ready_timeout_timer Timer _____");
    	ble_ready_timeout_timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(ble_scan_time_out_check) userInfo:nil repeats:NO];
-    [self start_ble_scan];
-    [self startUpdateLocationInfo];
     
+}
+- (void) start_watch_app_synchronization_foreground
+{
+    if(syncing_in_progress == TRUE )
+    {
+         if(_currentlyDisplayingService != nil)
+         {
+         	NSLog(@"Other syncing is in progress --> SKIP ");
+         	return;
+         }
+        
+    }
+    
+    syncing_in_progress = TRUE;
+    current_sync_type = SYNC_TYPE_MANUAL;
+    
+    communication_stopped = FALSE;
+    sync_done = NO;
+    receiving_message_command = 0;
+    NSLog( @"///// start_ble_scan 002 /////");
+    [self start_ble_scan];
+    current_considering_peripheral = nil;
+    NSLog( @"sync_confirm_dialog_ok_tapped / startUpdateLocationInfo");
+    [self startUpdateLocationInfo];
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
@@ -835,9 +897,9 @@ __strong static BLEHelper* _sharedInstance = nil;
                 NSLog(@"This is an synchronization..checking for last_time_sync_24H_enabled_device_UUID");
                 
                 NSLog(@"----- watch_model = %d",watch_model);
-                NSString* user_selected_device_UUID = [SettingUtils sharedInstance].deviceUDID ;
+//                NSString* user_selected_device_UUID = [SettingUtils sharedInstance].deviceUDID ;
                 //FIXME
-//                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
+                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
                 NSLog(@"user_selected_device_UUID = %@", user_selected_device_UUID);
                 
                 if( !user_selected_device_UUID )
@@ -845,6 +907,7 @@ __strong static BLEHelper* _sharedInstance = nil;
                     NSLog(@"This is the first ---- device has been connected with Prospex app..");
                     this_is_user_selected_device_UUID = TRUE;
                     [SettingUtils sharedInstance].deviceUDID=peripheral.identifier.UUIDString;
+                    [[SettingUtils sharedInstance] saveDataWhenTerminate];
                     //TODO
 //                    [ setting Set_24H_Sync_UUID:watch_model :peripheral.identifier.UUIDString];
                     
@@ -907,5 +970,119 @@ __strong static BLEHelper* _sharedInstance = nil;
     {
         NSLog(@"There is no device");
     }
+}
+
+- (NSData*) generate_time_sync_message
+{
+    int16_t latitude_data = 0;
+    int16_t longitude_data = 0;
+    uint8_t gps_sync_enable = 0x00;
+    
+    if (self.m_currentLocation != nil)
+    {
+        NSLog(@"location_accquired = TRUE ");
+        
+        if( self.m_currentLocation.coordinate.latitude >= -65.0 && self.m_currentLocation.coordinate.latitude <= 65.0 )
+        {
+            NSLog(@"Location latitude is in valid range (-65 ~ 65). Enable location bit field ");
+            gps_sync_enable = 0x01;
+            latitude_data = self.m_currentLocation.coordinate.latitude * 100;
+            longitude_data = self.m_currentLocation.coordinate.longitude * 100;
+        }
+        else
+        {
+            NSLog(@"Location latitude is out of range (-65 ~ 65). Disable location bit field  ");
+        }
+    }
+    else
+    {
+        NSLog(@"location_accquired = FALSE . Disable location bit field ");
+    }
+    
+    // ----- 2016.02.09 debug -----
+    //	NSCalendar *calendar= [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    //	NSCalendarUnit unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSCalendar *calendar= [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSCalendarUnit unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    // ----- 2016.02.09 debug -----
+    NSDate *date = [NSDate date];
+    Sync_Date = [NSDate date] ;
+    NSDateComponents *dateComponents = [calendar components:unitFlags fromDate:date];
+    
+    NSInteger year = [dateComponents year];
+    NSInteger month = [dateComponents month];
+    NSInteger day = [dateComponents day];
+    NSInteger hour = [dateComponents hour];
+    NSInteger minute = [dateComponents minute];
+    NSInteger second = [dateComponents second];
+    
+    long long millisecs = (long long)( fmod([[NSDate date] timeIntervalSince1970],1) * 1000.0);
+    Byte sec_percents = millisecs/10;
+    
+    int16_t time_zone_offset = ([[NSTimeZone localTimeZone] secondsFromGMT] / 60.0);
+    
+    uint8_t dst_enable = 0x00;
+    
+    BOOL dst = [[calendar timeZone] isDaylightSavingTime];
+    // debug
+    double dst_offset_minutes = 60;
+    // debug
+    
+    if (dst == YES)
+    {
+        dst_enable = 1;
+        // debug
+        dst_offset_minutes = ([[calendar timeZone] daylightSavingTimeOffset] / 60.0);
+        NSLog(@"current dst_offset_minutes = %f", dst_offset_minutes);
+        if (dst_offset_minutes == 0)
+        {
+            dst_offset_minutes = 60;
+        }
+        // debug
+        // subtract for dst_offset_minutes according to Bug list No.303
+        // only subtract when DST is enabled at current time - Bug list No.303
+        time_zone_offset = time_zone_offset - dst_offset_minutes;
+    }
+    
+    NSLog(@"current hour = %ld", hour);
+    NSLog(@"current minute = %ld", minute);
+    NSLog(@"current second = %ld", second);
+    NSLog(@"current second percents = %d", sec_percents);
+    
+    NSLog(@"current day = %ld", (long)day);
+    NSLog(@"current month = %ld", (long)month);
+    NSLog(@"current year = %ld", (long)year);
+    
+    NSLog(@"current longitude data = %hd", longitude_data);
+    NSLog(@"current latitude data = %hd", latitude_data);
+    NSLog(@"time_zone_offset = %hd", time_zone_offset);
+    
+    Byte byte[] = {0x19, 0x00, 0x10, 0x80,
+        sec_percents,
+        (uint8_t)(second),/*second*/
+        (uint8_t)(minute),/*minute*/
+        (uint8_t)(hour),/*hour*/
+        (uint8_t)(day),/*day*/
+        (uint8_t)(month),/*month*/
+        (uint8_t)( (uint16_t)year ), /*year*/
+        (uint8_t)( ((uint16_t)year)>>8 ), /*year>>8*/
+        //0xAC, 0x0D, 0x4C, 0x36,
+        (uint8_t)( latitude_data ), /*latitude*/
+        (uint8_t)( latitude_data>>8 ), /*latitude*/
+        (uint8_t)( longitude_data ), /*longitude*/
+        (uint8_t)( longitude_data>>8 ), /*longitude*/
+        (uint8_t)( time_zone_offset ), /*time different*/
+        (uint8_t)( time_zone_offset>>8 ), /*time different*/
+        // debug
+        //    60, // DST offset
+        (uint8_t)(dst_offset_minutes),	//DST offset
+        // debug
+        dst_enable, // currently DST enable status
+        0x00,0x00,0x00,0x00, // time when DST will switch from OFF->ON
+        0x00,0x00,0x00,0x00, // time when DST will switch from ON->OFF
+        gps_sync_enable };
+    
+    NSData *time_sync_message = [[NSData alloc] initWithBytes:byte length:29];
+    return time_sync_message;
 }
 @end
