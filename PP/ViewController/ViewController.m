@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "DBCameraContainerViewController.h"
 #import "DBCameraView.h"
-
+#import "BLEHelper.h"
 @interface ViewController () <DBCameraViewControllerDelegate>
 
 @end
@@ -18,12 +18,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [BLEHelper sharedInstance];
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    [[BLEHelper sharedInstance] stop_timeout_timer];
+//    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
+    [self performSelector:@selector(startService) withObject:nil afterDelay:1];
+}
+- (void)startService
+{
+    [[BLEHelper sharedInstance] stop_timeout_timer];
+    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

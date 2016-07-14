@@ -4,7 +4,7 @@
  * Language: ja
  */
 
-/********** Uncategorized **********/
+/********** Main Title **********/
 
 /* comment */
 "BLE Dashboard" = "BLE通信テスト";
@@ -23,3 +23,93 @@
 
 /* comment */
 "PositionInfo Dashboard" = "位置情報/いまここログ機能テスト";
+
+
+/********** BLE Features **********/
+
+/* comment */
+"BLE Title Section 1" = "ペアリング情報";
+
+/* comment */
+"BLE Title Section 2" = "同期状態";
+
+/* comment */
+"BLE.Section1.Title1" = "機種名 :";
+
+/* comment */
+"BLE.Section1.Title2" = "UUID :";
+
+/* comment */
+"BLE.Section2.Title1" = "受信コマンド :";
+
+
+/********** PositionInfo Features **********/
+
+/* comment */
+"PositionInfo.LogName" = "ログ名";
+
+/* comment */
+"PositionInfo.StartLog" = "ログ取得開始";
+
+/* comment */
+"PositionInfo.StopLog" = "ログ取得停止";
+
+/* comment */
+"PositionInfo.GPSSetting" = "GPS設定";
+
+/* comment */
+"PositionInfo.LogControlPolicy" = "ログ取得の制御方針";
+
+/* comment */
+"PositionInfo.Interval" = "インターバル";
+
+/* comment */
+"PositionInfo.MaxRecordingTime" = "最大記録時間";
+
+
+/********** Weather Features **********/
+
+/* comment */
+"Position information acquisition time" = "位置情報取得時刻：";
+
+/* comment */
+"Sunrise and sunset data" = "日の出・日の入データ";
+
+/* comment */
+"De sunset data of the month" = "月の出・日の入データ";
+
+/* comment */
+"Age (noon)" = "月齢（正午）";
+
+/* comment */
+"Meteorological data" = "気象データ";
+
+/* comment */
+"Sunrise time" = "日の出時刻：";
+
+/* comment */
+"Sunset time" = "日の入時刻：";
+
+/* comment */
+"Moonrise time" = "月の出時刻：";
+
+/* comment */
+"Moonset time" = "月の入時刻：";
+
+/* comment */
+"Age" = "月齢：";
+
+/* comment */
+"Weather alert" = "天候アラート";
+
+/* comment */
+"Weather" = "天気：";
+
+/* comment */
+"ON (no blinking at the time of rain detection)" = "ON(雨の検出時に点滅なし）";
+
+/* comment */
+"Weather information acquisition" = "天気情報取得";
+
+/* comment */
+"Background" = "バックグランド";
