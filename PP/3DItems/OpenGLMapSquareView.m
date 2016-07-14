@@ -204,7 +204,7 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
     
     if (_floorTexture == 0) {
-        _floorTexture = [self setupTexture:@"tile_floor.png"];
+        _floorTexture = [self setupTexture:@"staticmap2.png"];
     }
     
     if (_mShouldLoadTexture) {
@@ -240,7 +240,7 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     
     GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
     
-    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
     
     // 3
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
