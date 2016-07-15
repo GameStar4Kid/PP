@@ -36,11 +36,17 @@ __strong static SettingUtils* _sharedInstance = nil;
 {
     [[NSUserDefaults standardUserDefaults] setObject:_deviceUDID forKey:@"deviceUDID"];
     [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"deviceName"];
+    [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_SavePeriod"];
+    [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_AccuracyFilter"];
+    [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_DistanceFilter"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 - (void)loadData
 {
     _deviceName = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceName"];
     _deviceUDID = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceUDID"];
+    _savePeriod = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_SavePeriod"];
+    _accurracyFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_AccuracyFilter"];
+    _distanceFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_DistanceFilter"];
 }
 @end

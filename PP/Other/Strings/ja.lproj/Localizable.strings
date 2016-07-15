@@ -113,3 +113,15 @@
 
 /* comment */
 "Background" = "バックグランド";
+
+
+/********** GPSSetting Screen **********/
+
+/* comment */
+"Save period" = "保存周期：";
+
+/* comment */
+"Accuracy filter" = "精度フィルタ：";
+
+/* comment */
+"Distance filter" = "距離フィルタ：";

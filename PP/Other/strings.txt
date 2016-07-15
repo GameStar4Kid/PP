@@ -134,3 +134,16 @@ comment = comment
 en = Background
 ja = バックグランド
 comment = comment
+[[GPSSetting Screen]]
+[Save period]
+en = Save period:
+ja = 保存周期：
+comment = comment
+[Accuracy filter]
+en = Accuracy filter:
+ja = 精度フィルタ：
+comment = comment
+[Distance filter]
+en = Distance filter:
+ja = 距離フィルタ：
+comment = comment

@@ -7,6 +7,7 @@
 //
 
 #import "PositionViewController.h"
+#import "GPSSettingViewController.h"
 
 @interface PositionViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -61,14 +62,21 @@
     return cell;
     
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Action Methods
+
+- (IBAction)tappedAtGPSSettingButton:(id)sender {
+    GPSSettingViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"GPSSettingViewController"];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
-*/
+
+- (IBAction)tappedAtStartButton:(id)sender {
+    
+}
+
+- (IBAction)tappedAtStopButton:(id)sender {
+    
+}
 
 @end

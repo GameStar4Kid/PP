@@ -113,3 +113,15 @@
 
 /* comment */
 "Background" = "Background";
+
+
+/********** GPSSetting Screen **********/
+
+/* comment */
+"Save period" = "Save period:";
+
+/* comment */
+"Accuracy filter" = "Accuracy filter:";
+
+/* comment */
+"Distance filter" = "Distance filter:";
