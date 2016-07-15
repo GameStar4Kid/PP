@@ -118,10 +118,10 @@
 /********** GPSSetting Screen **********/
 
 /* comment */
-"Save period" = "Save period:";
+"Save period" = "保存周期：";
 
 /* comment */
-"Accuracy filter" = "Accuracy filter:";
+"Accuracy filter" = "精度フィルタ：";
 
 /* comment */
-"Distance filter" = "Distance filter:";
+"Distance filter" = "距離フィルタ：";

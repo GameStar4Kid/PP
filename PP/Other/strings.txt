@@ -74,81 +74,6 @@
         ja = 最大記録時間
         comment = comment
 [[Weather Features]]
-<<<<<<< HEAD
-[Position information acquisition time]
-en = Position information acquisition time:
-ja = 位置情報取得時刻：
-comment = comment
-[Sunrise and sunset data]
-en = Sunrise and sunset data
-ja = 日の出・日の入データ
-comment = comment
-[De sunset data of the month]
-en = De sunset data of the month
-ja = 月の出・日の入データ
-comment = comment
-[Age (noon)]
-en = Age (noon)
-ja = 月齢（正午）
-comment = comment
-[Meteorological data]
-en = Meteorological data
-ja = 気象データ
-comment = comment
-[Sunrise time]
-en = Sunrise time:
-ja = 日の出時刻：
-comment = comment
-[Sunset time]
-en = Sunset time:
-ja = 日の入時刻：
-comment = comment
-[Moonrise time]
-en = Moonrise time:
-ja = 月の出時刻：
-comment = comment
-[Moonset time]
-en = Moonset time:
-ja = 月の入時刻：
-comment = comment
-[Age]
-en = Age:
-ja = 月齢：
-comment = comment
-[Weather alert]
-en = Weather alert
-ja = 天候アラート
-comment = comment
-[Weather]
-en = Weather:
-ja = 天気：
-comment = comment
-[ON (no blinking at the time of rain detection)]
-en = ON (no blinking at the time of rain detection)
-ja = ON(雨の検出時に点滅なし）
-comment = comment
-[Weather information acquisition]
-en = Weather information acquisition
-ja = 天気情報取得
-comment = comment
-[Background]
-en = Background
-ja = バックグランド
-comment = comment
-[[GPSSetting Screen]]
-[Save period]
-en = Save period:
-ja = 保存周期：
-comment = comment
-[Accuracy filter]
-en = Accuracy filter:
-ja = 精度フィルタ：
-comment = comment
-[Distance filter]
-en = Distance filter:
-ja = 距離フィルタ：
-comment = comment
-=======
     [Position information acquisition time]
         en = 位置情報取得時刻：
         ja = 位置情報取得時刻：
@@ -209,4 +134,16 @@ comment = comment
         en = バックグランド
         ja = バックグランド
         comment = comment
->>>>>>> 132a26caffe8953e496730aafc02807b90c707fa
+[[GPSSetting Screen]]
+    [Save period]
+        en = 保存周期：
+        ja = 保存周期：
+        comment = comment
+    [Accuracy filter]
+        en = 精度フィルタ：
+        ja = 精度フィルタ：
+        comment = comment
+    [Distance filter]
+        en = 距離フィルタ：
+        ja = 距離フィルタ：
+        comment = comment
