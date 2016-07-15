@@ -44,6 +44,10 @@
         en = 受信コマンド :
         ja = 受信コマンド :
         comment = comment
+    [BLE.Section2.Title2]
+        en = 最終同期時刻 :
+        ja = 最終同期時刻 :
+        comment = comment
 [[PositionInfo Features]]
     [PositionInfo.LogName]
         en = ログ名

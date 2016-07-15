@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [BLEHelper sharedInstance];
+//    [BLEHelper sharedInstance];
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -30,15 +30,13 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+//    [self performSelector:@selector(startService) withObject:nil afterDelay:1];
+}
+//- (void)startService
+//{
 //    [[BLEHelper sharedInstance] stop_timeout_timer];
 //    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
-    [self performSelector:@selector(startService) withObject:nil afterDelay:1];
-}
-- (void)startService
-{
-    [[BLEHelper sharedInstance] stop_timeout_timer];
-    [[BLEHelper sharedInstance] start_watch_app_synchronization_foreground];
-}
+//}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

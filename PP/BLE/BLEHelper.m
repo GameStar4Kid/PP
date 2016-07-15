@@ -221,7 +221,7 @@ __strong static BLEHelper* _sharedInstance = nil;
         {
 //            [self close_progress_dialog];
 //            [self show_ble_scan_failed_dialog];
-//            [self start_watch_app_synchronization];
+            [self start_watch_app_synchronization_foreground];
         }
         else
         {
@@ -455,6 +455,11 @@ __strong static BLEHelper* _sharedInstance = nil;
     {
         case BLE_APP_COMMAND_READY_FOR_COMMUNICATION:
         {
+            [SettingUtils sharedInstance].deviceUDID=_currentlyDisplayingService.peripheral.identifier.UUIDString;
+            [SettingUtils sharedInstance].deviceName=_currentlyDisplayingService.peripheral.name;
+            [[SettingUtils sharedInstance].dateFormatter setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+            [SettingUtils sharedInstance].lastSync= [[SettingUtils sharedInstance].dateFormatter stringFromDate:[NSDate date]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BLE_CONNECT_SUCCESS object:nil];
             NSLog(@"Communication Ready notification received... start data syncing..");
             communication_ready_msg_received = TRUE;
             [self stop_ready_timeout_timer];
@@ -545,8 +550,9 @@ __strong static BLEHelper* _sharedInstance = nil;
     sync_done = YES;
     syncing_in_progress = FALSE;
     [self stop_timeout_timer];
-    [self check_and_set_a_timer_for_next_sync];
-    [self restart_ble_scan:TRUE];
+//    [self check_and_set_a_timer_for_next_sync];
+//    [self restart_ble_scan:TRUE];
+    [self performSelector:@selector(start_watch_app_synchronization_foreground) withObject:nil afterDelay:10];
 }
 - (void) BLE_process_time_write_response:(NSData*)data
 {
@@ -628,11 +634,8 @@ __strong static BLEHelper* _sharedInstance = nil;
         {
             NSLog(@"watch connected ---> start_watch_app_synchronization ");
             
-            /* ----- 2016.02.05 debug -----*/
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
             [self start_watch_app_synchronization];
-            //			[self performSelector:@selector(start_watch_app_synchronization) withObject:nil afterDelay:5.0];
-            /* ----- 2016.02.05 debug -----*/
         }
         else
         {
@@ -712,6 +715,7 @@ __strong static BLEHelper* _sharedInstance = nil;
         if(current_sync_type == SYNC_TYPE_MANUAL )
         {
             //            [self BLE_communication_error:@"ERROR: unexpected disconect from watch"];
+            _currentlyDisplayingService=nil;
         }
     }
     self.WatchModel_24H_Sync = MODEL_MAX;
@@ -897,23 +901,23 @@ __strong static BLEHelper* _sharedInstance = nil;
                 NSLog(@"This is an synchronization..checking for last_time_sync_24H_enabled_device_UUID");
                 
                 NSLog(@"----- watch_model = %d",watch_model);
-//                NSString* user_selected_device_UUID = [SettingUtils sharedInstance].deviceUDID ;
+                NSString* user_selected_device_UUID = [SettingUtils sharedInstance].deviceUDID ;
                 //FIXME
-                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
+//                NSString* user_selected_device_UUID =@"2A01EEB0-CD72-B5F0-A6BB-E88663EBFF91";
                 NSLog(@"user_selected_device_UUID = %@", user_selected_device_UUID);
                 
                 if( !user_selected_device_UUID )
                 {
                     NSLog(@"This is the first ---- device has been connected with Prospex app..");
                     this_is_user_selected_device_UUID = TRUE;
-                    [SettingUtils sharedInstance].deviceUDID=peripheral.identifier.UUIDString;
-                    [[SettingUtils sharedInstance] saveDataWhenTerminate];
+//                    [[SettingUtils sharedInstance] saveDataWhenTerminate];
                     //TODO
 //                    [ setting Set_24H_Sync_UUID:watch_model :peripheral.identifier.UUIDString];
                     
                 }
                 else
                 {
+                    
                     this_is_user_selected_device_UUID = [peripheral.identifier.UUIDString isEqualToString:user_selected_device_UUID];
                     
                     if((this_is_current_targeted_watch_model== TRUE) && ( this_is_user_selected_device_UUID == FALSE ))

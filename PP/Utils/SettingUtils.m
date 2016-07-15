@@ -29,24 +29,56 @@ __strong static SettingUtils* _sharedInstance = nil;
     if(self=[super init])
     {
         [self loadData];
+        self.dateFormatter = [[NSDateFormatter alloc] init];
     }
     return self;
 }
-- (void)saveDataWhenTerminate
+- (void)setDeviceName:(NSString *)deviceName
 {
-    [[NSUserDefaults standardUserDefaults] setObject:_deviceUDID forKey:@"deviceUDID"];
+    _deviceName=deviceName;
     [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"deviceName"];
     [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_SavePeriod"];
     [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_AccuracyFilter"];
     [[NSUserDefaults standardUserDefaults] setObject:_deviceName forKey:@"GPSSetting_DistanceFilter"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+- (void)setDeviceUDID:(NSString *)deviceUDID
+{
+    _deviceUDID = deviceUDID;
+    [[NSUserDefaults standardUserDefaults] setObject:_deviceUDID forKey:@"deviceUDID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (void)setLastSync:(NSString *)lastSync
+{
+    _lastSync = lastSync;
+    [[NSUserDefaults standardUserDefaults] setObject:_lastSync forKey:@"lastSync"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (void)setSavePeriod:(NSString *)savePeriod
+{
+    _savePeriod = savePeriod;
+    [[NSUserDefaults standardUserDefaults] setObject:_lastSync forKey:@"savePeriod"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (void)setAccurracyFilter:(NSString *)accurracyFilter
+{
+    _accurracyFilter = accurracyFilter;
+    [[NSUserDefaults standardUserDefaults] setObject:_lastSync forKey:@"accurracyFilter"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (void)setDistanceFilter:(NSString *)distanceFilter
+{
+    _distanceFilter = distanceFilter;
+    [[NSUserDefaults standardUserDefaults] setObject:_lastSync forKey:@"distanceFilter"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 - (void)loadData
 {
     _deviceName = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceName"];
     _deviceUDID = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceUDID"];
-    _savePeriod = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_SavePeriod"];
-    _accurracyFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_AccuracyFilter"];
-    _distanceFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"GPSSetting_DistanceFilter"];
+    _savePeriod = [[NSUserDefaults standardUserDefaults] stringForKey:@"savePeriod"];
+    _accurracyFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"accurracyFilter"];
+    _distanceFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"distanceFilter"];
+    _lastSync = [[NSUserDefaults standardUserDefaults] stringForKey:@"lastSync"];
 }
 @end
