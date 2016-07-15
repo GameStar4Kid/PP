@@ -20,5 +20,7 @@
 -(void) stop_ble_scan_for_foreground;
 -(void) restart_ble_scan:(BOOL)loadViewFlg;
 -(void) start_watch_app_synchronization;
+- (void) start_watch_app_synchronization_foreground;
 -(void) startUpdateLocationInfo;
+-(void) stop_timeout_timer;
 @end

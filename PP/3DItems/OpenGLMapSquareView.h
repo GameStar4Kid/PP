@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
 #import <QuartzCore/QuartzCore.h>
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
@@ -31,6 +32,7 @@
     GLuint _textureUniform;
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
+    GLuint _textureBuffer;
     GLuint _vertexBuffer2;
     GLuint _indexBuffer2;
 }

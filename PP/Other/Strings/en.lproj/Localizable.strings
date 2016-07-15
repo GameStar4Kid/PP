@@ -7,112 +7,112 @@
 /********** Main Title **********/
 
 /* comment */
-"BLE Dashboard" = "BLE Title";
+"BLE Dashboard" = "BLE通信テスト";
 
 /* comment */
-"Weather Dashboard" = "Weather Title";
+"Weather Dashboard" = "お天気ダッシュボードテスト";
 
 /* comment */
-"Log3D Dashboard" = "Log3D Title";
+"Log3D Dashboard" = "ログ表示テスト(3D地図含む)";
 
 /* comment */
-"SNS Dashboard" = "SNS Title";
+"SNS Dashboard" = "SNS投稿フォーム作成テスト";
 
 /* comment */
-"Shutter Dashboard" = "Shutter Title";
+"Shutter Dashboard" = "ウオッチからシャッター機能テスト";
 
 /* comment */
-"PositionInfo Dashboard" = "PositionInfo Title";
+"PositionInfo Dashboard" = "位置情報/いまここログ機能テスト";
 
 
 /********** BLE Features **********/
 
 /* comment */
-"BLE Title Section 1" = "BLE Title Section 1";
+"BLE Title Section 1" = "ペアリング情報";
 
 /* comment */
-"BLE Title Section 2" = "BLE Title Section 2";
+"BLE Title Section 2" = "同期状態";
 
 /* comment */
-"BLE.Section1.Title1" = "Name";
+"BLE.Section1.Title1" = "機種名 :";
 
 /* comment */
-"BLE.Section1.Title2" = "UUID";
+"BLE.Section1.Title2" = "UUID :";
 
 /* comment */
-"BLE.Section2.Title1" = "Next Sync";
+"BLE.Section2.Title1" = "受信コマンド :";
 
 
 /********** PositionInfo Features **********/
 
 /* comment */
-"PositionInfo.LogName" = "Log Name";
+"PositionInfo.LogName" = "ログ名";
 
 /* comment */
-"PositionInfo.StartLog" = "Start Log";
+"PositionInfo.StartLog" = "ログ取得開始";
 
 /* comment */
-"PositionInfo.StopLog" = "Stop Log";
+"PositionInfo.StopLog" = "ログ取得停止";
 
 /* comment */
-"PositionInfo.GPSSetting" = "GPS Setting";
+"PositionInfo.GPSSetting" = "GPS設定";
 
 /* comment */
-"PositionInfo.LogControlPolicy" = "Log Control Policy";
+"PositionInfo.LogControlPolicy" = "ログ取得の制御方針";
 
 /* comment */
-"PositionInfo.Interval" = "Interval";
+"PositionInfo.Interval" = "インターバル";
 
 /* comment */
-"PositionInfo.MaxRecordingTime" = "Max Recording Time";
+"PositionInfo.MaxRecordingTime" = "最大記録時間";
 
 
 /********** Weather Features **********/
 
 /* comment */
-"Position information acquisition time" = "Position information acquisition time:";
+"Position information acquisition time" = "位置情報取得時刻：";
 
 /* comment */
-"Sunrise and sunset data" = "Sunrise and sunset data";
+"Sunrise and sunset data" = "日の出・日の入データ";
 
 /* comment */
-"De sunset data of the month" = "De sunset data of the month";
+"De sunset data of the month" = "月の出・日の入データ";
 
 /* comment */
-"Age (noon)" = "Age (noon)";
+"Age (noon)" = "月齢（正午）";
 
 /* comment */
-"Meteorological data" = "Meteorological data";
+"Meteorological data" = "気象データ";
 
 /* comment */
-"Sunrise time" = "Sunrise time:";
+"Sunrise time" = "日の出時刻：";
 
 /* comment */
-"Sunset time" = "Sunset time:";
+"Sunset time" = "日の入時刻：";
 
 /* comment */
-"Moonrise time" = "Moonrise time:";
+"Moonrise time" = "月の出時刻：";
 
 /* comment */
-"Moonset time" = "Moonset time:";
+"Moonset time" = "月の入時刻：";
 
 /* comment */
-"Age" = "Age:";
+"Age" = "月齢：";
 
 /* comment */
-"Weather alert" = "Weather alert";
+"Weather alert" = "天候アラート";
 
 /* comment */
-"Weather" = "Weather:";
+"Weather" = "天気：";
 
 /* comment */
-"ON (no blinking at the time of rain detection)" = "ON (no blinking at the time of rain detection)";
+"ON (no blinking at the time of rain detection)" = "ON(雨の検出時に点滅なし）";
 
 /* comment */
-"Weather information acquisition" = "Weather information acquisition";
+"Weather information acquisition" = "天気情報取得";
 
 /* comment */
-"Background" = "Background";
+"Background" = "バックグランド";
 
 
 /********** GPSSetting Screen **********/

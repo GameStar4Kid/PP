@@ -8,13 +8,13 @@
 
 #import "OpenGLMapSquareView.h"
 #import "CC3GLMatrix.h"
+#import <OpenGLES/ES1/gl.h>
 
 @interface OpenGLMapSquareView() {
     
 }
 
 @property Boolean mShouldLoadTexture;
-@property int mTextureId;
 
 @end
 
@@ -26,25 +26,13 @@ typedef struct {
     float TexCoord[2]; // New
 } Vertex;
 
-/*const Vertex Vertices[] = {
-    {{1, -1, 0}, {1, 0, 0, 1}},
-    {{1, 1, 0}, {0, 1, 0, 1}},
-    {{-1, 1, 0}, {0, 0, 1, 1}},
-    {{-1, -1, 0}, {0, 0, 0, 1}}
-};
- 
-const GLubyte Indices[] = {
-     0, 1, 2,
-     2, 3, 0
-};*/
-
-#define TEX_COORD_MAX   4
-
+#define TEX_COORD_MAX   1
 const Vertex Vertices1[] = {
-    -1.0f, 1.0f, 0.0f, // 0, Top Left
-    -1.0f, -1.0f, 0.0f, // 1, Bottom Left
-    1.0f, -1.0f, 0.0f, // 2, Bottom Right
-    1.0f, 1.0f, 0.0f, // 3, Top Right
+    // Front
+    {{-1.0f, 1.0f, 0.0f}, {1, 0, 0, 1}, {0, 0}},                            // -1  1 0 / 0,0 / Top Left
+    {{-1.0f, -1.0f, 0.0f}, {0, 1, 0, 1}, {0.0f, TEX_COORD_MAX}},            // -1 -1 0 / 0,0 / Bottom Left
+    {{1.0f, -1.0f, 0.0f}, {0, 0, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},    //  1 -1 0 / 0,0 / Bottom Right
+    {{1.0f, 1.0f, 0.0f}, {0, 0, 0, 1}, {TEX_COORD_MAX, 0}},                 //  1  1 0 / 0,0 / Top Right
 };
 
 const GLubyte Indices1[] = {0, 1, 2, 0, 2, 3 };
@@ -54,21 +42,6 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     1.0f, 1.0f, //
     1.0f, 0.0f, //
 };
-
-const GLfloat vertexBuffer;
-const GLshort indexBuffer;
-const GLfloat mTextureBuffer;
-
-//const Vertex Vertices2[] = {
-//    {{0.5, -0.5, 0.01}, {1, 1, 1, 1}, {1, 1}},
-//    {{0.5, 0.5, 0.01}, {1, 1, 1, 1}, {1, 0}},
-//    {{-0.5, 0.5, 0.01}, {1, 1, 1, 1}, {0, 0}},
-//    {{-0.5, -0.5, 0.01}, {1, 1, 1, 1}, {0, 1}},
-//};
-
-//const GLubyte Indices2[] = {
-//    1, 0, 2, 3
-//};
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -80,7 +53,7 @@ const GLfloat mTextureBuffer;
 }
 
 - (void)setupContext {   
-    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES1;
+    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context) {
         NSLog(@"Failed to initialize OpenGLES 2.0 context");
@@ -192,7 +165,7 @@ const GLfloat mTextureBuffer;
 }
 
 - (void)setupVBOs {
-    
+
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices1), Vertices1, GL_STATIC_DRAW);
@@ -200,15 +173,7 @@ const GLfloat mTextureBuffer;
     glGenBuffers(1, &_indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices1), Indices1, GL_STATIC_DRAW);
-    
-//    glGenBuffers(1, &_vertexBuffer2);
-//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
-    
-//    glGenBuffers(1, &_indexBuffer2);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices2), Indices2, GL_STATIC_DRAW);
-    
+
 }
 
 - (void)render:(CADisplayLink*)displayLink {
@@ -219,16 +184,12 @@ const GLfloat mTextureBuffer;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);        
     
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    
-    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
-    _currentRotation += displayLink.duration * 90;
-    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    float aspect = fabs(self.frame.size.width / self.frame.size.height);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+
+    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     
     // 1
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -242,34 +203,26 @@ const GLfloat mTextureBuffer;
     
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
     
-    glActiveTexture(GL_TEXTURE0); 
-    glBindTexture(GL_TEXTURE_2D, _floorTexture);
-    glUniform1i(_textureUniform, 0); 
+    if (_floorTexture == 0) {
+        _floorTexture = [self setupTexture:@"staticmap2.png"];
+    }
+    
+    if (_mShouldLoadTexture) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _floorTexture);
+    }
+    
+    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
     
     // 3
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-
-    glActiveTexture(GL_TEXTURE0); // unneccc in practice
-    glBindTexture(GL_TEXTURE_2D, _fishTexture);
-    glUniform1i(_textureUniform, 0); // unnecc in practice
-
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-
-//    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices2)/sizeof(Indices2[0]), GL_UNSIGNED_BYTE, 0);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (void)setupDisplayLink {
     CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    
+    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (GLuint)setupTexture:(NSString *)fileName {
@@ -287,7 +240,7 @@ const GLfloat mTextureBuffer;
     
     GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
     
-    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
     
     // 3
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
@@ -295,17 +248,19 @@ const GLfloat mTextureBuffer;
     CGContextRelease(spriteContext);
     
     // 4
-    GLuint texName;
-    glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);
+    GLuint texId;
+    glGenTextures(1, &texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
-    free(spriteData);        
-    return texName;
+    // Enable flag by true
+    self.mShouldLoadTexture = true;
     
+    free(spriteData);        
+    return texId;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -315,16 +270,12 @@ const GLfloat mTextureBuffer;
         [self initParams];
         [self setupLayer];        
         [self setupContext];
-        [self loadBitmap];
-        [self loadGLTexture];
         [self setupDepthBuffer];
         [self setupRenderBuffer];        
         [self setupFrameBuffer];     
         [self compileShaders];
         [self setupVBOs];
         [self setupDisplayLink];
-        _floorTexture = [self setupTexture:@"tile_floor.png"];
-        _fishTexture = [self setupTexture:@"item_powerup_fish.png"];
     }
     return self;
 }
@@ -336,70 +287,5 @@ const GLfloat mTextureBuffer;
 
 - (void)initParams {
     self.mShouldLoadTexture = false;
-    self.mTextureId = -1;
-}
-
-- (void)loadBitmap {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"tile_floor" ofType:@"png"];
-    NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
-    UIImage *localImage = [[UIImage alloc] initWithData:texData];
-    if (localImage == nil)
-        NSLog(@"Do real error checking here");
-    
-    _image = localImage;
-    self.mShouldLoadTexture = true;
-}
-
-- (void)loadGLTexture {
-    // Generate one texture pointer...
-    GLuint textures[1];
-    glGenTextures(1, &textures[0]);
-    
-    self.mTextureId = textures[0];
-    
-    // ...and bind it to our array
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    
-    // Create Nearest Filtered Texture
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-    // Use the Android GLUtils to specify a two-dimensional texture image
-    // from our bitmap
-    GLuint iWidth = CGImageGetWidth(_image.CGImage);
-    GLuint iHeight = CGImageGetHeight(_image.CGImage);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    void *imageData = malloc( iHeight * iWidth * 4 );
-    CGContextRef localContext = CGBitmapContextCreate( imageData, iWidth, iHeight, 8, 4 * iWidth, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-    CGColorSpaceRelease( colorSpace );
-    CGContextClearRect( localContext, CGRectMake( 0, 0, iWidth, iHeight ) );
-    CGContextTranslateCTM( localContext, 0, iHeight - iHeight );
-    CGContextDrawImage( localContext, CGRectMake( 0, 0, iWidth, iHeight ), _image.CGImage );
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-}
-
-- (void)setTextureCoordinates {
-    
-}
-
-- (NSOutputStream*)outputStream {
-    if (_outputStream == nil) {
-        _outputStream = [[NSOutputStream alloc] initToMemory];
-        [_outputStream open];
-    }
-    return _outputStream;
-}
-
-- (void)putInt:(NSInteger)value {
-    [self.outputStream write:(uint8_t*)&value maxLength:sizeof(NSInteger)];
-}
-
-- (NSData*)data {
-    return [self.outputStream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
 }
 @end
