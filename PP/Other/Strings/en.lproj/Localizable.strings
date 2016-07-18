@@ -42,6 +42,9 @@
 /* comment */
 "BLE.Section2.Title1" = "受信コマンド :";
 
+/* comment */
+"BLE.Section2.Title2" = "最終同期時刻 :";
+
 
 /********** PositionInfo Features **********/
 

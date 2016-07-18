@@ -12,8 +12,9 @@
 + (SettingUtils *)sharedInstance;
 @property(nonatomic,strong) NSString* deviceUDID;
 @property(nonatomic,strong) NSString* deviceName;
+@property(nonatomic,strong) NSString* lastSync;
+@property(nonatomic,strong) NSDateFormatter* dateFormatter;
 @property (nonatomic, strong) NSString *savePeriod;
 @property (nonatomic, strong) NSString *accurracyFilter;
 @property (nonatomic, strong) NSString *distanceFilter;
-- (void)saveDataWhenTerminate;
 @end
