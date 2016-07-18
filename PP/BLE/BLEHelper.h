@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LeDiscovery.h"
+#define NOTIFICATION_BLE_CONNECT_SUCCESS @"NOTIFICATION_BLE_CONNECT_SUCCESS"
 @interface BLEHelper : NSObject
 @property (retain, nonatomic) LeValueAlarmService *currentlyDisplayingService;
 @property (retain, nonatomic) NSMutableArray            *connectedServices;

@@ -7,7 +7,6 @@
 //
 
 #import "WeatherViewController.h"
-#import "Enums.h"
 #import "WeatherInfoTableViewCell.h"
 #import "SunOrMoonDataTableViewCell.h"
 #import "UITableViewCellFixed.h"

@@ -7,12 +7,20 @@
 //
 
 #import "PositionViewController.h"
+#import "GPSSettingViewController.h"
+#import "SettingUtils.h"
 
-@interface PositionViewController ()
+@import CoreLocation;
+
+@interface PositionViewController ()<CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *btnStart;
 @property (weak, nonatomic) IBOutlet UIButton *btnStop;
 @property (weak, nonatomic) IBOutlet UIButton *btnGPSSetting;
+@property (weak, nonatomic) IBOutlet UILabel *lblIntervalValue;
+@property (weak, nonatomic) IBOutlet UILabel *lblMaxRecordTime;
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
 
@@ -61,14 +69,77 @@
     return cell;
     
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Action Methods
+
+- (IBAction)tappedAtGPSSettingButton:(id)sender {
+    GPSSettingViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"GPSSettingViewController"];
+    UIBarButtonItem *newBackButton =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:nil
+                                    action:nil];
+    [[self navigationItem] setBackBarButtonItem:newBackButton];
+    [self.navigationController pushViewController:vc animated:YES];
 }
-*/
+
+- (IBAction)tappedAtStartButton:(id)sender {
+    // Create the location manager if this object does not
+    // already have one.
+    if (nil == self.locationManager) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+    }
+    self.locationManager.desiredAccuracy = [self accuracyFilterSetting];
+    
+    // Set a movement threshold for new events.
+    self.locationManager.distanceFilter = [self distanceFilterFromSetting]; // meters
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (IBAction)tappedAtStopButton:(id)sender {
+    [self.locationManager stopUpdatingLocation];
+}
+
+- (CLLocationAccuracy)accuracyFilterSetting {
+    NSString *accuracyFilter = [SettingUtils sharedInstance].accurracyFilter;
+    
+    if ([accuracyFilter isEqualToString:GPS_ACCURACY_FILTER_10M]) {
+        
+        return kCLLocationAccuracyNearestTenMeters;
+    } else if ([accuracyFilter isEqualToString:GPS_ACCURACY_FILTER_100M]) {
+        
+        return kCLLocationAccuracyHundredMeters;
+    }
+    
+    return kCLLocationAccuracyNearestTenMeters;
+}
+
+- (NSUInteger)distanceFilterFromSetting {
+    NSString *string = [SettingUtils sharedInstance].distanceFilter;
+    NSUInteger distanceFilter = 0;
+    if ([string isEqualToString:GPS_DISTANCE_FILTER_5M]) {
+        
+        distanceFilter = 5;
+    } else if ([string isEqualToString:GPS_DISTANCE_FILTER_10M]) {
+        
+        distanceFilter = 10;
+    } else if ([string isEqualToString:GPS_DISTANCE_FILTER_50M]) {
+        
+        distanceFilter = 50;
+    } else if ([string isEqualToString:GPS_DISTANCE_FILTER_100M]) {
+        
+        distanceFilter = 100;
+    } else if ([string isEqualToString:GPS_DISTANCE_FILTER_500M]) {
+        
+        distanceFilter = 500;
+    } else {
+        
+        distanceFilter = 5;
+    }
+    
+    return distanceFilter;
+}
 
 @end

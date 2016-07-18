@@ -33,39 +33,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadDevicesList) name:NOTIFICATION_BLE_CONNECT_SUCCESS object:nil];
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.navigationItem.title = NSLocalizedString(@"BLE Dashboard", nil);
-    [[BLEHelper sharedInstance] start_watch_app_synchronization];
+//    [[BLEHelper sharedInstance] start_watch_app_synchronization];
     [self loadDevicesList];
+    
 }
 - (void) loadDevicesList
 {
-    if(!_dataList)
-    {
-        _dataList = [NSMutableArray arrayWithCapacity:0];
-    }
+    NSMutableArray*    list = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray*arr = [BLEHelper sharedInstance].connectedServices;
     for (LeValueAlarmService* service in arr)
     {
         BLEItem*item = [[BLEItem alloc] initWithName:service.peripheral.name UDID:service.peripheral.identifier.UUIDString];
-        [_dataList addObject:item];
+        [list addObject:item];
     }
-    if(_dataList.count==0 && [SettingUtils sharedInstance].deviceName.length>0)
+    if(list.count==0 && [SettingUtils sharedInstance].deviceUDID.length>0)
     {
         NSString*name = [SettingUtils sharedInstance].deviceName;
         NSString*udid = [SettingUtils sharedInstance].deviceUDID;
         BLEItem*item = [[BLEItem alloc] initWithName:name UDID:udid];
-        [_dataList addObject:item];
+        [list addObject:item];
     }
-    if(_dataList.count==0)
+    if(list.count==0)
     {
         BLEItem*item = [[BLEItem alloc] initWithName:@"...." UDID:@"...."];
-        [_dataList addObject:item];
+        [list addObject:item];
     }
+    self.dataList=list;
     [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning {
@@ -78,10 +82,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if(section==0)
-        return _dataList.count;
+        return _dataList.count*2;
     else
     {
-        return 1;
+        return 2;
     }
 }
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -105,34 +109,61 @@
 //    {
 //        return 0;
 //    }
-    return 60;
+    return 40;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"staticCell"];
+    if (!cell) {
+        cell = [[BLESettingCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"staticCell"];
+    }
+    [self configureCell:indexPath cell:cell];
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Background color
+    view.tintColor = [UIColor grayColor];
+    
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:[UIColor whiteColor]];
+    
+    // Another way to set the background color
+    // Note: does not preserve gradient effect of original header
+    // header.contentView.backgroundColor = [UIColor blackColor];
+}
+- (void)configureCell:(NSIndexPath*)indexPath cell:(UITableViewCell*)cell
+{
     if(indexPath.section==0)
     {
-        BLEDeviceCell *cell = [tableView dequeueReusableCellWithIdentifier:@"deviceCell"];
-        if (!cell) {
-            cell = [[BLEDeviceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"deviceCell"];
+        int row = roundf(indexPath.row/2);
+        BLEItem*item = _dataList[row];
+        if(indexPath.row==0)
+        {
+            cell.textLabel.text=NSLocalizedString(@"BLE.Section1.Title1", nil );
+            cell.detailTextLabel.text= item.name;
         }
-        cell.lblTitleName.text= NSLocalizedString(@"BLE.Section1.Title1", nil);
-        cell.lblTitleUDID.text= NSLocalizedString(@"BLE.Section1.Title2", nil);
-        BLEItem*item = _dataList[indexPath.row];
-        cell.lblDetailName.text=item.name;
-        cell.lblDetailUDID.text=item.UDID;
-        return cell;
+        else
+        {
+            cell.textLabel.text=NSLocalizedString(@"BLE.Section1.Title2", nil );
+            cell.detailTextLabel.text= item.UDID;
+            cell.detailTextLabel.adjustsFontSizeToFitWidth=YES;
+        }
     }
     else
     {
-        BLESettingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"settingCell"];
-        if (!cell) {
-            cell = [[BLESettingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"settingCell"];
-            //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            //        cell.backgroundColor=[UIColor yellowColor];
+        if(indexPath.row==0)
+        {
+            cell.textLabel.text=NSLocalizedString(@"BLE.Section2.Title1", nil );
+            cell.detailTextLabel.text= @"....";
         }
-        cell.lblTitleSetting.text= NSLocalizedString(@"BLE.Section2.Title1", nil );
-        cell.lblDetailSetting.text= @"....";
-        return cell;
+        else
+        {
+            cell.textLabel.text=NSLocalizedString(@"BLE.Section2.Title2", nil );
+            cell.detailTextLabel.text= [SettingUtils sharedInstance].lastSync;
+            cell.detailTextLabel.adjustsFontSizeToFitWidth=YES;
+        }
     }
 }
 /*
