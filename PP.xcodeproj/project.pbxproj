@@ -138,7 +138,8 @@
 		3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunOrMoonDataTableViewCell.m; sourceTree = "<group>"; };
 		3CD3743A1D34D2B50087B2F4 /* WeatherInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherInfoTableViewCell.h; sourceTree = "<group>"; };
 		3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoTableViewCell.m; sourceTree = "<group>"; };
-		3CD3743E1D34E8B90087B2F4 /* Enums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enums.h; sourceTree = "<group>"; };
+		3CE476011D38E5FE0009B440 /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enums.h; sourceTree = "<group>"; };
+		3CE476021D38E6140009B440 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3CFCA5DB1D37698F00ED30CF /* GPSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSSettingViewController.h; sourceTree = "<group>"; };
 		3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSSettingViewController.m; sourceTree = "<group>"; };
 		3CFCA5DF1D376ECC00ED30CF /* CommonMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMethods.h; sourceTree = "<group>"; };
@@ -247,7 +248,6 @@
 			children = (
 				3CFCA5E41D3779BC00ED30CF /* Models */,
 				26E555081D3625FA00B1BE52 /* Utils */,
-				3CD3743D1D34E8A80087B2F4 /* Enums */,
 				3CD374331D34C6590087B2F4 /* Views */,
 				17C151821D3392470084CF31 /* 3DArt */,
 				17C1517D1D33919A0084CF31 /* 3DData */,
@@ -291,6 +291,8 @@
 		26E555081D3625FA00B1BE52 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3CE475FF1D38E5FE0009B440 /* Constants */,
+				3CE476001D38E5FE0009B440 /* Enums */,
 				3CFCA5DE1D376E9F00ED30CF /* CommonMethods */,
 				26E555091D3625FA00B1BE52 /* SettingUtils.h */,
 				26E5550A1D3625FA00B1BE52 /* SettingUtils.m */,
@@ -395,10 +397,18 @@
 			path = WeatherInfoCell;
 			sourceTree = "<group>";
 		};
-		3CD3743D1D34E8A80087B2F4 /* Enums */ = {
+		3CE475FF1D38E5FE0009B440 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				3CD3743E1D34E8B90087B2F4 /* Enums.h */,
+				3CE476021D38E6140009B440 /* Constants.h */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		3CE476001D38E5FE0009B440 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				3CE476011D38E5FE0009B440 /* Enums.h */,
 			);
 			path = Enums;
 			sourceTree = "<group>";

@@ -61,7 +61,7 @@ static NSUInteger const kNumberOfComponents = 1;
 #pragma mark - Private Methods
 
 - (void)setUpView {
-    self.title = NSLocalizedString(@"", nil);
+    self.title = NSLocalizedString(@"PositionInfo.GPSSetting", nil);
     self.lblSavePeriod.text = NSLocalizedString(@"Save period", nil);
     self.lblAccuracyFilter.text = NSLocalizedString(@"Accuracy filter", nil);
     self.lblDistanceFilter.text = NSLocalizedString(@"Distance filter", nil);
@@ -70,21 +70,21 @@ static NSUInteger const kNumberOfComponents = 1;
     if (periodSave.length > 0) {
         self.lblSavePeriodValue.text = periodSave;
     } else {
-        self.lblSavePeriodValue.text = @"LONG24H";
+        self.lblSavePeriodValue.text = GPS_SAVE_PERIOD_LONG_24H;
         [[SettingUtils sharedInstance] setSavePeriod:self.lblSavePeriodValue.text];
     }
     NSString *accuracyFilter = [SettingUtils sharedInstance].accurracyFilter;
     if (accuracyFilter.length > 0) {
         self.lblAccuracyFilterValue.text = accuracyFilter;
     } else {
-        self.lblAccuracyFilterValue.text = @"10m";
+        self.lblAccuracyFilterValue.text = GPS_ACCURACY_FILTER_10M;
         [[SettingUtils sharedInstance] setAccurracyFilter:self.lblAccuracyFilterValue.text];
     }
     NSString *distanceFilter = [SettingUtils sharedInstance].distanceFilter;
     if (distanceFilter.length > 0) {
         self.lblDistanceFilterValue.text = distanceFilter;
     } else {
-        self.lblDistanceFilterValue.text = @"5m";
+        self.lblDistanceFilterValue.text = GPS_DISTANCE_FILTER_5M;
         [[SettingUtils sharedInstance] setDistanceFilter:self.lblDistanceFilterValue.text];
     }
     
@@ -141,21 +141,21 @@ static NSUInteger const kNumberOfComponents = 1;
     NSArray *data = nil;
     switch (self.currentInputLabel) {
         case InputLabel_SavePeriod:
-            data = @[NSLocalizedString(@"LONG24H", nil),
-                     NSLocalizedString(@"SHORT15M", nil),
-                     NSLocalizedString(@"SHORT30M", nil),
-                     NSLocalizedString(@"SHORT1H", nil)];
+            data = @[GPS_SAVE_PERIOD_LONG_24H,
+                     GPS_SAVE_PERIOD_SHORT_15M,
+                     GPS_SAVE_PERIOD_SHORT_30M,
+                     GPS_SAVE_PERIOD_SHORT_1H];
             break;
         case InputLabel_AccuracyFilter:
-            data = @[NSLocalizedString(@"10m", nil),
-                     NSLocalizedString(@"50m", nil)];
+            data = @[GPS_ACCURACY_FILTER_10M,
+                     GPS_ACCURACY_FILTER_100M];
             break;
         case InputLabel_DistanceFilter:
-            data = @[NSLocalizedString(@"5m", nil),
-                     NSLocalizedString(@"10m", nil),
-                     NSLocalizedString(@"50m", nil),
-                     NSLocalizedString(@"100m", nil),
-                     NSLocalizedString(@"500m", nil)];
+            data = @[GPS_DISTANCE_FILTER_5M,
+                     GPS_DISTANCE_FILTER_10M,
+                     GPS_DISTANCE_FILTER_50M,
+                     GPS_DISTANCE_FILTER_100M,
+                     GPS_DISTANCE_FILTER_500M];
             break;
             
         default:

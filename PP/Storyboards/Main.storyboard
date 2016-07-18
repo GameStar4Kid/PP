@@ -67,7 +67,7 @@
                                         <rect key="frame" x="0.0" y="92" width="600" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tGQ-5k-d5L" id="wun-n4-k4V">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0i-WQ-IXA">
@@ -135,7 +135,7 @@
                                         <rect key="frame" x="0.0" y="155" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L5b-c5-pWi" id="aht-SZ-PXm">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pM9-Ua-BTR">
@@ -561,6 +561,8 @@
                         <outlet property="btnGPSSetting" destination="RT7-zI-1ku" id="EcJ-sn-2kf"/>
                         <outlet property="btnStart" destination="FKt-eA-jvf" id="rfm-du-ocX"/>
                         <outlet property="btnStop" destination="ZZF-TR-dWi" id="c7V-rB-loJ"/>
+                        <outlet property="lblIntervalValue" destination="2L4-Fd-A8Z" id="pS8-mu-WwB"/>
+                        <outlet property="lblMaxRecordTime" destination="lW5-Vu-FHs" id="Rcd-ac-VUb"/>
                         <outlet property="tableView" destination="u03-WO-Ot1" id="aU5-tp-G0N"/>
                     </connections>
                 </viewController>
