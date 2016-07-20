@@ -180,7 +180,7 @@ const GLubyte Indices2[] = {
     
     // 1
     GLuint vertexShader = [self compileShader:@"SimpleVertex" withType:GL_VERTEX_SHADER];
-    GLuint fragmentShader = [self compileShader:@"SimpleFragment" withType:GL_FRAGMENT_SHADER];
+    GLuint fragmentShader = [self compileShader:@"MapFragment" withType:GL_FRAGMENT_SHADER];
     
     // 2
     GLuint programHandle = glCreateProgram();

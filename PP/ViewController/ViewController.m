@@ -10,6 +10,8 @@
 #import "DBCameraContainerViewController.h"
 #import "DBCameraView.h"
 #import "BLEHelper.h"
+#import "OpenGLViewController.h"
+
 @interface ViewController () <DBCameraViewControllerDelegate>
 
 @end
@@ -183,6 +185,17 @@
         //save success
         
     }
+}
+
+-(BOOL)shouldAutorotate {
+    
+    BOOL shouldRotate = NO;
+    
+    if ([self.navigationController.topViewController isMemberOfClass:[OpenGLViewController class]] ) {
+        shouldRotate = [self.navigationController.topViewController shouldAutorotate];
+    }
+    
+    return shouldRotate;
 }
 
 @end

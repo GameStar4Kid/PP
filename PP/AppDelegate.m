@@ -22,6 +22,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [self performSelector:@selector(startService) withObject:nil afterDelay:3];
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+
     return YES;
 }
 - (void)startService

@@ -46,14 +46,7 @@ typedef struct {
     float alt; // New
 } Position;
 
-
-//        positionList.add(new Position(11.938604, 108.441754, 1491));
-//        positionList.add(new Position(11.939946, 108.446161, 1481));
-//        positionList.add(new Position(11.936598, 108.446848, 1485));
-//        positionList.add(new Position(11.935789, 108.446054, 1480));
-//        positionList.add(new Position(11.935926, 108.445614, 1482));
-//        positionList.add(new Position(11.937584, 108.445131, 1486));
-//        positionList.add(new Position(11.938613, 108.441794, 1491));
+// Blue route
 Position route[] = {{11.938604, 108.441754, 1491},
                 {11.939946, 108.446161, 1481},
                 {11.936598, 108.446848, 1485},
@@ -95,7 +88,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
 - (void)setupDepthBuffer {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);    
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
 }
 
 - (void)setupFrameBuffer {    
@@ -144,8 +137,12 @@ Position route[] = {{11.938604, 108.441754, 1491},
 }
 
 - (void)compileFragmentShader:(NSString *)fragmentName {
+    // 1
     GLuint vertexShader = [self compileShader:@"SimpleVertex" withType:GL_VERTEX_SHADER];
     GLuint fragmentShader = [self compileShader:fragmentName withType:GL_FRAGMENT_SHADER];
+    
+    // 2
+    _programHandle = glCreateProgram();
     glAttachShader(_programHandle, vertexShader);
     glAttachShader(_programHandle, fragmentShader);
     glLinkProgram(_programHandle);
@@ -167,8 +164,8 @@ Position route[] = {{11.938604, 108.441754, 1491},
     // 5
     _positionSlot = glGetAttribLocation(_programHandle, "Position");
     _colorSlot = glGetAttribLocation(_programHandle, "SourceColor");
-    glEnableVertexAttribArray(_programHandle);
-    glEnableVertexAttribArray(_programHandle);
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_colorSlot);
     
     _projectionUniform = glGetUniformLocation(_programHandle, "Projection");
     _modelViewUniform = glGetUniformLocation(_programHandle, "Modelview");
@@ -217,7 +214,6 @@ Position route[] = {{11.938604, 108.441754, 1491},
     _texCoordSlot = glGetAttribLocation(_programHandle, "TexCoordIn");
     glEnableVertexAttribArray(_texCoordSlot);
     _textureUniform = glGetUniformLocation(_programHandle, "Texture");
-    
 }
 // For vertices of triangle
 - (void)setupVBO_Index {
@@ -234,10 +230,21 @@ Position route[] = {{11.938604, 108.441754, 1491},
 - (void)setupVBOInfo:(Vertex*)vertexData {
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 7, vertexData, GL_STATIC_DRAW);
 }
 
 - (void)render:(CADisplayLink*)displayLink {
+    // Enable Smooth Shading, default not really needed.
+    glShadeModel(GL_SMOOTH);
+    // Depth buffer setup.
+    glClearDepthf(1.0f);
+    // Enables depth testing.
+    glEnable(GL_DEPTH_TEST);
+    // The type of depth testing to do.
+    glDepthFunc(GL_LEQUAL);
+    // Really nice perspective calculations.
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    
     [self setupVBO_Index];
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -246,15 +253,24 @@ Position route[] = {{11.938604, 108.441754, 1491},
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);        
     
+    // Map
+    [self compileShaders];
+    
     float aspect = fabs(self.frame.size.width / self.frame.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
     glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
 
-    // Map
+    
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
-    
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    
+    
+//    CGFloat scale = [[UIScreen mainScreen] scale];
+//    _eaglLayer.contentsScale = scale;
+//    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+//    CGSize s = self.frame.size;
+//    glViewport(0, 0, s.width * scale, s.height * scale);
     
     // 1
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -265,9 +281,9 @@ Position route[] = {{11.938604, 108.441754, 1491},
     // 2
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
     
+    // 3
     if (_mapTexture == 0) {
         _mapTexture = [self setupTexture:@"staticmap2.png"];
     }
@@ -283,6 +299,8 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     
     // Pin
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     if (_pinTexture == 0) {
         _pinTexture = [self setupTexture:@"map_marker_icon.png"];
     }
@@ -301,12 +319,54 @@ Position route[] = {{11.938604, 108.441754, 1491},
     // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
-    
     // Blueroute
+    // 1
     [self setupVBOInfo:verticesBR];
     [self compileFragmentShader:@"RouteFragment"];
-    // Draw
-    glDrawElements(GL_LINE_STRIP, sizeof(verticesBR)/sizeof(verticesBR[0]), GL_UNSIGNED_BYTE, 0);
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    
+    // 2
+    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 3
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+
+// DEBUG
+//    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", sizeof(verticesBR), sizeof(Vertex));
+//    for (int i = 0; i < sizeof(route)/sizeof(Position); i++) {
+//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
+//    }
+    
+    // 4
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
+    
+    
+    // RedRoute
+    // 1
+    [self setupVBOInfo:verticesRR];
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 3
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+
+// DEBUG
+//    for (int i = 0; i < [self getLengthOfArray]; i++) {
+//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
+//    }
+    
+    // 4
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -343,7 +403,13 @@ Position route[] = {{11.938604, 108.441754, 1491},
     glGenTextures(1, &texId);
     glBindTexture(GL_TEXTURE_2D, texId);
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    // Create Nearest Filtered Texture
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
@@ -361,7 +427,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
     float smallestLng = 200;
     float lowest = 9999;
     float highest = 0;
-    int lengthOfArray = sizeof(route) / sizeof(route[0]);
+    int lengthOfArray = [self getLengthOfArray];
     for (int i = 0; i < lengthOfArray; i++) {
         // Latitude
         biggestLat = (route[i].lat > biggestLat) ? route[i].lat : biggestLat;
@@ -374,7 +440,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
         lowest = (route[i].alt < lowest) ? route[i].alt : lowest;
     }
     
-    float latFraction = [self latRad:biggestLat] - [self latRad:smallestLat] / M_PI;
+    float latFraction = ([self latRad:biggestLat] - [self latRad:smallestLat]) / M_PI;
     
     float lngDiff = biggestLng - smallestLng;
     float lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
@@ -391,12 +457,35 @@ Position route[] = {{11.938604, 108.441754, 1491},
     float round = 360;
     float latPerPixel = round/pow(2, zoom)/512;
     float latUnit = latPerPixel * 256;
-    verticesBR = malloc(sizeof(Vertex) * lengthOfArray);
+    
+    // Allocate memory for vertices
+    verticesBR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
+    verticesRR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
     for(int i = 0; i < lengthOfArray; i ++){
+        // Blue route
         verticesBR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
         verticesBR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
         [self calculateModifier:centerLat];
         verticesBR[i].Position[2] = 0;
+        verticesBR[i].Color[0] = 0;
+        verticesBR[i].Color[1] = 0;
+        verticesBR[i].Color[2] = 1;
+        verticesBR[i].Color[3] = 1;
+        
+        // Red route
+        verticesRR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
+        verticesRR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
+        [self calculateModifier:centerLat];
+        verticesRR[i].Position[2] = [self convertAlt:highest Lowest:lowest Alt:route[i].alt];
+        verticesRR[i].Color[0] = 1;
+        verticesRR[i].Color[1] = 0;
+        verticesRR[i].Color[2] = 0;
+        verticesRR[i].Color[3] = 1;
+    }
+    
+    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", lengthOfArray, sizeof(Vertex));
+    for (int i = 0; i < lengthOfArray; i++) {
+        NSLog(@"Vertices[%d]: %f\t%f\t%f\n", i, verticesBR[i].Position[0],verticesBR[i].Position[1],verticesBR[i].Position[2]);
     }
 }
 
@@ -411,7 +500,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
         [self setupRenderBuffer];        
         [self setupFrameBuffer];
         [self setupRoute];
-        [self compileShaders];
+//        [self compileShaders];
         [self setupDisplayLink];
     }
     return self;
@@ -445,10 +534,17 @@ Position route[] = {{11.938604, 108.441754, 1491},
 
 - (void)dealloc
 {
+    if (verticesBR != nil) {
+        free(verticesBR);
+    }
     _context = nil;
 }
 
 - (void)initParams {
     self.mShouldLoadTexture = false;
+}
+
+- (int)getLengthOfArray {
+    return sizeof(route) / sizeof(route[0]);
 }
 @end

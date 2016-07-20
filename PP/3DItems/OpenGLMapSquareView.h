@@ -25,6 +25,7 @@ typedef struct {
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
     Vertex* verticesBR;
+    Vertex* verticesRR;
     GLuint _programHandle;
     
     GLuint _positionSlot;
