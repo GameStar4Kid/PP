@@ -746,7 +746,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46e2158a-f040-40f2-a725-50874a0726b2";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
@@ -765,7 +765,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46e2158a-f040-40f2-a725-50874a0726b2";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
