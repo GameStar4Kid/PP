@@ -16,12 +16,19 @@
 }
 
 @property Boolean mShouldLoadTexture;
-
+@property float mAngle;
+@property float mVAngle;
+@property float mX;
+@property float mY;
+@property float mPreviousX;
+@property float mPreviousY;
 @end
 
 @implementation OpenGLMapSquareView
 
 #define TEX_COORD_MAX   1
+const float TOUCH_SCALE_FACTOR = 180.0f / 640;
+
 const Vertex Vertices1[] = {
     // Front
     {{-1.0f, 1.0f, 0.0f}, {1, 0, 0, 1}, {0, 0}},                            // -1  1 0 / 0,0 / Top Left
@@ -244,16 +251,15 @@ Position route[] = {{11.938604, 108.441754, 1491},
     glDepthFunc(GL_LEQUAL);
     // Really nice perspective calculations.
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    
-    [self setupVBO_Index];
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);        
+    glEnable(GL_DEPTH_TEST);
     
     // Map
+    [self setupVBO_Index];
     [self compileShaders];
     
     float aspect = fabs(self.frame.size.width / self.frame.size.height);
@@ -262,15 +268,12 @@ Position route[] = {{11.938604, 108.441754, 1491},
 
     
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+    
+    // Rotate via z axis
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+    
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    
-    
-//    CGFloat scale = [[UIScreen mainScreen] scale];
-//    _eaglLayer.contentsScale = scale;
-//    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
-//    CGSize s = self.frame.size;
-//    glViewport(0, 0, s.width * scale, s.height * scale);
     
     // 1
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -327,7 +330,8 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     // 2
     modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -336,12 +340,6 @@ Position route[] = {{11.938604, 108.441754, 1491},
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-
-// DEBUG
-//    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", sizeof(verticesBR), sizeof(Vertex));
-//    for (int i = 0; i < sizeof(route)/sizeof(Position); i++) {
-//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
-//    }
     
     // 4
     glLineWidth(5.0f);
@@ -358,15 +356,49 @@ Position route[] = {{11.938604, 108.441754, 1491},
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-
-// DEBUG
-//    for (int i = 0; i < [self getLengthOfArray]; i++) {
-//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
-//    }
     
     // 4
     glLineWidth(5.0f);
     glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
+    
+    
+    // Compass
+    glViewport(0, self.frame.size.height-100, 100, 100);
+    [self setupVBO_Index];
+    [self compileShaders];
+    
+    aspect = 1.0f;
+    projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    
+    
+    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    
+    // Rotate via z axis
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 2
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+    
+    // 3
+    if (_compassTexture == 0) {
+        _compassTexture = [self setupTexture:@"compass_.png"];
+    }
+    
+    if (_mShouldLoadTexture) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _compassTexture);
+    }
+    // Shader
+    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+    // Draw
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -466,7 +498,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
         verticesBR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
         verticesBR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
         [self calculateModifier:centerLat];
-        verticesBR[i].Position[2] = 0;
+        verticesBR[i].Position[2] = 0.0001;
         verticesBR[i].Color[0] = 0;
         verticesBR[i].Color[1] = 0;
         verticesBR[i].Color[2] = 1;
@@ -537,14 +569,66 @@ Position route[] = {{11.938604, 108.441754, 1491},
     if (verticesBR != nil) {
         free(verticesBR);
     }
+    
+    if (verticesRR != nil) {
+        free(verticesRR);
+    }
     _context = nil;
 }
 
 - (void)initParams {
     self.mShouldLoadTexture = false;
+    self.mVAngle = -50.0f;
 }
 
 - (int)getLengthOfArray {
     return sizeof(route) / sizeof(route[0]);
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchLocation = [touch locationInView:self];
+    
+    self.mX = touchLocation.x;
+    self.mY = touchLocation.y;
+    
+    self.mPreviousX = (self.mPreviousX != self.mX) ? self.mX : self.mPreviousX;
+    self.mPreviousY = (self.mPreviousY != self.mY) ? self.mY : self.mPreviousY;
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchLocation = [touch locationInView:self];
+    
+    self.mX = touchLocation.x;
+    self.mY = touchLocation.y;
+    
+    float dx = self.mX - self.mPreviousX;
+    float dy = self.mY - self.mPreviousY;
+    int height = self.frame.size.height;
+    
+    // reverse direction of rotation above the mid-line
+    if (self.mY > height / 2) {
+        dx = dx * -1 ;
+    }
+    
+    float newAngle = self.mAngle +
+    ((-dx) * TOUCH_SCALE_FACTOR);
+    [self setMAngle:newAngle];
+    
+    float newVAngle = self.mVAngle +
+    (dy) * TOUCH_SCALE_FACTOR;
+    if(newVAngle < -89){
+        newVAngle = -89;
+    }
+    if(newVAngle > 0){
+        newVAngle = 0;
+    }
+    [self setMVAngle:newVAngle];
+    
+    NSLog(@"TOUCH MOVE: X:%f Y:%f\nPreviousX:%f PreviousY:%f\nDx:%f Dy:%f\nScreenHeight:%d Dx(New):%f\nNewAngle:%f NewVAngle:%f", self.mX, self.mY, self.mPreviousX, self.mPreviousY, dx, dy, height, dx, newAngle, newVAngle);
+    
+    self.mPreviousX = (self.mPreviousX != self.mX) ? self.mX : self.mPreviousX;
+    self.mPreviousY = (self.mPreviousY != self.mY) ? self.mY : self.mPreviousY;
 }
 @end
