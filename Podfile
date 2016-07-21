@@ -5,6 +5,6 @@
 
 target 'PP' do
 pod 'DBCamera', '~> 2.4'
-
+pod 'GoogleMaps'
 end
 
