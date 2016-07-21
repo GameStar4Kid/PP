@@ -552,6 +552,7 @@ __strong static BLEHelper* _sharedInstance = nil;
     [self stop_timeout_timer];
 //    [self check_and_set_a_timer_for_next_sync];
 //    [self restart_ble_scan:TRUE];
+    //TODO
     [self performSelector:@selector(start_watch_app_synchronization_foreground) withObject:nil afterDelay:10];
 }
 - (void) BLE_process_time_write_response:(NSData*)data
@@ -925,7 +926,8 @@ __strong static BLEHelper* _sharedInstance = nil;
                         [self stop_ble_scan];
                         NSLog(@"--> Show new watch confirm dialog");
                         current_considering_peripheral = peripheral;
-                        
+                        //TODO
+                        [self performSelector:@selector(start_watch_app_synchronization_foreground) withObject:nil afterDelay:10];
                         return;
                     }
                     else

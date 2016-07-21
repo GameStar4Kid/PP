@@ -563,6 +563,7 @@
                         <outlet property="btnStop" destination="ZZF-TR-dWi" id="c7V-rB-loJ"/>
                         <outlet property="lblIntervalValue" destination="2L4-Fd-A8Z" id="pS8-mu-WwB"/>
                         <outlet property="lblMaxRecordTime" destination="lW5-Vu-FHs" id="Rcd-ac-VUb"/>
+                        <outlet property="lblRecordStartTime" destination="7O6-jn-qOY" id="Y4v-tX-OU5"/>
                         <outlet property="tableView" destination="u03-WO-Ot1" id="aU5-tp-G0N"/>
                     </connections>
                 </viewController>

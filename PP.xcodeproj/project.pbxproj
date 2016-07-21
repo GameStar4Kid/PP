@@ -56,6 +56,7 @@
 		3C8605331D361A5E00A57326 /* UITableViewCellFixed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8605321D361A5E00A57326 /* UITableViewCellFixed.m */; };
 		3CD374381D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */; };
 		3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */; };
+		3CE19A881D3F582B0045C3E6 /* LocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE19A871D3F582B0045C3E6 /* LocationModel.m */; };
 		3CFCA5DD1D37698F00ED30CF /* GPSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */; };
 		3CFCA5E11D376ECC00ED30CF /* CommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */; };
 		DB40101CD73F37F91350EFD5 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C029883BDE7D531DF617C5 /* libPods-PP.a */; };
@@ -142,6 +143,8 @@
 		3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunOrMoonDataTableViewCell.m; sourceTree = "<group>"; };
 		3CD3743A1D34D2B50087B2F4 /* WeatherInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherInfoTableViewCell.h; sourceTree = "<group>"; };
 		3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoTableViewCell.m; sourceTree = "<group>"; };
+		3CE19A861D3F582B0045C3E6 /* LocationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationModel.h; sourceTree = "<group>"; };
+		3CE19A871D3F582B0045C3E6 /* LocationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationModel.m; sourceTree = "<group>"; };
 		3CE476011D38E5FE0009B440 /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enums.h; sourceTree = "<group>"; };
 		3CE476021D38E6140009B440 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3CFCA5DB1D37698F00ED30CF /* GPSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSSettingViewController.h; sourceTree = "<group>"; };
@@ -426,6 +429,8 @@
 		3CFCA5E41D3779BC00ED30CF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3CE19A861D3F582B0045C3E6 /* LocationModel.h */,
+				3CE19A871D3F582B0045C3E6 /* LocationModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -610,6 +615,7 @@
 				3C8605331D361A5E00A57326 /* UITableViewCellFixed.m in Sources */,
 				26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */,
 				3CFCA5DD1D37698F00ED30CF /* GPSSettingViewController.m in Sources */,
+				3CE19A881D3F582B0045C3E6 /* LocationModel.m in Sources */,
 				269C13C01D339604004865EA /* BLEHelper.m in Sources */,
 				26F4B7D11D2FAA1A007FD43C /* MapDetailViewController.m in Sources */,
 				17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */,
@@ -746,7 +752,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46e2158a-f040-40f2-a725-50874a0726b2";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
@@ -765,7 +771,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46e2158a-f040-40f2-a725-50874a0726b2";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
