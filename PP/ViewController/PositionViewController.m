@@ -201,7 +201,10 @@ static NSUInteger const kMaxNumberOfRows = 50;
     } else {
         model.isSuccess = NO;
         model.date = [NSDate date];
-        LocationModel *latestLocation = self.locationDatas[0];
+        LocationModel *latestLocation = [[LocationModel alloc] init];
+        if (self.locationDatas.count > 0) {
+            latestLocation = self.locationDatas[0];
+        }
         model.latitude = latestLocation.latitude;
         model.longitude = latestLocation.longitude;
         status = @"x";
