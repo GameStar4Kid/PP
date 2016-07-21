@@ -13,4 +13,6 @@
 @interface OpenGLViewController : UIViewController
 //@property (strong, nonatomic) IBOutlet OpenGLView *glView;
 @property (strong, nonatomic) IBOutlet OpenGLMapSquareView *glView;
+@property (nonatomic) UIDeviceOrientation currentDeviceOrientation;
+//@property (strong, nonatomic) IBOutlet OpenGLCompassView *glCompassView;
 @end

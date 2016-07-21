@@ -7,6 +7,7 @@
 //
 
 #import "OpenGLMapSquareView.h"
+#include <math.h>
 #import "CC3GLMatrix.h"
 #import <OpenGLES/ES1/gl.h>
 
@@ -19,12 +20,6 @@
 @end
 
 @implementation OpenGLMapSquareView
-
-typedef struct {
-    float Position[3];
-    float Color[4];
-    float TexCoord[2]; // New
-} Vertex;
 
 #define TEX_COORD_MAX   1
 const Vertex Vertices1[] = {
@@ -41,6 +36,24 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     0.0f, 1.0f, //
     1.0f, 1.0f, //
     1.0f, 0.0f, //
+};
+
+
+
+typedef struct {
+    float lat;
+    float lng;
+    float alt; // New
+} Position;
+
+// Blue route
+Position route[] = {{11.938604, 108.441754, 1491},
+                {11.939946, 108.446161, 1481},
+                {11.936598, 108.446848, 1485},
+                {11.935789, 108.446054, 1480},
+                {11.935926, 108.445614, 1482},
+                {11.937584, 108.445131, 1486},
+                {11.938613, 108.441794, 1491}
 };
 
 + (Class)layerClass {
@@ -75,7 +88,7 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
 - (void)setupDepthBuffer {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);    
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
 }
 
 - (void)setupFrameBuffer {    
@@ -123,49 +136,87 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     
 }
 
-- (void)compileShaders {
-    
+- (void)compileFragmentShader:(NSString *)fragmentName {
     // 1
     GLuint vertexShader = [self compileShader:@"SimpleVertex" withType:GL_VERTEX_SHADER];
-    GLuint fragmentShader = [self compileShader:@"SimpleFragment" withType:GL_FRAGMENT_SHADER];
+    GLuint fragmentShader = [self compileShader:fragmentName withType:GL_FRAGMENT_SHADER];
     
     // 2
-    GLuint programHandle = glCreateProgram();
-    glAttachShader(programHandle, vertexShader);
-    glAttachShader(programHandle, fragmentShader);
-    glLinkProgram(programHandle);
+    _programHandle = glCreateProgram();
+    glAttachShader(_programHandle, vertexShader);
+    glAttachShader(_programHandle, fragmentShader);
+    glLinkProgram(_programHandle);
     
     // 3
     GLint linkSuccess;
-    glGetProgramiv(programHandle, GL_LINK_STATUS, &linkSuccess);
+    glGetProgramiv(_programHandle, GL_LINK_STATUS, &linkSuccess);
     if (linkSuccess == GL_FALSE) {
         GLchar messages[256];
-        glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
+        glGetProgramInfoLog(_programHandle, sizeof(messages), 0, &messages[0]);
         NSString *messageString = [NSString stringWithUTF8String:messages];
         NSLog(@"%@", messageString);
         exit(1);
     }
     
     // 4
-    glUseProgram(programHandle);
+    glUseProgram(_programHandle);
     
     // 5
-    _positionSlot = glGetAttribLocation(programHandle, "Position");
-    _colorSlot = glGetAttribLocation(programHandle, "SourceColor");
+    _positionSlot = glGetAttribLocation(_programHandle, "Position");
+    _colorSlot = glGetAttribLocation(_programHandle, "SourceColor");
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_colorSlot);
     
-    _projectionUniform = glGetUniformLocation(programHandle, "Projection");
-    _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
+    _projectionUniform = glGetUniformLocation(_programHandle, "Projection");
+    _modelViewUniform = glGetUniformLocation(_programHandle, "Modelview");
     
-    _texCoordSlot = glGetAttribLocation(programHandle, "TexCoordIn");
+    _texCoordSlot = glGetAttribLocation(_programHandle, "TexCoordIn");
     glEnableVertexAttribArray(_texCoordSlot);
-    _textureUniform = glGetUniformLocation(programHandle, "Texture");
-    
+    _textureUniform = glGetUniformLocation(_programHandle, "Texture");
+
 }
 
-- (void)setupVBOs {
-
+- (void)compileShaders {
+    
+    // 1
+    GLuint vertexShader = [self compileShader:@"SimpleVertex" withType:GL_VERTEX_SHADER];
+    GLuint fragmentShader = [self compileShader:@"MapFragment" withType:GL_FRAGMENT_SHADER];
+    
+    // 2
+    _programHandle = glCreateProgram();
+    glAttachShader(_programHandle, vertexShader);
+    glAttachShader(_programHandle, fragmentShader);
+    glLinkProgram(_programHandle);
+    
+    // 3
+    GLint linkSuccess;
+    glGetProgramiv(_programHandle, GL_LINK_STATUS, &linkSuccess);
+    if (linkSuccess == GL_FALSE) {
+        GLchar messages[256];
+        glGetProgramInfoLog(_programHandle, sizeof(messages), 0, &messages[0]);
+        NSString *messageString = [NSString stringWithUTF8String:messages];
+        NSLog(@"%@", messageString);
+        exit(1);
+    }
+    
+    // 4
+    glUseProgram(_programHandle);
+    
+    // 5
+    _positionSlot = glGetAttribLocation(_programHandle, "Position");
+    _colorSlot = glGetAttribLocation(_programHandle, "SourceColor");
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_colorSlot);
+    
+    _projectionUniform = glGetUniformLocation(_programHandle, "Projection");
+    _modelViewUniform = glGetUniformLocation(_programHandle, "Modelview");
+    
+    _texCoordSlot = glGetAttribLocation(_programHandle, "TexCoordIn");
+    glEnableVertexAttribArray(_texCoordSlot);
+    _textureUniform = glGetUniformLocation(_programHandle, "Texture");
+}
+// For vertices of triangle
+- (void)setupVBO_Index {
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices1), Vertices1, GL_STATIC_DRAW);
@@ -175,8 +226,26 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices1), Indices1, GL_STATIC_DRAW);
 
 }
+// For vertices of line
+- (void)setupVBOInfo:(Vertex*)vertexData {
+    glGenBuffers(1, &_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 7, vertexData, GL_STATIC_DRAW);
+}
 
 - (void)render:(CADisplayLink*)displayLink {
+    // Enable Smooth Shading, default not really needed.
+    glShadeModel(GL_SMOOTH);
+    // Depth buffer setup.
+    glClearDepthf(1.0f);
+    // Enables depth testing.
+    glEnable(GL_DEPTH_TEST);
+    // The type of depth testing to do.
+    glDepthFunc(GL_LEQUAL);
+    // Really nice perspective calculations.
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    
+    [self setupVBO_Index];
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
@@ -184,12 +253,24 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);        
     
+    // Map
+    [self compileShaders];
+    
     float aspect = fabs(self.frame.size.width / self.frame.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
     glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
 
+    
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    
+    
+//    CGFloat scale = [[UIScreen mainScreen] scale];
+//    _eaglLayer.contentsScale = scale;
+//    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+//    CGSize s = self.frame.size;
+//    glViewport(0, 0, s.width * scale, s.height * scale);
     
     // 1
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -200,22 +281,92 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     // 2
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
     
-    if (_floorTexture == 0) {
-        _floorTexture = [self setupTexture:@"staticmap2.png"];
+    // 3
+    if (_mapTexture == 0) {
+        _mapTexture = [self setupTexture:@"staticmap2.png"];
     }
     
     if (_mShouldLoadTexture) {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _floorTexture);
+        glBindTexture(GL_TEXTURE_2D, _mapTexture);
+    }
+    // Shader
+    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+    // Draw
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    
+    
+    // Pin
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    if (_pinTexture == 0) {
+        _pinTexture = [self setupTexture:@"map_marker_icon.png"];
+    }
+    if (_mShouldLoadTexture) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _pinTexture);
     }
     
     glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
     
-    // 3
+    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
+    // Shader
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    
+    // Blueroute
+    // 1
+    [self setupVBOInfo:verticesBR];
+    [self compileFragmentShader:@"RouteFragment"];
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    
+    // 2
+    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(45.0f), -1, 0, 0);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 3
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+
+// DEBUG
+//    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", sizeof(verticesBR), sizeof(Vertex));
+//    for (int i = 0; i < sizeof(route)/sizeof(Position); i++) {
+//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
+//    }
+    
+    // 4
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
+    
+    
+    // RedRoute
+    // 1
+    [self setupVBOInfo:verticesRR];
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 3
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+
+// DEBUG
+//    for (int i = 0; i < [self getLengthOfArray]; i++) {
+//        NSLog(@"%f\t%f\t%f\n", verticesBR[i].Position[0],verticesBR[i].Position[1], verticesBR[i].Position[2]);
+//    }
+    
+    // 4
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -252,7 +403,13 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     glGenTextures(1, &texId);
     glBindTexture(GL_TEXTURE_2D, texId);
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    // Create Nearest Filtered Texture
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
@@ -261,6 +418,75 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     
     free(spriteData);        
     return texId;
+}
+
+- (void)setupRoute {
+    float biggestLat = -200;
+    float smallestLat = 200;
+    float biggestLng = -200;
+    float smallestLng = 200;
+    float lowest = 9999;
+    float highest = 0;
+    int lengthOfArray = [self getLengthOfArray];
+    for (int i = 0; i < lengthOfArray; i++) {
+        // Latitude
+        biggestLat = (route[i].lat > biggestLat) ? route[i].lat : biggestLat;
+        smallestLat = (route[i].lat < smallestLat) ? route[i].lat : smallestLat;
+        // Longitude
+        biggestLng = (route[i].lng > biggestLng) ? route[i].lng : biggestLng;
+        smallestLng = (route[i].lng < smallestLng) ? route[i].lng : smallestLng;
+        // Altitude
+        highest = (route[i].alt > highest) ? route[i].alt : highest;
+        lowest = (route[i].alt < lowest) ? route[i].alt : lowest;
+    }
+    
+    float latFraction = ([self latRad:biggestLat] - [self latRad:smallestLat]) / M_PI;
+    
+    float lngDiff = biggestLng - smallestLng;
+    float lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+    
+    float latZoom = [self zoom:512 WorldPx:256 Fraction:latFraction];
+    float lngZoom = [self zoom:512 WorldPx:256 Fraction:lngFraction];
+    
+    float zoom = fminf(latZoom, lngZoom);
+    zoom = fminf(zoom, 21);
+    
+    float centerLat = (biggestLat + smallestLat) / 2;
+    float centerLng = (biggestLng + smallestLng) / 2;
+    
+    float round = 360;
+    float latPerPixel = round/pow(2, zoom)/512;
+    float latUnit = latPerPixel * 256;
+    
+    // Allocate memory for vertices
+    verticesBR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
+    verticesRR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
+    for(int i = 0; i < lengthOfArray; i ++){
+        // Blue route
+        verticesBR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
+        verticesBR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
+        [self calculateModifier:centerLat];
+        verticesBR[i].Position[2] = 0;
+        verticesBR[i].Color[0] = 0;
+        verticesBR[i].Color[1] = 0;
+        verticesBR[i].Color[2] = 1;
+        verticesBR[i].Color[3] = 1;
+        
+        // Red route
+        verticesRR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
+        verticesRR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
+        [self calculateModifier:centerLat];
+        verticesRR[i].Position[2] = [self convertAlt:highest Lowest:lowest Alt:route[i].alt];
+        verticesRR[i].Color[0] = 1;
+        verticesRR[i].Color[1] = 0;
+        verticesRR[i].Color[2] = 0;
+        verticesRR[i].Color[3] = 1;
+    }
+    
+    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", lengthOfArray, sizeof(Vertex));
+    for (int i = 0; i < lengthOfArray; i++) {
+        NSLog(@"Vertices[%d]: %f\t%f\t%f\n", i, verticesBR[i].Position[0],verticesBR[i].Position[1],verticesBR[i].Position[2]);
+    }
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -272,20 +498,53 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
         [self setupContext];
         [self setupDepthBuffer];
         [self setupRenderBuffer];        
-        [self setupFrameBuffer];     
-        [self compileShaders];
-        [self setupVBOs];
+        [self setupFrameBuffer];
+        [self setupRoute];
+//        [self compileShaders];
         [self setupDisplayLink];
     }
     return self;
 }
 
+- (float)latRad:(float) lat{
+    float sin = sinf(lat * M_PI / 180);
+    float radX2 = log((1 + sin) / (1 - sin)) / 2;
+    return fmaxf(fminf(radX2, M_PI), -M_PI) / 2;
+}
+
+- (float)zoom:(float)mapPx WorldPx:(float)worldPx Fraction:(float)fraction {
+    return floorf(log(mapPx / worldPx / fraction) / 0.693);
+}
+
+- (float)toBaseCoordinate:(float)center Unit:(float)unit Val:(float)x {
+    return (float)((x-center)/unit/2);
+}
+
+- (float)convertAlt:(float)highest Lowest:(float)lowest Alt:(float)alt {
+    return (float)((alt-lowest)/(highest-lowest));
+}
+
+- (float)calculateModifier:(float)lat{
+    float modifier = 0.01682 * lat + 0.629396;
+    if(modifier < 1){
+        modifier = 1.0;
+    }
+    return modifier;
+}
+
 - (void)dealloc
 {
+    if (verticesBR != nil) {
+        free(verticesBR);
+    }
     _context = nil;
 }
 
 - (void)initParams {
     self.mShouldLoadTexture = false;
+}
+
+- (int)getLengthOfArray {
+    return sizeof(route) / sizeof(route[0]);
 }
 @end

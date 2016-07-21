@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1710B6301D3F80F800507C50 /* UINavigationController+iOSAutorotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1710B62F1D3F80F800507C50 /* UINavigationController+iOSAutorotation.m */; };
 		17289BF61D337928007C93CE /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BED1D337928007C93CE /* CC3Foundation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BEF1D337928007C93CE /* CC3GLMatrix.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF81D337928007C93CE /* CC3Kazmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 17289BF01D337928007C93CE /* CC3Kazmath.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -17,12 +18,10 @@
 		178F77261D34D3CD00596B38 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F77231D34D34100596B38 /* CoreGraphics.framework */; };
 		178F77271D34D3E400596B38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F77211D34D33500596B38 /* Foundation.framework */; };
 		17C151781D33878E0084CF31 /* OpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151771D33878E0084CF31 /* OpenGLViewController.m */; };
-		17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C151791D3391950084CF31 /* SimpleFragment.glsl */; };
 		17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517A1D3391950084CF31 /* SimpleVertex.glsl */; };
 		17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151831D33943C0084CF31 /* QuartzCore.framework */; };
 		17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */; };
 		17D932361D34D56600EA323B /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D932351D34D56600EA323B /* OpenGLView.m */; };
-		17D932601D374EA800EA323B /* OpenGLMapSquareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */; };
 		17D9326C1D379C5100EA323B /* compass_.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932611D379C5100EA323B /* compass_.png */; };
 		17D9326D1D379C5100EA323B /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932621D379C5100EA323B /* compass.png */; };
 		17D9326E1D379C5100EA323B /* map_marker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932631D379C5100EA323B /* map_marker_icon.png */; };
@@ -35,6 +34,8 @@
 		17D932791D37A07F00EA323B /* staticmap1.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932771D37A07F00EA323B /* staticmap1.png */; };
 		17D9327A1D37A07F00EA323B /* staticmap2.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932781D37A07F00EA323B /* staticmap2.png */; };
 		17D9327C1D37A1C600EA323B /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D9327B1D37A1C600EA323B /* tile_floor.png */; };
+		17D932B11D3CEB2800EA323B /* RouteFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17D932AF1D3CEB2800EA323B /* RouteFragment.glsl */; };
+		17D932B21D3CEB2800EA323B /* MapFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17D932B01D3CEB2800EA323B /* MapFragment.glsl */; };
 		263CBC121D2E62B200AEB3A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 263CBC111D2E62B200AEB3A3 /* AppDelegate.m */; };
 		263CBC1A1D2E62B200AEB3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263CBC191D2E62B200AEB3A3 /* Assets.xcassets */; };
 		269C13C01D339604004865EA /* BLEHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 269C13BB1D339604004865EA /* BLEHelper.m */; };
@@ -58,10 +59,14 @@
 		3CE19A881D3F582B0045C3E6 /* LocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE19A871D3F582B0045C3E6 /* LocationModel.m */; };
 		3CFCA5DD1D37698F00ED30CF /* GPSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */; };
 		3CFCA5E11D376ECC00ED30CF /* CommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */; };
-		5885BACA5EBFB577458BFF89 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */; };
+		DB40101CD73F37F91350EFD5 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C029883BDE7D531DF617C5 /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04D6A52782F2C25E33544447 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		12C029883BDE7D531DF617C5 /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1710B62E1D3F80F800507C50 /* UINavigationController+iOSAutorotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+iOSAutorotation.h"; sourceTree = "<group>"; };
+		1710B62F1D3F80F800507C50 /* UINavigationController+iOSAutorotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+iOSAutorotation.m"; sourceTree = "<group>"; };
 		17289BEC1D337928007C93CE /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Foundation.h; path = 3DMath/CC3Foundation.h; sourceTree = "<group>"; };
 		17289BED1D337928007C93CE /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3Foundation.m; path = 3DMath/CC3Foundation.m; sourceTree = "<group>"; };
 		17289BEE1D337928007C93CE /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3GLMatrix.h; path = 3DMath/CC3GLMatrix.h; sourceTree = "<group>"; };
@@ -79,7 +84,6 @@
 		178F77231D34D34100596B38 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		17C151761D33878E0084CF31 /* OpenGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLViewController.h; sourceTree = "<group>"; };
 		17C151771D33878E0084CF31 /* OpenGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLViewController.m; sourceTree = "<group>"; };
-		17C151791D3391950084CF31 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = 3DData/SimpleFragment.glsl; sourceTree = "<group>"; };
 		17C1517A1D3391950084CF31 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = 3DData/SimpleVertex.glsl; sourceTree = "<group>"; };
 		17C151831D33943C0084CF31 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		17C151851D3394730084CF31 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -87,8 +91,6 @@
 		17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLMapSquareView.m; path = 3DItems/OpenGLMapSquareView.m; sourceTree = "<group>"; };
 		17D932341D34D56600EA323B /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
 		17D932351D34D56600EA323B /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
-		17D9325E1D374EA800EA323B /* OpenGLMapSquareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLMapSquareViewController.h; sourceTree = "<group>"; };
-		17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLMapSquareViewController.m; sourceTree = "<group>"; };
 		17D932611D379C5100EA323B /* compass_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_.png; path = 3DImages/compass_.png; sourceTree = "<group>"; };
 		17D932621D379C5100EA323B /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass.png; path = 3DImages/compass.png; sourceTree = "<group>"; };
 		17D932631D379C5100EA323B /* map_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_icon.png; path = 3DImages/map_marker_icon.png; sourceTree = "<group>"; };
@@ -101,6 +103,8 @@
 		17D932771D37A07F00EA323B /* staticmap1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = staticmap1.png; path = 3DImages/staticmap1.png; sourceTree = "<group>"; };
 		17D932781D37A07F00EA323B /* staticmap2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = staticmap2.png; path = 3DImages/staticmap2.png; sourceTree = "<group>"; };
 		17D9327B1D37A1C600EA323B /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = 3DImages/tile_floor.png; sourceTree = "<group>"; };
+		17D932AF1D3CEB2800EA323B /* RouteFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = RouteFragment.glsl; path = 3DData/RouteFragment.glsl; sourceTree = "<group>"; };
+		17D932B01D3CEB2800EA323B /* MapFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MapFragment.glsl; path = 3DData/MapFragment.glsl; sourceTree = "<group>"; };
 		263CBC0A1D2E62B200AEB3A3 /* PP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		263CBC101D2E62B200AEB3A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		263CBC111D2E62B200AEB3A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -147,9 +151,7 @@
 		3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSSettingViewController.m; sourceTree = "<group>"; };
 		3CFCA5DF1D376ECC00ED30CF /* CommonMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMethods.h; sourceTree = "<group>"; };
 		3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonMethods.m; sourceTree = "<group>"; };
-		7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
-		994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
-		D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B995698EA50305E64B79627C /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,7 +164,7 @@
 				178F77251D34D3BB00596B38 /* UIKit.framework in Frameworks */,
 				17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */,
 				17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */,
-				5885BACA5EBFB577458BFF89 /* libPods-PP.a in Frameworks */,
+				DB40101CD73F37F91350EFD5 /* libPods-PP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,7 +204,8 @@
 		17C1517D1D33919A0084CF31 /* 3DData */ = {
 			isa = PBXGroup;
 			children = (
-				17C151791D3391950084CF31 /* SimpleFragment.glsl */,
+				17D932AF1D3CEB2800EA323B /* RouteFragment.glsl */,
+				17D932B01D3CEB2800EA323B /* MapFragment.glsl */,
 				17C1517A1D3391950084CF31 /* SimpleVertex.glsl */,
 			);
 			name = 3DData;
@@ -234,7 +237,7 @@
 				263CBC0B1D2E62B200AEB3A3 /* Products */,
 				C9F635770A372A9307CC5A0A /* Frameworks */,
 				26E555071D36239300B1BE52 /* Recovered References */,
-				73AB57255192A9AC767582AD /* Pods */,
+				633D27848A04F2B94C2AAAD2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -285,8 +288,6 @@
 		26E555071D36239300B1BE52 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */,
-				7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -349,8 +350,8 @@
 				17C151771D33878E0084CF31 /* OpenGLViewController.m */,
 				3CFCA5DB1D37698F00ED30CF /* GPSSettingViewController.h */,
 				3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */,
-				17D9325E1D374EA800EA323B /* OpenGLMapSquareViewController.h */,
-				17D9325F1D374EA800EA323B /* OpenGLMapSquareViewController.m */,
+				1710B62E1D3F80F800507C50 /* UINavigationController+iOSAutorotation.h */,
+				1710B62F1D3F80F800507C50 /* UINavigationController+iOSAutorotation.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -434,9 +435,11 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		73AB57255192A9AC767582AD /* Pods */ = {
+		633D27848A04F2B94C2AAAD2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				B995698EA50305E64B79627C /* Pods-PP.debug.xcconfig */,
+				04D6A52782F2C25E33544447 /* Pods-PP.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -449,7 +452,7 @@
 				17C151851D3394730084CF31 /* UIKit.framework */,
 				17C151831D33943C0084CF31 /* QuartzCore.framework */,
 				17289BFE1D337B5D007C93CE /* OpenGLES.framework */,
-				D5FD39EBEEE610B3BDEA1A1B /* libPods-PP.a */,
+				12C029883BDE7D531DF617C5 /* libPods-PP.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -468,7 +471,6 @@
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
 				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
-				4B41756B5C0E527AD8397CEA /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -490,7 +492,6 @@
 				TargetAttributes = {
 					263CBC091D2E62B200AEB3A3 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 2Q72BFQW67;
 					};
 				};
 			};
@@ -522,9 +523,9 @@
 				26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */,
 				17D932721D379C5100EA323B /* compass_left.png in Resources */,
 				17D932741D379C5100EA323B /* compass_top.png in Resources */,
-				17C1517B1D3391950084CF31 /* SimpleFragment.glsl in Resources */,
 				17D9326E1D379C5100EA323B /* map_marker_icon.png in Resources */,
 				17D9326D1D379C5100EA323B /* compass.png in Resources */,
+				17D932B21D3CEB2800EA323B /* MapFragment.glsl in Resources */,
 				17D932751D379C5100EA323B /* rotate.png in Resources */,
 				17D932731D379C5100EA323B /* compass_right.png in Resources */,
 				17D932791D37A07F00EA323B /* staticmap1.png in Resources */,
@@ -532,6 +533,7 @@
 				26F4B7CF1D2FAA1A007FD43C /* Main.storyboard in Resources */,
 				26F4B7CE1D2FAA1A007FD43C /* LaunchScreen.storyboard in Resources */,
 				17D9327A1D37A07F00EA323B /* staticmap2.png in Resources */,
+				17D932B11D3CEB2800EA323B /* RouteFragment.glsl in Resources */,
 				17D932711D379C5100EA323B /* compass_bottom.png in Resources */,
 				17D9327C1D37A1C600EA323B /* tile_floor.png in Resources */,
 				17D9326C1D379C5100EA323B /* compass_.png in Resources */,
@@ -570,21 +572,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "twine generate-all-string-files PP/Other/strings.txt PP/Other/Strings";
-		};
-		4B41756B5C0E527AD8397CEA /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -635,8 +622,8 @@
 				269C13C11D339604004865EA /* LeDiscovery.m in Sources */,
 				269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */,
 				17D932361D34D56600EA323B /* OpenGLView.m in Sources */,
-				17D932601D374EA800EA323B /* OpenGLMapSquareViewController.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
+				1710B6301D3F80F800507C50 /* UINavigationController+iOSAutorotation.m in Sources */,
 				26E5550B1D3625FA00B1BE52 /* SettingUtils.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
 				3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */,
@@ -754,7 +741,7 @@
 		};
 		263CBC221D2E62B200AEB3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 994779ABB72AE2119AE3498B /* Pods-PP.debug.xcconfig */;
+			baseConfigurationReference = B995698EA50305E64B79627C /* Pods-PP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -763,16 +750,16 @@
 				INFOPLIST_FILE = PP/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
 		};
 		263CBC231D2E62B200AEB3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7719B105CDE9B51A0E56DAD7 /* Pods-PP.release.xcconfig */;
+			baseConfigurationReference = 04D6A52782F2C25E33544447 /* Pods-PP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -782,9 +769,9 @@
 				INFOPLIST_FILE = PP/Other/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = vn.isb.co.jp.pp.PP;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mcworld.PP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "00960b9d-f460-40d6-b04a-28fd0f822220";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;

@@ -12,12 +12,21 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 
+typedef struct {
+    float Position[3];
+    float Color[4];
+    float TexCoord[2]; // New
+} Vertex;
+
 @interface OpenGLMapSquareView : UIView {
     UIImage* _image;
     NSOutputStream* _outputStream;
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
+    Vertex* verticesBR;
+    Vertex* verticesRR;
+    GLuint _programHandle;
     
     GLuint _positionSlot;
     GLuint _colorSlot;
@@ -26,15 +35,14 @@
     float _currentRotation;
     GLuint _depthRenderBuffer;
     
-    GLuint _floorTexture;
-    GLuint _fishTexture;
+    GLuint _mapTexture;
+    GLuint _pinTexture;
     GLuint _texCoordSlot;
     GLuint _textureUniform;
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
-    GLuint _textureBuffer;
-    GLuint _vertexBuffer2;
-    GLuint _indexBuffer2;
+    // For BlueRoute
+    GLuint _vertexBRBuffer;
 }
 
 @end
