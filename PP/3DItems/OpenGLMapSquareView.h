@@ -37,6 +37,7 @@ typedef struct {
     
     GLuint _mapTexture;
     GLuint _pinTexture;
+    GLuint _compassTexture;
     GLuint _texCoordSlot;
     GLuint _textureUniform;
     GLuint _vertexBuffer;
