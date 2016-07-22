@@ -233,17 +233,16 @@ static NSUInteger const kMaxNumberOfRows = 50;
 - (void)saveDataToFileCSVWithLocation:(CLLocation *)location {
     //1. Add location to data list
     LocationModel *model = [[LocationModel alloc] init];
+    model.date = [NSDate date];
     NSString *status = @"";
     if (location) {
         model.isSuccess = YES;
-        model.date = location.timestamp;
         model.latitude = location.coordinate.latitude;
         model.longitude = location.coordinate.longitude;
         status = @"o";
         
     } else {
         model.isSuccess = NO;
-        model.date = [NSDate date];
         model.latitude = self.latestLocation.coordinate.latitude;
         model.longitude = self.latestLocation.coordinate.longitude;
         status = @"x";
