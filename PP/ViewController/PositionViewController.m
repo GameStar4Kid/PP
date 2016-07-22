@@ -10,6 +10,7 @@
 #import "GPSSettingViewController.h"
 #import "SettingUtils.h"
 #import "LocationModel.h"
+#import <UIAlertView+Blocks.h>
 
 @import CoreLocation;
 
@@ -30,7 +31,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
 @property (strong, nonatomic) NSTimer *retryTimer;
 @property (strong, nonatomic) NSString *pathFile;
 @property (strong, nonatomic) NSMutableArray *locationDatas;
-@property (nonatomic) BOOL isRetringGetLocation;
+@property (strong, nonatomic) CLLocation *latestLocation;
 
 @end
 
@@ -45,6 +46,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
     [[_btnGPSSetting layer] setBorderWidth:2.0f];
     [[_btnGPSSetting layer] setBorderColor:[UIColor blackColor].CGColor];
     self.locationDatas = [[NSMutableArray alloc] init];
+    self.btnStop.enabled = NO;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -83,6 +85,10 @@ static NSUInteger const kMaxNumberOfRows = 50;
     [super viewDidDisappear:animated];
     
     [self stopRecordData];
+    if (self.retryTimer) {
+        [self.retryTimer invalidate];
+        self.retryTimer = nil;
+    }
 }
 
 #pragma mark TableView Methods
@@ -108,6 +114,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
         status = @"取得失敗";
     }
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %0.3f-%0.3f", status, [self stringFromDate:model.date andFormat:@"yyyy/MM/dd HH:mm" ], model.latitude, model.longitude];
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     
     return cell;
 }
@@ -126,63 +133,83 @@ static NSUInteger const kMaxNumberOfRows = 50;
 }
 
 - (IBAction)tappedAtStartButton:(id)sender {
-    if (nil == self.locationManager) {
-        self.locationManager = [[CLLocationManager alloc] init];
+    if ([CLLocationManager locationServicesEnabled]) {
+        if (nil == self.locationManager) {
+            self.locationManager = [[CLLocationManager alloc] init];
+        }
+        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        if (status == kCLAuthorizationStatusNotDetermined) {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = [self accuracyFilterFromSetting];
+        self.locationManager.distanceFilter = [self distanceFilterFromSetting];
+        GPSSavePeriodType type = [self savePeriodFromSetting];
+        NSInteger maxRecord = 0;
+        switch (type) {
+            case GPSSavePeriodType_Long24h:
+                maxRecord = 24 * 60 * 60 + 30;
+                break;
+            case GPSSavePeriodType_Short15m:
+                maxRecord = 15 * 60;
+                break;
+            case GPSSavePeriodType_Short30m:
+                maxRecord = 30 * 60;
+                break;
+            case GPSSavePeriodType_Short1h:
+                maxRecord = 60 * 60;
+                break;
+                
+            default:
+                break;
+        }
+        self.maxRecordTimer = [NSTimer scheduledTimerWithTimeInterval:maxRecord
+                                                               target:self
+                                                             selector:@selector(stopRecordData)
+                                                             userInfo:nil
+                                                              repeats:NO];
+        self.btnStart.enabled = NO;
+        self.btnStop.enabled = YES;
+        [self createFileCSV];
+        self.lblRecordStartTime.text = [self stringFromDate:[NSDate date] andFormat:@"yyyy_MM_dd_HH_mm_ss"];
+        [self.locationDatas removeAllObjects];
+        [self.locationManager startUpdatingLocation];
+    } else {
+        [UIAlertView showWithTitle:@"Warning!"
+                           message:@"Location service was disabled."
+                 cancelButtonTitle:@"OK"
+                 otherButtonTitles:nil
+                          tapBlock:nil];
     }
-    self.locationManager.delegate = self;
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if (status == kCLAuthorizationStatusNotDetermined) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-    self.locationManager.desiredAccuracy = [self accuracyFilterFromSetting];
-    self.locationManager.distanceFilter = [self distanceFilterFromSetting];
-    GPSSavePeriodType type = [self savePeriodFromSetting];
-    NSInteger maxRecord = 0;
-    switch (type) {
-        case GPSSavePeriodType_Long24h:
-            maxRecord = 24 * 60 * 60;
-            break;
-        case GPSSavePeriodType_Short15m:
-            maxRecord = 15 * 60;
-            break;
-        case GPSSavePeriodType_Short30m:
-            maxRecord = 30 * 60;
-            break;
-        case GPSSavePeriodType_Short1h:
-            maxRecord = 60 * 60;
-            break;
-            
-        default:
-            break;
-    }
-    self.maxRecordTimer = [NSTimer scheduledTimerWithTimeInterval:maxRecord
-                                                           target:self
-                                                         selector:@selector(stopRecordData)
-                                                         userInfo:nil
-                                                          repeats:NO];
-    self.btnStart.enabled = NO;
-    self.pathFile = [self pathToFileCSV];
-    self.lblRecordStartTime.text = [self stringFromDate:[NSDate date] andFormat:@"yyyy_MM_dd_HH_mm_ss"];
-    [self.locationDatas removeAllObjects];
-    [self.locationManager startUpdatingLocation];
 }
 
 - (IBAction)tappedAtStopButton:(id)sender {
     [self stopRecordData];
     self.btnStart.enabled = YES;
+    self.btnStop.enabled = NO;
+    if (self.retryTimer) {
+        [self.retryTimer invalidate];
+        self.retryTimer = nil;
+    }
 }
+
+#pragma mark - CLLocationManagerDelegate
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     CLLocation *location = locations[0];
+    self.latestLocation = location;
     GPSSavePeriodType type = [self savePeriodFromSetting];
     if (type == GPSSavePeriodType_Long24h) {
-        if (self.isRetringGetLocation) {
-            [self stopRetringGetLocation];
+        if (self.retryTimer) {
+            [self stopRetringGetNewLocation:NO];
+        }
+        if (self.intervalTimer) {
+            [self stopUpdatingNewLocation];
         } else {
-            [self stopGetingNewLocation];
+            [self stopUpdatingLocationService];
         }
     } else {
-        [self stopGetingNewLocation];
+        [self stopUpdatingNewLocation];
     }
     [self saveDataToFileCSVWithLocation:location];
 }
@@ -190,19 +217,18 @@ static NSUInteger const kMaxNumberOfRows = 50;
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     GPSSavePeriodType type = [self savePeriodFromSetting];
     if (type == GPSSavePeriodType_Long24h) {
-        if (!self.isRetringGetLocation) {
-            [self stopGetingNewLocation];
-            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopRetringGetLocation) userInfo:nil repeats:NO];
-            self.isRetringGetLocation = YES;
-        } else {
-            [self stopUpdatingLocationService];
-        }
+        [self stopUpdatingLocationService];
         [self startUpdatingLocationService];
+        if (!self.retryTimer ) {
+            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopRetringGetNewLocation:) userInfo:nil repeats:NO];
+        }
     } else {
-        [self stopGetingNewLocation];
+        [self stopUpdatingNewLocation];
         [self saveDataToFileCSVWithLocation:nil];
     }
 }
+
+#pragma mark - Private Methods
 
 - (void)saveDataToFileCSVWithLocation:(CLLocation *)location {
     //1. Add location to data list
@@ -214,15 +240,12 @@ static NSUInteger const kMaxNumberOfRows = 50;
         model.latitude = location.coordinate.latitude;
         model.longitude = location.coordinate.longitude;
         status = @"o";
+        
     } else {
         model.isSuccess = NO;
         model.date = [NSDate date];
-        LocationModel *latestLocation = [[LocationModel alloc] init];
-        if (self.locationDatas.count > 0) {
-            latestLocation = self.locationDatas[0];
-        }
-        model.latitude = latestLocation.latitude;
-        model.longitude = latestLocation.longitude;
+        model.latitude = self.latestLocation.coordinate.latitude;
+        model.longitude = self.latestLocation.coordinate.longitude;
         status = @"x";
     }
     if (self.locationDatas.count >= kMaxNumberOfRows) {
@@ -231,17 +254,11 @@ static NSUInteger const kMaxNumberOfRows = 50;
     [self.locationDatas addObject:model];
     
     //2. Save location to file csv
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.pathFile]) {
-        NSString *contentString = [NSString stringWithFormat:@"取得状況, 日時, 緯度, 経度\n"];
-        [[NSFileManager defaultManager] createFileAtPath:self.pathFile contents:[contentString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
-    }
-    LocationModel *latestLocation = [self.locationDatas lastObject];
-    NSString *writeString = [NSString stringWithFormat:@"%@, %@, %0.3f, %0.3f\n", status, [self stringFromDate:latestLocation.date andFormat:@"yyyy/MM/dd HH:mm:ss"], latestLocation.latitude, latestLocation.longitude];
+    NSString *writeString = [NSString stringWithFormat:@"%@, %@, %0.3f, %0.3f\n", status, [self stringFromDate:model.date andFormat:@"yyyy/MM/dd HH:mm:ss"], model.latitude, model.longitude];
     
     NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:self.pathFile];
     //say to handle where's the file fo write
     [handle truncateFileAtOffset:[handle seekToEndOfFile]];
-    //position handle cursor to the end of file
     [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
     
     //3. Reload data on the tableview
@@ -256,7 +273,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
     GPSSavePeriodType type = [self savePeriodFromSetting];
     NSInteger interval = 1;
     if (type == GPSSavePeriodType_Long24h) {
-        interval = 90;
+        interval = 120;
     }
     self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                           target:self
@@ -265,7 +282,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
                                                          repeats:NO];
 }
 
-- (NSString *)pathToFileCSV {
+- (void)createFileCSV {
     NSString *savePeriod = [SettingUtils sharedInstance].savePeriod;
     if (savePeriod.length == 0) {
         savePeriod = GPS_SAVE_PERIOD_LONG_24H;
@@ -276,9 +293,12 @@ static NSUInteger const kMaxNumberOfRows = 50;
     NSError *error = nil;
     [[NSFileManager defaultManager] createDirectoryAtPath:pathToCSVFolder withIntermediateDirectories:NO attributes:nil error:&error];
     
-    NSString *path = [pathToCSVFolder stringByAppendingPathComponent:fileName];
+    self.pathFile = [pathToCSVFolder stringByAppendingPathComponent:fileName];
     
-    return path;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.pathFile]) {
+        NSString *contentString = [NSString stringWithFormat:@"取得状況, 日時, 緯度, 経度\n"];
+        [[NSFileManager defaultManager] createFileAtPath:self.pathFile contents:[contentString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+    }
 }
 
 - (NSString *)stringFromDate:(NSDate *)date andFormat:(NSString *)format {
@@ -289,12 +309,13 @@ static NSUInteger const kMaxNumberOfRows = 50;
     return string;
 }
 
-- (void)stopRetringGetLocation {
-    self.isRetringGetLocation = NO;
+- (void)stopRetringGetNewLocation:(BOOL)isSave {
     [self stopUpdatingLocationService];
     [self.retryTimer invalidate];
     self.retryTimer = nil;
-    [self saveDataToFileCSVWithLocation:nil];
+    if (isSave) {
+        [self saveDataToFileCSVWithLocation:nil];
+    }
 }
 
 - (void)startUpdatingLocationService {
@@ -307,14 +328,16 @@ static NSUInteger const kMaxNumberOfRows = 50;
     self.locationManager.delegate = nil;
 }
 
-- (void)stopGetingNewLocation {
+- (void)stopUpdatingNewLocation {
     [self stopUpdatingLocationService];
-    [self.intervalTimer invalidate];
-    self.intervalTimer = nil;
+    if (self.intervalTimer) {
+        [self.intervalTimer invalidate];
+        self.intervalTimer = nil;
+    }
 }
 
 - (void)stopRecordData {
-    [self stopGetingNewLocation];
+    [self stopUpdatingNewLocation];
     [self.maxRecordTimer invalidate];
     self.maxRecordTimer = nil;
     self.lblRecordStartTime.text = @"ログ名";
