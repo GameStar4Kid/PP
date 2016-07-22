@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "BLEHelper.h"
+@import GoogleMaps;
 @interface AppDelegate ()
 
 @end
@@ -24,6 +25,7 @@
     [self performSelector:@selector(startService) withObject:nil afterDelay:3];
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [GMSServices provideAPIKey:@"AIzaSyCSiVAbyYNDeTW0_cnU23zECcSdHVlvj2Q"];
 
     return YES;
 }

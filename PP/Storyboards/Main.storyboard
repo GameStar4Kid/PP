@@ -596,6 +596,41 @@
             </objects>
             <point key="canvasLocation" x="125" y="2343"/>
         </scene>
+        <!--Map2D View Controller-->
+        <scene sceneID="Jq4-Zk-NaV">
+            <objects>
+                <viewController id="z7B-CJ-PDG" customClass="Map2DViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="x7t-UK-2fo"/>
+                        <viewControllerLayoutGuide type="bottom" id="2RX-bF-4Sc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gzS-2a-Ehv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nkF-wn-yyq" customClass="TopToolbarView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnm-3d-WXV" customClass="GoogleMap2DView">
+                                <rect key="frame" x="0.0" y="64" width="600" height="342"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CqF-hl-oon" customClass="Height2DView">
+                                <rect key="frame" x="0.0" y="434" width="600" height="166"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="map2DView" destination="xnm-3d-WXV" id="IsF-xY-zOc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h6q-2W-JNd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="841" y="2343"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="SyW-NG-RzY">
             <objects>
@@ -613,6 +648,7 @@
                         <segue destination="G2J-rU-Yv7" kind="show" identifier="toMapDetailView" id="vIl-nL-K4H"/>
                         <segue destination="vuI-rk-aoX" kind="show" identifier="toMapView" id="j7w-qq-OWR"/>
                         <segue destination="1BK-PW-Lif" kind="show" identifier="toBLEView" id="Zzb-jz-nFA"/>
+                        <segue destination="z7B-CJ-PDG" kind="show" identifier="toMap2DView" id="Pn8-CS-v9c"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zVy-Kq-ode" userLabel="First Responder" sceneMemberID="firstResponder"/>
