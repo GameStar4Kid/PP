@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <GoogleMaps/GoogleMaps.h>
 #import "GoogleMap2DView.h"
 
 @interface Map2DViewController : UIViewController <GMSMapViewDelegate>
-@property (weak, nonatomic) IBOutlet GoogleMap2DView *map2DView;
-
+@property (weak, nonatomic) IBOutlet GMSMapView *map2DView;
+@property GMSMarker *selectedMarker;
+@property (strong, nonatomic) NSMutableArray *markerArray;
+@property (strong, nonatomic) NSMutableArray *dataRows;
+@property BOOL isMarkerActive;
 @end

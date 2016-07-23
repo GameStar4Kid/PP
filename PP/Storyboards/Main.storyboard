@@ -608,23 +608,53 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nkF-wn-yyq" customClass="TopToolbarView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xnm-3d-WXV" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="406"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="406" id="DzZ-G6-tgc"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="DzZ-G6-tgc"/>
+                                    </mask>
+                                </variation>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnm-3d-WXV" customClass="GoogleMap2DView">
-                                <rect key="frame" x="0.0" y="64" width="600" height="342"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CqF-hl-oon" customClass="Height2DView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CqF-hl-oon" customClass="Height2DView">
                                 <rect key="frame" x="0.0" y="434" width="600" height="166"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="166" id="ViU-o9-nT3"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CqF-hl-oon" firstAttribute="leading" secondItem="gzS-2a-Ehv" secondAttribute="leading" id="3z5-r6-btn"/>
+                            <constraint firstItem="CqF-hl-oon" firstAttribute="leading" secondItem="gzS-2a-Ehv" secondAttribute="leadingMargin" constant="-20" id="5lv-RJ-pJ0"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CqF-hl-oon" secondAttribute="trailing" constant="-20" id="6Jw-fe-Es4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CqF-hl-oon" secondAttribute="trailing" constant="-20" id="Fzh-fp-fty"/>
+                            <constraint firstItem="xnm-3d-WXV" firstAttribute="leading" secondItem="gzS-2a-Ehv" secondAttribute="leadingMargin" constant="-20" id="NjP-Xl-2zw"/>
+                            <constraint firstAttribute="trailing" secondItem="CqF-hl-oon" secondAttribute="trailing" id="c7l-9m-ooB"/>
+                            <constraint firstItem="xnm-3d-WXV" firstAttribute="top" secondItem="gzS-2a-Ehv" secondAttribute="top" id="d7y-iW-e2T"/>
+                            <constraint firstAttribute="trailing" secondItem="xnm-3d-WXV" secondAttribute="trailing" id="q4g-be-Lrg"/>
+                            <constraint firstItem="CqF-hl-oon" firstAttribute="bottom" secondItem="2RX-bF-4Sc" secondAttribute="top" id="rce-Kh-bCi"/>
+                            <constraint firstItem="xnm-3d-WXV" firstAttribute="leading" secondItem="gzS-2a-Ehv" secondAttribute="leading" id="t8L-Yd-y1G"/>
+                            <constraint firstItem="CqF-hl-oon" firstAttribute="top" secondItem="xnm-3d-WXV" secondAttribute="bottom" constant="28" id="tK3-5j-jIk"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xnm-3d-WXV" secondAttribute="trailing" constant="-20" id="w3u-KZ-5Y5"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="NjP-Xl-2zw"/>
+                                <exclude reference="w3u-KZ-5Y5"/>
+                                <exclude reference="5lv-RJ-pJ0"/>
+                                <exclude reference="6Jw-fe-Es4"/>
+                                <exclude reference="Fzh-fp-fty"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
-                        <outlet property="map2DView" destination="xnm-3d-WXV" id="IsF-xY-zOc"/>
+                        <outlet property="map2DView" destination="xnm-3d-WXV" id="Gog-ty-RWY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h6q-2W-JNd" userLabel="First Responder" sceneMemberID="firstResponder"/>

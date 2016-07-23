@@ -126,8 +126,9 @@
         case 2:
 //            [self.navigationController performSegueWithIdentifier:@"toMapDetailView" sender:self];
             // Testing only
+//            [self.navigationController performSegueWithIdentifier:@"toMapView" sender:self];
             [self.navigationController performSegueWithIdentifier:@"toMap2DView" sender:self];
-//            [self.navigationController performSegueWithIdentifier:@"toMapSquare" sender:self];
+            //[self.navigationController performSegueWithIdentifier:@"toMapSquare" sender:self];
             break;
         case 3:
             //start SNS, don't implement in prototype
