@@ -96,13 +96,13 @@ static NSUInteger const kNumberOfComponents = 1;
     self.inputView.layer.masksToBounds = YES;
     
     UITapGestureRecognizer *savePeriodGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedAtSavePeriodLabel:)];
-    [self.lblSavePeriod addGestureRecognizer:savePeriodGesture];
+    [self.lblSavePeriodValue addGestureRecognizer:savePeriodGesture];
     
     UITapGestureRecognizer *accuracyFilterGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedAtAccuracyFilterLabel:)];
-    [self.lblAccuracyFilter addGestureRecognizer:accuracyFilterGesture];
+    [self.lblAccuracyFilterValue addGestureRecognizer:accuracyFilterGesture];
     
     UITapGestureRecognizer *distanceFilterGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedAtDistanceFilterLabel:)];
-    [self.lblDistanceFilter addGestureRecognizer:distanceFilterGesture];
+    [self.lblDistanceFilterValue addGestureRecognizer:distanceFilterGesture];
 }
 
 - (void)updateView {
