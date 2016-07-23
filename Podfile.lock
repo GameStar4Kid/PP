@@ -1,13 +1,19 @@
 PODS:
   - DBCamera (2.4.1):
     - GPUImage (~> 0.1)
+  - GoogleMaps (1.13.2)
   - GPUImage (0.1.7)
+  - UIAlertView+Blocks (0.9)
 
 DEPENDENCIES:
   - DBCamera (~> 2.4)
+  - GoogleMaps
+  - UIAlertView+Blocks
 
 SPEC CHECKSUMS:
   DBCamera: 7a4343a541e1264610f9f33176552b93170a843e
+  GoogleMaps: b20a103ff307f58392e603cf142e59d7e30374c1
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
 
 COCOAPODS: 0.39.0
