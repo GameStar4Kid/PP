@@ -76,6 +76,7 @@
 		3CFCA5E11D376ECC00ED30CF /* CommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */; };
 		A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28AEE531D4335310036CC1A /* GoogleMaps.framework */; };
 		A28AEE561D4336710036CC1A /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE551D4336710036CC1A /* GoogleMaps.bundle */; };
+		A28AEE7F1D4341970036CC1A /* logtestdata.csv in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE7E1D4341970036CC1A /* logtestdata.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +188,7 @@
 		9B8D9826BA750C12AC9FD73D /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
 		A28AEE531D4335310036CC1A /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework; sourceTree = "<group>"; };
 		A28AEE551D4336710036CC1A /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		A28AEE7E1D4341970036CC1A /* logtestdata.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = logtestdata.csv; path = 3DData/logtestdata.csv; sourceTree = "<group>"; };
 		EE0C21C9E37F68E56FB01C45 /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -257,6 +259,7 @@
 		17C1517D1D33919A0084CF31 /* 3DData */ = {
 			isa = PBXGroup;
 			children = (
+				A28AEE7E1D4341970036CC1A /* logtestdata.csv */,
 				17D932AF1D3CEB2800EA323B /* RouteFragment.glsl */,
 				17D932B01D3CEB2800EA323B /* MapFragment.glsl */,
 				17C1517A1D3391950084CF31 /* SimpleVertex.glsl */,
@@ -608,6 +611,7 @@
 				17D9326C1D379C5100EA323B /* compass_.png in Resources */,
 				17D932761D379C5100EA323B /* staticmap.png in Resources */,
 				26F4B7CD1D2FAA1A007FD43C /* strings.txt in Resources */,
+				A28AEE7F1D4341970036CC1A /* logtestdata.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
