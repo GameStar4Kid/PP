@@ -19,3 +19,9 @@
 #define GPS_DISTANCE_FILTER_50M @"50m"
 #define GPS_DISTANCE_FILTER_100M @"100m"
 #define GPS_DISTANCE_FILTER_500M @"500m"
+
+#pragma GoolgeMap part
+#define GoogleAPIKey @"AIzaSyCSiVAbyYNDeTW0_cnU23zECcSdHVlvj2Q"
+#define MAP_WIDTH   512
+#define MAP_HEIGHT  512
+#define MAP_STYLE   @"png"

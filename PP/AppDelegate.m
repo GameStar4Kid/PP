@@ -25,7 +25,7 @@
     [self performSelector:@selector(startService) withObject:nil afterDelay:3];
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [GMSServices provideAPIKey:@"AIzaSyCSiVAbyYNDeTW0_cnU23zECcSdHVlvj2Q"];
+    [GMSServices provideAPIKey:GoogleAPIKey];
 
     return YES;
 }

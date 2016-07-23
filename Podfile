@@ -8,5 +8,6 @@ pod 'DBCamera', '~> 2.4'
 pod 'UIAlertView+Blocks'
 
 pod 'GoogleMaps'
+pod 'AFNetworking', '~> 3.0'
 end
 
