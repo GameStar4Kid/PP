@@ -288,7 +288,11 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     // 3
     if (_mapTexture == 0) {
-        _mapTexture = [self setupTexture:@"staticmap2.png"];
+        NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString  *documentsDirectory = [paths objectAtIndex:0];
+        NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
+        //_mapTexture = [self setupTexture:@"staticmap2.png"];
+        _mapTexture = [self setupTexture:filePath];
     }
     
     if (_mShouldLoadTexture) {

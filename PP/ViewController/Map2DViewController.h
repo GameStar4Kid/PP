@@ -11,8 +11,7 @@
 
 @interface Map2DViewController : UIViewController <GMSMapViewDelegate>
 @property (weak, nonatomic) IBOutlet GMSMapView *map2DView;
-@property GMSMarker *selectedMarker;
-@property (strong, nonatomic) NSMutableArray *markerArray;
 @property (strong, nonatomic) NSMutableArray *dataRows;
+@property (weak, nonatomic) IBOutlet UIButton *btn3D;
 @property BOOL isMarkerActive;
 @end

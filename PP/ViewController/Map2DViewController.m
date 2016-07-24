@@ -7,6 +7,8 @@
 //
 
 #import "Map2DViewController.h"
+#import <AFNetworking/AFNetworking.h>
+#import "OpenGLMapSquareView.h"
 
 @interface Locator : NSObject
 @property GLfloat m_centerLat;
@@ -41,6 +43,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Disable 3D button firstly
+    [_btn3D setEnabled:FALSE];
+    
     // Read data file
     self.dataRows = [self read3DData];
     
@@ -60,6 +65,7 @@
         [path addCoordinate:CLLocationCoordinate2DMake(((MapLocator*)([_dataRows objectAtIndex:i])).m_lat, ((MapLocator*)([_dataRows objectAtIndex:i])).m_lng)];
     }
     
+    
     // Create polyline
     GMSPolyline *polyline = [GMSPolyline polylineWithPath:path];
     [polyline setStrokeWidth:2.0f];
@@ -73,48 +79,37 @@
     [marker setMap:self.map2DView];
     
     
-    //    CLLocationCoordinate2D position = CLLocationCoordinate2DMake(-33.8683, 151.2086);
+    // Move camera to center position
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:centerPosition zoom:centerLocator.m_zoom-1];
     [self.map2DView setCamera:camera];
     
     // Get 2D Image from Google URL
     NSString *imageUrlStr = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%f&size=%dx%d&format=%@&key=%@", centerLocator.m_centerLat, centerLocator.m_centerLng, centerLocator.m_zoom-1, MAP_WIDTH, MAP_HEIGHT, MAP_STYLE, GoogleAPIKey];
 
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrlStr]];
-//    AFHTTPRequestOperation *operation = [[[AFHTTPRequestOperation alloc] initWithRequest:request] autorelease];
-//    
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"filename"];
-//    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
-//    
-//    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"Successfully downloaded file to %@", path);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-//    
-//    [operation start];
-
-}
-
-- (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker
-{
-    CGPoint p;
-    marker.icon=[UIImage imageNamed:@"selectedicon.png"];//selected marker
-    
-    for (int i=0; i<[_markerArray count]; i++)
-    {
-        [_markerArray[i] getValue:&p];
-        GMSMarker *unselectedMarker= [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(p.x, p.y)];
-        //check selected marker and unselected marker position
-        if(unselectedMarker.position.latitude!=marker.position.latitude &&    unselectedMarker.position.longitude!=marker.position.longitude)
+    //download the file in a seperate thread.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"Downloading Started");
+        NSString *urlToDownload = imageUrlStr;
+        NSURL  *url = [NSURL URLWithString:urlToDownload];
+        NSData *urlData = [NSData dataWithContentsOfURL:url];
+        if ( urlData )
         {
-            unselectedMarker.icon=[UIImage imageNamed:@"unselectedicon.png"];
+            NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString  *documentsDirectory = [paths objectAtIndex:0];
+            
+            NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
+            
+            //saving is done on main thread
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [urlData writeToFile:filePath atomically:YES];
+                NSLog(@"File Saved !");
+                
+                // Enable 3D button
+                [_btn3D setEnabled:TRUE];
+            });
         }
-    }
-    
-    
-    return NO;
+        
+    });
 }
 
 - (NSMutableArray *)read3DData {
@@ -241,6 +236,12 @@
 }
 
 - (BOOL)shouldAutorotate {
-    return NO;
+    return YES;
+}
+
+- (IBAction)open3DView:(id)sender {
+    // Open 3D form
+    OpenGLMapSquareView *glView = [[OpenGLMapSquareView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:glView];
 }
 @end
