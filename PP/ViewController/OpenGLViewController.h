@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-//#include "OpenGLView.h"
 #include "OpenGLMapSquareView.h"
 
+@class Locator;
+
 @interface OpenGLViewController : UIViewController
-//@property (strong, nonatomic) IBOutlet OpenGLView *glView;
 @property (strong, nonatomic) IBOutlet OpenGLMapSquareView *glView;
 @property (nonatomic) UIDeviceOrientation currentDeviceOrientation;
-//@property (strong, nonatomic) IBOutlet OpenGLCompassView *glCompassView;
+@property (strong, nonatomic) NSMutableArray *dataRows;
+@property (strong, nonatomic) Locator *centerPoint;
+@property (strong, nonatomic) MapLocator *markerPoint;
 @end

@@ -8,25 +8,9 @@
 
 #import "Map2DViewController.h"
 #import <AFNetworking/AFNetworking.h>
-#import "OpenGLMapSquareView.h"
-
-@interface Locator : NSObject
-@property GLfloat m_centerLat;
-@property GLfloat m_centerLng;
-@property GLfloat m_zoom;
-@end
+#import "OpenGLViewController.h"
 
 @implementation Locator
-@end
-
-@interface MapLocator : NSObject
-@property (strong, nonatomic) NSString *m_date;
-@property (strong, nonatomic) NSString *m_time;
-@property GLint m_status;
-@property GLfloat m_lat;
-@property GLfloat m_lng;
-@property GLfloat m_alt;
-@property GLint m_now;
 @end
 
 @implementation MapLocator
@@ -74,8 +58,8 @@
     
     
     // Create marker
-    MapLocator *firstLocator = [self.dataRows objectAtIndex:0];
-    GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(firstLocator.m_lat, firstLocator.m_lng)];
+    [self setMarkerPoint:[self.dataRows objectAtIndex:0]];
+    GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng)];
     [marker setMap:self.map2DView];
     
     
@@ -84,7 +68,7 @@
     [self.map2DView setCamera:camera];
     
     // Get 2D Image from Google URL
-    NSString *imageUrlStr = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%f&size=%dx%d&format=%@&key=%@", centerLocator.m_centerLat, centerLocator.m_centerLng, centerLocator.m_zoom-1, MAP_WIDTH, MAP_HEIGHT, MAP_STYLE, GoogleAPIKey];
+    NSString *imageUrlStr = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&format=%@&key=%@", centerLocator.m_centerLat, centerLocator.m_centerLng, (int)centerLocator.m_zoom-1, MAP_WIDTH, MAP_HEIGHT, MAP_STYLE, GoogleAPIKey];
 
     //download the file in a seperate thread.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -241,7 +225,11 @@
 
 - (IBAction)open3DView:(id)sender {
     // Open 3D form
-    OpenGLMapSquareView *glView = [[OpenGLMapSquareView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:glView];
+    OpenGLViewController *glView = [[OpenGLViewController alloc] init];
+    [glView setDataRows:self.dataRows];
+    [glView setCenterPoint:[self getCenterLocator]];
+    [glView setMarkerPoint:self.markerPoint];
+    // Adds the above view controller to the stack and pushes it into view
+    [self.navigationController pushViewController:glView animated:YES];
 }
 @end

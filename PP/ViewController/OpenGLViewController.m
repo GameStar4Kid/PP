@@ -27,6 +27,7 @@
     // Do what you want here
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     self.glView = [[OpenGLMapSquareView alloc] initWithFrame:screenBounds];
+    [self.glView initData:self.dataRows CenterPoint:self.centerPoint MarkerPoint:self.markerPoint];
     [self.view addSubview:self.glView];
 }
 
@@ -57,5 +58,4 @@
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscape; // or however you want to rotate
 }
-
 @end

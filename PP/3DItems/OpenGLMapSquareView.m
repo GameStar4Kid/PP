@@ -14,7 +14,6 @@
 @interface OpenGLMapSquareView() {
     
 }
-
 @property Boolean mShouldLoadTexture;
 @property float mAngle;
 @property float mVAngle;
@@ -22,6 +21,9 @@
 @property float mY;
 @property float mPreviousX;
 @property float mPreviousY;
+@property (strong, nonatomic) NSMutableArray *mDataRows;
+@property (strong, nonatomic) Locator *mCenterPoint;
+@property (strong, nonatomic) MapLocator *mMarkerPoint;
 @end
 
 @implementation OpenGLMapSquareView
@@ -45,23 +47,11 @@ const GLfloat textureCoordinates[] = { 0.0f, 0.0f, //
     1.0f, 0.0f, //
 };
 
-
-
 typedef struct {
     float lat;
     float lng;
     float alt; // New
 } Position;
-
-// Blue route
-Position route[] = {{11.938604, 108.441754, 1491},
-                {11.939946, 108.446161, 1481},
-                {11.936598, 108.446848, 1485},
-                {11.935789, 108.446054, 1480},
-                {11.935926, 108.445614, 1482},
-                {11.937584, 108.445131, 1486},
-                {11.938613, 108.441794, 1491}
-};
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -237,7 +227,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
 - (void)setupVBOInfo:(Vertex*)vertexData {
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 7, vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * [self.mDataRows count], vertexData, GL_STATIC_DRAW);
 }
 
 - (void)render:(CADisplayLink*)displayLink {
@@ -321,10 +311,13 @@ Position route[] = {{11.938604, 108.441754, 1491},
     modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
     modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, self.mMarkerPoint.m_lat, self.mMarkerPoint.m_lng, self.mMarkerPoint.m_alt);
     // Shader
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    
     
     // Blueroute
     // 1
@@ -347,7 +340,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     // 4
     glLineWidth(5.0f);
-    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
+    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
     
     
     // RedRoute
@@ -363,7 +356,7 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     // 4
     glLineWidth(5.0f);
-    glDrawArrays(GL_LINE_STRIP, 0, [self getLengthOfArray]);
+    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
     
     
     // Compass
@@ -463,35 +456,25 @@ Position route[] = {{11.938604, 108.441754, 1491},
     float smallestLng = 200;
     float lowest = 9999;
     float highest = 0;
-    int lengthOfArray = [self getLengthOfArray];
+    int lengthOfArray = [self.mDataRows count];
+    
     for (int i = 0; i < lengthOfArray; i++) {
         // Latitude
-        biggestLat = (route[i].lat > biggestLat) ? route[i].lat : biggestLat;
-        smallestLat = (route[i].lat < smallestLat) ? route[i].lat : smallestLat;
+        biggestLat = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat > biggestLat) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat : biggestLat;
+        smallestLat = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat < smallestLat) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat : smallestLat;
+        
         // Longitude
-        biggestLng = (route[i].lng > biggestLng) ? route[i].lng : biggestLng;
-        smallestLng = (route[i].lng < smallestLng) ? route[i].lng : smallestLng;
+        biggestLng = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng > biggestLng) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng : biggestLng;
+        smallestLng = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng < smallestLng) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng : smallestLng;
+        
         // Altitude
-        highest = (route[i].alt > highest) ? route[i].alt : highest;
-        lowest = (route[i].alt < lowest) ? route[i].alt : lowest;
+        highest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt > highest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : highest;
+        lowest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt < lowest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : lowest;
     }
-    
-    float latFraction = ([self latRad:biggestLat] - [self latRad:smallestLat]) / M_PI;
-    
+
     float lngDiff = biggestLng - smallestLng;
-    float lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
-    
-    float latZoom = [self zoom:512 WorldPx:256 Fraction:latFraction];
-    float lngZoom = [self zoom:512 WorldPx:256 Fraction:lngFraction];
-    
-    float zoom = fminf(latZoom, lngZoom);
-    zoom = fminf(zoom, 21);
-    
-    float centerLat = (biggestLat + smallestLat) / 2;
-    float centerLng = (biggestLng + smallestLng) / 2;
-    
     float round = 360;
-    float latPerPixel = round/pow(2, zoom)/512;
+    float latPerPixel = round/pow(2, self.mCenterPoint.m_zoom)/512;
     float latUnit = latPerPixel * 256;
     
     // Allocate memory for vertices
@@ -499,9 +482,9 @@ Position route[] = {{11.938604, 108.441754, 1491},
     verticesRR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
     for(int i = 0; i < lengthOfArray; i ++){
         // Blue route
-        verticesBR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
-        verticesBR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
-        [self calculateModifier:centerLat];
+        verticesBR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        verticesBR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        [self calculateModifier:self.mCenterPoint.m_centerLat];
         verticesBR[i].Position[2] = 0.0001;
         verticesBR[i].Color[0] = 0;
         verticesBR[i].Color[1] = 0;
@@ -509,36 +492,20 @@ Position route[] = {{11.938604, 108.441754, 1491},
         verticesBR[i].Color[3] = 1;
         
         // Red route
-        verticesRR[i].Position[0] = [self toBaseCoordinate:centerLng Unit:latUnit Val:route[i].lng];
-        verticesRR[i].Position[1] = [self toBaseCoordinate:centerLat Unit:latUnit Val:route[i].lat] *
-        [self calculateModifier:centerLat];
-        verticesRR[i].Position[2] = [self convertAlt:highest Lowest:lowest Alt:route[i].alt];
+        verticesRR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        verticesRR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        [self calculateModifier:self.mCenterPoint.m_centerLat];
+        verticesRR[i].Position[2] = [self convertAlt:highest Lowest:lowest Alt:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt];
         verticesRR[i].Color[0] = 1;
         verticesRR[i].Color[1] = 0;
         verticesRR[i].Color[2] = 0;
         verticesRR[i].Color[3] = 1;
-    }
-    
-    NSLog(@"sizeof(verticesBR): %lu\t sizeof(VERTEX): %lu\n", lengthOfArray, sizeof(Vertex));
-    for (int i = 0; i < lengthOfArray; i++) {
-        NSLog(@"Vertices[%d]: %f\t%f\t%f\n", i, verticesBR[i].Position[0],verticesBR[i].Position[1],verticesBR[i].Position[2]);
     }
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
-        [self initParams];
-        [self setupLayer];        
-        [self setupContext];
-        [self setupDepthBuffer];
-        [self setupRenderBuffer];        
-        [self setupFrameBuffer];
-        [self setupRoute];
-//        [self compileShaders];
-        [self setupDisplayLink];
-    }
     return self;
 }
 
@@ -583,10 +550,6 @@ Position route[] = {{11.938604, 108.441754, 1491},
 - (void)initParams {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
-}
-
-- (int)getLengthOfArray {
-    return sizeof(route) / sizeof(route[0]);
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -634,5 +597,19 @@ Position route[] = {{11.938604, 108.441754, 1491},
     
     self.mPreviousX = (self.mPreviousX != self.mX) ? self.mX : self.mPreviousX;
     self.mPreviousY = (self.mPreviousY != self.mY) ? self.mY : self.mPreviousY;
+}
+
+- (void)initData:(NSMutableArray *)pDataRows CenterPoint:(Locator *)pCenterPoint MarkerPoint:(MapLocator *)pMarkerPoint {
+    [self initParams];
+    [self setMDataRows:pDataRows];
+    [self setMCenterPoint:pCenterPoint];
+    [self setMMarkerPoint:pMarkerPoint];
+    [self setupLayer];
+    [self setupContext];
+    [self setupDepthBuffer];
+    [self setupRenderBuffer];
+    [self setupFrameBuffer];
+    [self setupRoute];
+    [self setupDisplayLink];
 }
 @end

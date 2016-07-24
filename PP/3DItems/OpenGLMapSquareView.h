@@ -11,6 +11,10 @@
 #import <QuartzCore/QuartzCore.h>
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
+#include "Map2DViewController.h"
+
+@class MapLocator;
+@class Locator;
 
 typedef struct {
     float Position[3];
@@ -45,5 +49,5 @@ typedef struct {
     // For BlueRoute
     GLuint _vertexBRBuffer;
 }
-
+- (void)initData:(NSMutableArray *)pDataRows CenterPoint:(Locator *)pCenterPoint MarkerPoint:(MapLocator *)pMarkerPoint;
 @end
