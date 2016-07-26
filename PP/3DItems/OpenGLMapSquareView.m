@@ -239,6 +239,8 @@ typedef struct {
 }
 
 - (void)render:(CADisplayLink*)displayLink {
+    glClearColor(0, 0, 0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Enable Smooth Shading, default not really needed.
     glShadeModel(GL_SMOOTH);
     // Depth buffer setup.
@@ -251,10 +253,6 @@ typedef struct {
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    
-    glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
     
     // Map
     [self setupVBO_Index];
@@ -304,6 +302,8 @@ typedef struct {
     
     
     // Pin
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     if (_pinTexture == 0) {
@@ -333,7 +333,7 @@ typedef struct {
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    
+    glDisable(GL_BLEND);
     
     // Blueroute
     // 1
