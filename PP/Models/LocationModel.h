@@ -15,4 +15,6 @@
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 
+- (instancetype)initWithLatitude:(double)latitude andLongitude:(double)longitude;
+
 @end

@@ -10,4 +10,14 @@
 
 @implementation LocationModel
 
+- (instancetype)initWithLatitude:(double)latitude andLongitude:(double)longitude {
+    self = [super init];
+    if (self) {
+        self.latitude = latitude;
+        self.longitude = longitude;
+    }
+    
+    return self;
+}
+
 @end

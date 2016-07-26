@@ -26,12 +26,6 @@ static NSUInteger const kMaxNumberOfRows = 50;
 @property (weak, nonatomic) IBOutlet UILabel *lblRecordStartTime;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) NSTimer *intervalTimer;
-@property (strong, nonatomic) NSTimer *maxRecordTimer;
-@property (strong, nonatomic) NSTimer *retryTimer;
-@property (strong, nonatomic) NSString *pathFile;
-@property (strong, nonatomic) NSMutableArray *locationDatas;
-@property (strong, nonatomic) CLLocation *latestLocation;
 
 @end
 
@@ -45,8 +39,12 @@ static NSUInteger const kMaxNumberOfRows = 50;
     [[_btnStop layer] setBorderColor:[UIColor blackColor].CGColor];
     [[_btnGPSSetting layer] setBorderWidth:2.0f];
     [[_btnGPSSetting layer] setBorderColor:[UIColor blackColor].CGColor];
-    self.locationDatas = [[NSMutableArray alloc] init];
-    self.btnStop.enabled = NO;
+    if ([[SettingUtils sharedInstance].maxRecordTimer isValid]) {
+        self.btnStart.enabled = NO;
+        self.btnStop.enabled = YES;
+    } else {
+        self.btnStop.enabled = NO;
+    }
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -81,20 +79,10 @@ static NSUInteger const kMaxNumberOfRows = 50;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [self stopRecordData];
-    if (self.retryTimer) {
-        [self.retryTimer invalidate];
-        self.retryTimer = nil;
-    }
-}
-
 #pragma mark TableView Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.locationDatas count];
+    return [[SettingUtils sharedInstance].locationDatas count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -108,7 +96,7 @@ static NSUInteger const kMaxNumberOfRows = 50;
         //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         //        cell.backgroundColor=[UIColor yellowColor];
     }
-    LocationModel *model = [self.locationDatas objectAtIndex:indexPath.row];
+    LocationModel *model = [[SettingUtils sharedInstance].locationDatas objectAtIndex:indexPath.row];
     NSString *status = @"取得成功";
     if (!model.isSuccess) {
         status = @"取得失敗";
@@ -163,16 +151,22 @@ static NSUInteger const kMaxNumberOfRows = 50;
             default:
                 break;
         }
-        self.maxRecordTimer = [NSTimer scheduledTimerWithTimeInterval:maxRecord
+        [SettingUtils sharedInstance].maxRecordTimer = [NSTimer scheduledTimerWithTimeInterval:maxRecord
                                                                target:self
                                                              selector:@selector(stopRecordData)
                                                              userInfo:nil
                                                               repeats:NO];
         self.btnStart.enabled = NO;
         self.btnStop.enabled = YES;
-        [self createFileCSV];
-        self.lblRecordStartTime.text = [self stringFromDate:[NSDate date] andFormat:@"yyyy_MM_dd_HH_mm_ss"];
-        [self.locationDatas removeAllObjects];
+        NSString *fileName = [self stringFromDate:[NSDate date] andFormat:@"yyyy_MM_dd_HH_mm_ss"];
+        NSString *header = [NSString stringWithFormat:@"取得状況, 日時, 緯度, 経度\n"];
+        [self createFileCSVWith:fileName andContent:header];
+        self.lblRecordStartTime.text = fileName;
+        if ([SettingUtils sharedInstance].locationDatas) {
+            [[SettingUtils sharedInstance].locationDatas removeAllObjects];
+        } else {
+            [SettingUtils sharedInstance].locationDatas = [[NSMutableArray alloc] init];
+        }
         [self.locationManager startUpdatingLocation];
     } else {
         [UIAlertView showWithTitle:@"Warning!"
@@ -187,9 +181,9 @@ static NSUInteger const kMaxNumberOfRows = 50;
     [self stopRecordData];
     self.btnStart.enabled = YES;
     self.btnStop.enabled = NO;
-    if (self.retryTimer) {
-        [self.retryTimer invalidate];
-        self.retryTimer = nil;
+    if ([SettingUtils sharedInstance].retryTimer) {
+        [[SettingUtils sharedInstance].retryTimer invalidate];
+        [SettingUtils sharedInstance].retryTimer = nil;
     }
 }
 
@@ -197,13 +191,13 @@ static NSUInteger const kMaxNumberOfRows = 50;
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     CLLocation *location = locations[0];
-    self.latestLocation = location;
+    [SettingUtils sharedInstance].latestLocation = [[LocationModel alloc] initWithLatitude:location.coordinate.latitude andLongitude:location.coordinate.longitude];
     GPSSavePeriodType type = [self savePeriodFromSetting];
     if (type == GPSSavePeriodType_Long24h) {
-        if (self.retryTimer) {
+        if ([SettingUtils sharedInstance].retryTimer) {
             [self stopRetringGetNewLocation:NO];
         }
-        if (self.intervalTimer) {
+        if ([SettingUtils sharedInstance].intervalTimer) {
             [self stopUpdatingNewLocation];
         } else {
             [self stopUpdatingLocationService];
@@ -219,8 +213,8 @@ static NSUInteger const kMaxNumberOfRows = 50;
     if (type == GPSSavePeriodType_Long24h) {
         [self stopUpdatingLocationService];
         [self startUpdatingLocationService];
-        if (!self.retryTimer ) {
-            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopRetringGetNewLocation:) userInfo:nil repeats:NO];
+        if (![SettingUtils sharedInstance].retryTimer ) {
+            [SettingUtils sharedInstance].retryTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopRetringGetNewLocation:) userInfo:nil repeats:NO];
         }
     } else {
         [self stopUpdatingNewLocation];
@@ -240,64 +234,118 @@ static NSUInteger const kMaxNumberOfRows = 50;
         model.latitude = location.coordinate.latitude;
         model.longitude = location.coordinate.longitude;
         status = @"o";
-        
+        for (int i = 0; i < [SettingUtils sharedInstance].locationDatas.count; i++) {
+            LocationModel *locationObj = [SettingUtils sharedInstance].locationDatas[i];
+            if (locationObj.isSuccess) {
+                break;
+            } else {
+                locationObj.latitude = model.latitude;
+                locationObj.longitude = model.longitude;
+                [SettingUtils sharedInstance].locationDatas[i] = locationObj;
+                locationObj = nil;
+            }
+        }
     } else {
         model.isSuccess = NO;
-        model.latitude = self.latestLocation.coordinate.latitude;
-        model.longitude = self.latestLocation.coordinate.longitude;
+        if ([SettingUtils sharedInstance].latestLocation) {
+            model.latitude = [SettingUtils sharedInstance].latestLocation.latitude;
+            model.longitude = [SettingUtils sharedInstance].latestLocation.longitude;
+        } else {
+            model.latitude = CGFLOAT_MIN;
+            model.longitude = CGFLOAT_MIN;
+            [SettingUtils sharedInstance].hasErrorLine = YES;
+        }
         status = @"x";
     }
-    if (self.locationDatas.count >= kMaxNumberOfRows) {
-        [self.locationDatas removeLastObject];
+    if ([SettingUtils sharedInstance].locationDatas.count >= kMaxNumberOfRows) {
+        [[SettingUtils sharedInstance].locationDatas removeLastObject];
     }
-    [self.locationDatas addObject:model];
+    [[SettingUtils sharedInstance].locationDatas addObject:model];
     
-    //2. Save location to file csv
+    //2. Update to the line error in file csv
+    if ([SettingUtils sharedInstance].hasErrorLine && location != nil) {
+        NSString *content = [NSString stringWithContentsOfFile:[SettingUtils sharedInstance].pathFile encoding:NSUTF8StringEncoding error:nil];
+        NSArray *listRows = [content componentsSeparatedByString:@"\n"];
+        NSMutableArray *listLocations = [NSMutableArray arrayWithArray:listRows];
+        [listLocations removeLastObject];
+        for (NSInteger i = listLocations.count - 1; i > 0; i--) {
+            NSString *dataInRow = listLocations[i];
+            NSArray *row = [dataInRow componentsSeparatedByString:@","];
+            NSMutableArray *rowDetail = [NSMutableArray arrayWithArray:row];
+            NSString *statusOfRow = rowDetail[0];
+            if ([statusOfRow isEqualToString:@"o"]) {
+                
+                break;
+            } else {
+                rowDetail[2] = [NSString stringWithFormat:@" %0.3f", model.latitude];
+                rowDetail[3] = [NSString stringWithFormat:@" %0.3f", model.longitude];
+                NSString *dataInRowEdited = @"";
+                for (int j = 0; j < rowDetail.count; j++) {
+                    dataInRowEdited = [dataInRowEdited stringByAppendingFormat:@"%@,", rowDetail[j]];
+                }
+                listLocations[i] = dataInRowEdited;
+            }
+        }
+        NSError *removeFileError = nil;
+        [[NSFileManager defaultManager] removeItemAtPath:[SettingUtils sharedInstance].pathFile error:&removeFileError];
+        if (removeFileError) {
+            
+        } else {
+            NSString *newContent = @"";
+            for (NSString *string in listLocations) {
+                newContent = [newContent stringByAppendingFormat:@"%@\n", string];
+            }
+            [self createFileCSVWith:self.lblRecordStartTime.text andContent:newContent];
+        }
+    }
+    
+    //3. Save location to file csv
     NSString *writeString = [NSString stringWithFormat:@"%@, %@, %0.3f, %0.3f\n", status, [self stringFromDate:model.date andFormat:@"yyyy/MM/dd HH:mm:ss"], model.latitude, model.longitude];
     
-    NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:self.pathFile];
+    NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:[SettingUtils sharedInstance].pathFile];
     //say to handle where's the file fo write
     [handle truncateFileAtOffset:[handle seekToEndOfFile]];
     [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    //3. Reload data on the tableview
-    if (self.locationDatas.count > 1) {
-       [self.locationDatas sortUsingComparator:^NSComparisonResult(LocationModel  *obj1, LocationModel  *obj2) {
+    //4. Reload data on the tableview
+    if ([SettingUtils sharedInstance].locationDatas.count > 1) {
+       [[SettingUtils sharedInstance].locationDatas sortUsingComparator:^NSComparisonResult(LocationModel  *obj1, LocationModel  *obj2) {
            return [obj2.date compare:obj1.date];
        }];
     }
     [self.tableView reloadData];
     
-    //4. Continue updating new location
+    //5. Continue updating new location
     GPSSavePeriodType type = [self savePeriodFromSetting];
     NSInteger interval = 1;
     if (type == GPSSavePeriodType_Long24h) {
         interval = 120;
     }
-    self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+    [SettingUtils sharedInstance].intervalTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                           target:self
                                                         selector:@selector(startUpdatingLocationService)
                                                         userInfo:nil
                                                          repeats:NO];
+    NSLog(@"----Continue to save data");
 }
 
-- (void)createFileCSV {
+- (void)createFileCSVWith:(NSString *)name andContent:(NSString *)content{
     NSString *savePeriod = [SettingUtils sharedInstance].savePeriod;
     if (savePeriod.length == 0) {
         savePeriod = GPS_SAVE_PERIOD_LONG_24H;
     }
-    NSString *fileName = [NSString stringWithFormat:@"%@.csv", [self stringFromDate:[NSDate date] andFormat:@"yyyy_MM_dd_HH_mm_ss"]];
+    NSString *fileName = [NSString stringWithFormat:@"%@.csv", name];
     NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString *pathToCSVFolder = [documentsDirectory stringByAppendingPathComponent:@"CSVFolder"];
     NSError *error = nil;
     [[NSFileManager defaultManager] createDirectoryAtPath:pathToCSVFolder withIntermediateDirectories:NO attributes:nil error:&error];
     
-    self.pathFile = [pathToCSVFolder stringByAppendingPathComponent:fileName];
+    [SettingUtils sharedInstance].pathFile = [pathToCSVFolder stringByAppendingPathComponent:fileName];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.pathFile]) {
-        NSString *contentString = [NSString stringWithFormat:@"取得状況, 日時, 緯度, 経度\n"];
-        [[NSFileManager defaultManager] createFileAtPath:self.pathFile contents:[contentString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[SettingUtils sharedInstance].pathFile]) {
+        [[NSFileManager defaultManager] createFileAtPath:[SettingUtils sharedInstance].pathFile contents:[content dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
     }
+    [SettingUtils sharedInstance].hasErrorLine = NO;
 }
 
 - (NSString *)stringFromDate:(NSDate *)date andFormat:(NSString *)format {
@@ -310,8 +358,8 @@ static NSUInteger const kMaxNumberOfRows = 50;
 
 - (void)stopRetringGetNewLocation:(BOOL)isSave {
     [self stopUpdatingLocationService];
-    [self.retryTimer invalidate];
-    self.retryTimer = nil;
+    [[SettingUtils sharedInstance].retryTimer invalidate];
+    [SettingUtils sharedInstance].retryTimer = nil;
     if (isSave) {
         [self saveDataToFileCSVWithLocation:nil];
     }
@@ -329,16 +377,19 @@ static NSUInteger const kMaxNumberOfRows = 50;
 
 - (void)stopUpdatingNewLocation {
     [self stopUpdatingLocationService];
-    if (self.intervalTimer) {
-        [self.intervalTimer invalidate];
-        self.intervalTimer = nil;
+    if ([SettingUtils sharedInstance].intervalTimer) {
+        [[SettingUtils sharedInstance].intervalTimer invalidate];
+        [SettingUtils sharedInstance].intervalTimer = nil;
     }
 }
 
 - (void)stopRecordData {
     [self stopUpdatingNewLocation];
-    [self.maxRecordTimer invalidate];
-    self.maxRecordTimer = nil;
+    [[SettingUtils sharedInstance].maxRecordTimer invalidate];
+    [SettingUtils sharedInstance].maxRecordTimer = nil;
+    [SettingUtils sharedInstance].latestLocation = nil;
+    [SettingUtils sharedInstance].pathFile = nil;
+    [SettingUtils sharedInstance].hasErrorLine = NO;
     self.lblRecordStartTime.text = @"ログ名";
 }
 
