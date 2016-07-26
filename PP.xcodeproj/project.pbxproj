@@ -20,7 +20,6 @@
 		1710B6B01D40CB4300507C50 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1710B6AF1D40CB4300507C50 /* libz.tbd */; };
 		1710B6B21D40CB5700507C50 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1710B6B11D40CB5700507C50 /* SystemConfiguration.framework */; };
 		1710B6B51D40CEAA00507C50 /* TopToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1710B6B41D40CEAA00507C50 /* TopToolbarView.m */; };
-		1710B6BB1D40CF1400507C50 /* GoogleMap2DView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1710B6BA1D40CF1400507C50 /* GoogleMap2DView.m */; };
 		1710B6BE1D40CF8400507C50 /* Height2DView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1710B6BD1D40CF8400507C50 /* Height2DView.m */; };
 		17289BF61D337928007C93CE /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BED1D337928007C93CE /* CC3Foundation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 17289BEF1D337928007C93CE /* CC3GLMatrix.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -35,6 +34,7 @@
 		17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 17C1517A1D3391950084CF31 /* SimpleVertex.glsl */; };
 		17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C151831D33943C0084CF31 /* QuartzCore.framework */; };
 		17C151891D339ECF0084CF31 /* OpenGLMapSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */; };
+		17CB98EF1D460F740041708A /* logtestdata_2sec.csv in Resources */ = {isa = PBXBuildFile; fileRef = 17CB98EE1D460F730041708A /* logtestdata_2sec.csv */; };
 		17D932361D34D56600EA323B /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D932351D34D56600EA323B /* OpenGLView.m */; };
 		17D9326C1D379C5100EA323B /* compass_.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932611D379C5100EA323B /* compass_.png */; };
 		17D9326D1D379C5100EA323B /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 17D932621D379C5100EA323B /* compass.png */; };
@@ -67,7 +67,6 @@
 		26F4B7D21D2FAA1A007FD43C /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C51D2FAA1A007FD43C /* PositionViewController.m */; };
 		26F4B7D31D2FAA1A007FD43C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C71D2FAA1A007FD43C /* ViewController.m */; };
 		26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F4B7C91D2FAA1A007FD43C /* WeatherViewController.m */; };
-		33035DEAF607E939FA199CEA /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6060AE47BFECE4F3AB835685 /* libPods-PP.a */; };
 		3C8605331D361A5E00A57326 /* UITableViewCellFixed.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8605321D361A5E00A57326 /* UITableViewCellFixed.m */; };
 		3CD374381D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */; };
 		3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */; };
@@ -77,6 +76,7 @@
 		A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28AEE531D4335310036CC1A /* GoogleMaps.framework */; };
 		A28AEE561D4336710036CC1A /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE551D4336710036CC1A /* GoogleMaps.bundle */; };
 		A28AEE7F1D4341970036CC1A /* logtestdata.csv in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE7E1D4341970036CC1A /* logtestdata.csv */; };
+		C1D2D542ED060D0A7B6886E3 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 798CABFFE8E6AAD093306D4C /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,8 +96,6 @@
 		1710B6B11D40CB5700507C50 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		1710B6B31D40CEAA00507C50 /* TopToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TopToolbarView.h; path = 3DItems/TopToolbarView.h; sourceTree = "<group>"; };
 		1710B6B41D40CEAA00507C50 /* TopToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TopToolbarView.m; path = 3DItems/TopToolbarView.m; sourceTree = "<group>"; };
-		1710B6B91D40CF1400507C50 /* GoogleMap2DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleMap2DView.h; path = 3DItems/GoogleMap2DView.h; sourceTree = "<group>"; };
-		1710B6BA1D40CF1400507C50 /* GoogleMap2DView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GoogleMap2DView.m; path = 3DItems/GoogleMap2DView.m; sourceTree = "<group>"; };
 		1710B6BC1D40CF8400507C50 /* Height2DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Height2DView.h; path = 3DItems/Height2DView.h; sourceTree = "<group>"; };
 		1710B6BD1D40CF8400507C50 /* Height2DView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Height2DView.m; path = 3DItems/Height2DView.m; sourceTree = "<group>"; };
 		17289BEC1D337928007C93CE /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Foundation.h; path = 3DMath/CC3Foundation.h; sourceTree = "<group>"; };
@@ -122,6 +120,7 @@
 		17C151851D3394730084CF31 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		17C151871D339ECF0084CF31 /* OpenGLMapSquareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLMapSquareView.h; path = 3DItems/OpenGLMapSquareView.h; sourceTree = "<group>"; };
 		17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLMapSquareView.m; path = 3DItems/OpenGLMapSquareView.m; sourceTree = "<group>"; };
+		17CB98EE1D460F730041708A /* logtestdata_2sec.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = logtestdata_2sec.csv; path = 3DData/logtestdata_2sec.csv; sourceTree = "<group>"; };
 		17D932341D34D56600EA323B /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = 3DItems/OpenGLView.h; sourceTree = "<group>"; };
 		17D932351D34D56600EA323B /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenGLView.m; path = 3DItems/OpenGLView.m; sourceTree = "<group>"; };
 		17D932611D379C5100EA323B /* compass_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compass_.png; path = 3DImages/compass_.png; sourceTree = "<group>"; };
@@ -184,12 +183,12 @@
 		3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSSettingViewController.m; sourceTree = "<group>"; };
 		3CFCA5DF1D376ECC00ED30CF /* CommonMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMethods.h; sourceTree = "<group>"; };
 		3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonMethods.m; sourceTree = "<group>"; };
-		6060AE47BFECE4F3AB835685 /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B8D9826BA750C12AC9FD73D /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		798CABFFE8E6AAD093306D4C /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A28AEE531D4335310036CC1A /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework; sourceTree = "<group>"; };
 		A28AEE551D4336710036CC1A /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		A28AEE7E1D4341970036CC1A /* logtestdata.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = logtestdata.csv; path = 3DData/logtestdata.csv; sourceTree = "<group>"; };
-		EE0C21C9E37F68E56FB01C45 /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
+		D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +212,7 @@
 				17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */,
 				A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */,
 				17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */,
-				33035DEAF607E939FA199CEA /* libPods-PP.a in Frameworks */,
+				C1D2D542ED060D0A7B6886E3 /* libPods-PP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,8 +228,6 @@
 				17C151881D339ECF0084CF31 /* OpenGLMapSquareView.m */,
 				1710B6B31D40CEAA00507C50 /* TopToolbarView.h */,
 				1710B6B41D40CEAA00507C50 /* TopToolbarView.m */,
-				1710B6B91D40CF1400507C50 /* GoogleMap2DView.h */,
-				1710B6BA1D40CF1400507C50 /* GoogleMap2DView.m */,
 				1710B6BC1D40CF8400507C50 /* Height2DView.h */,
 				1710B6BD1D40CF8400507C50 /* Height2DView.m */,
 			);
@@ -259,6 +256,7 @@
 		17C1517D1D33919A0084CF31 /* 3DData */ = {
 			isa = PBXGroup;
 			children = (
+				17CB98EE1D460F730041708A /* logtestdata_2sec.csv */,
 				A28AEE7E1D4341970036CC1A /* logtestdata.csv */,
 				17D932AF1D3CEB2800EA323B /* RouteFragment.glsl */,
 				17D932B01D3CEB2800EA323B /* MapFragment.glsl */,
@@ -286,15 +284,6 @@
 			name = 3DArt;
 			sourceTree = "<group>";
 		};
-		250A06E01B1CF2A744459FFD /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				EE0C21C9E37F68E56FB01C45 /* Pods-PP.debug.xcconfig */,
-				9B8D9826BA750C12AC9FD73D /* Pods-PP.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		263CBC011D2E62B200AEB3A3 = {
 			isa = PBXGroup;
 			children = (
@@ -302,7 +291,7 @@
 				263CBC0B1D2E62B200AEB3A3 /* Products */,
 				C9F635770A372A9307CC5A0A /* Frameworks */,
 				26E555071D36239300B1BE52 /* Recovered References */,
-				250A06E01B1CF2A744459FFD /* Pods */,
+				F5AD490CDF11123960F33EBE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -522,9 +511,18 @@
 				17C151851D3394730084CF31 /* UIKit.framework */,
 				17C151831D33943C0084CF31 /* QuartzCore.framework */,
 				17289BFE1D337B5D007C93CE /* OpenGLES.framework */,
-				6060AE47BFECE4F3AB835685 /* libPods-PP.a */,
+				798CABFFE8E6AAD093306D4C /* libPods-PP.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F5AD490CDF11123960F33EBE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */,
+				4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -541,7 +539,6 @@
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
 				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
-				2EADB3962CCB429802357670 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -593,6 +590,7 @@
 				17C1517C1D3391950084CF31 /* SimpleVertex.glsl in Resources */,
 				26F4B7CC1D2FAA1A007FD43C /* Localizable.strings in Resources */,
 				17D932721D379C5100EA323B /* compass_left.png in Resources */,
+				17CB98EF1D460F740041708A /* logtestdata_2sec.csv in Resources */,
 				17D932741D379C5100EA323B /* compass_top.png in Resources */,
 				17D9326E1D379C5100EA323B /* map_marker_icon.png in Resources */,
 				17D9326D1D379C5100EA323B /* compass.png in Resources */,
@@ -645,21 +643,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "twine generate-all-string-files PP/Other/strings.txt PP/Other/Strings";
-		};
-		2EADB3962CCB429802357670 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		80A636EB7095B95AB932D17F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -715,7 +698,6 @@
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
 				1710B6301D3F80F800507C50 /* UINavigationController+iOSAutorotation.m in Sources */,
 				26E5550B1D3625FA00B1BE52 /* SettingUtils.m in Sources */,
-				1710B6BB1D40CF1400507C50 /* GoogleMap2DView.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,
 				3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */,
 				17289BF71D337928007C93CE /* CC3GLMatrix.m in Sources */,
@@ -835,7 +817,7 @@
 		};
 		263CBC221D2E62B200AEB3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EE0C21C9E37F68E56FB01C45 /* Pods-PP.debug.xcconfig */;
+			baseConfigurationReference = D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -858,7 +840,7 @@
 		};
 		263CBC231D2E62B200AEB3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9B8D9826BA750C12AC9FD73D /* Pods-PP.release.xcconfig */;
+			baseConfigurationReference = 4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

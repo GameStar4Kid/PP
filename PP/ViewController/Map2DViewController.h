@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GoogleMap2DView.h"
+#import <GLKit/GLKit.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import "Height2DView.h"
 
 @interface Locator : NSObject
 @property GLfloat m_centerLat;
@@ -25,10 +27,19 @@
 @property GLint m_now;
 @end
 
-@interface Map2DViewController : UIViewController <GMSMapViewDelegate>
+@interface Map2DViewController : UIViewController <GMSMapViewDelegate, GLKViewControllerDelegate, GLKViewDelegate>
 @property (weak, nonatomic) IBOutlet GMSMapView *map2DView;
+@property (weak, nonatomic) IBOutlet Height2DView *mapHeight2DView;
 @property (strong, nonatomic) NSMutableArray *dataRows;
+
 @property (weak, nonatomic) IBOutlet UIButton *btn3D;
 @property (strong, nonatomic) MapLocator *markerPoint;
-@property BOOL isMarkerActive;
+// OpenGLES objects
+@property (strong, nonatomic) CADisplayLink *displayLink;
+@property (strong, nonatomic) EAGLContext *context;
+@property (strong, nonatomic) GLKBaseEffect *effect;
+@property volatile GLfloat x;
+@property GLfloat mTouchX;
+@property GLfloat *vertexData;
+@property int numberOfData;
 @end

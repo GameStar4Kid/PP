@@ -10,4 +10,14 @@
 
 @implementation Height2DView
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.x = -1;
+    }
+    return self;
+}
+
+-(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+}
 @end

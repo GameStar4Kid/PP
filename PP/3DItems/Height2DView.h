@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
+#import <OpenGLES/ES1/gl.h>
 
-@interface Height2DView : UIView
-
+@interface Height2DView : GLKView<GLKViewDelegate>
+@property GLfloat x;
 @end

@@ -24,6 +24,9 @@
 @property (strong, nonatomic) NSMutableArray *mDataRows;
 @property (strong, nonatomic) Locator *mCenterPoint;
 @property (strong, nonatomic) MapLocator *mMarkerPoint;
+@property float mHighest;
+@property float mLowest;
+@property float mLatUnit;
 @end
 
 @implementation OpenGLMapSquareView
@@ -62,7 +65,12 @@ typedef struct {
     _eaglLayer.opaque = YES;
 }
 
-- (void)setupContext {   
+- (void)setupContext {
+    glFlush();
+    if ([EAGLContext currentContext] != nil) {
+        [EAGLContext setCurrentContext:nil];
+    }
+    
     EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context) {
@@ -309,10 +317,18 @@ typedef struct {
     glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
     
     modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    // Rotate via z axis
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(90), 1, 0, 0);
+    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
+    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
+    [self calculateModifier:self.mCenterPoint.m_centerLat];
+    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
+
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, markerLng, markerLat, markerAlt);
     modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
     modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
-//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
-//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, self.mMarkerPoint.m_lat, self.mMarkerPoint.m_lng, self.mMarkerPoint.m_alt);
     // Shader
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     // Draw
@@ -454,8 +470,8 @@ typedef struct {
     float smallestLat = 200;
     float biggestLng = -200;
     float smallestLng = 200;
-    float lowest = 9999;
-    float highest = 0;
+    self.mLowest = 9999;
+    self.mHighest = 0;
     int lengthOfArray = [self.mDataRows count];
     
     for (int i = 0; i < lengthOfArray; i++) {
@@ -468,22 +484,21 @@ typedef struct {
         smallestLng = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng < smallestLng) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng : smallestLng;
         
         // Altitude
-        highest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt > highest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : highest;
-        lowest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt < lowest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : lowest;
+        self.mHighest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt > self.mHighest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : self.mHighest;
+        self.mLowest = (((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt < self.mLowest) ? ((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt : self.mLowest;
     }
 
-    float lngDiff = biggestLng - smallestLng;
     float round = 360;
     float latPerPixel = round/pow(2, self.mCenterPoint.m_zoom)/512;
-    float latUnit = latPerPixel * 256;
+    self.mLatUnit = latPerPixel * 256;
     
     // Allocate memory for vertices
     verticesBR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
     verticesRR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
     for(int i = 0; i < lengthOfArray; i ++){
         // Blue route
-        verticesBR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
-        verticesBR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        verticesBR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        verticesBR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
         [self calculateModifier:self.mCenterPoint.m_centerLat];
         verticesBR[i].Position[2] = 0.0001;
         verticesBR[i].Color[0] = 0;
@@ -492,10 +507,10 @@ typedef struct {
         verticesBR[i].Color[3] = 1;
         
         // Red route
-        verticesRR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
-        verticesRR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:latUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        verticesRR[i].Position[0] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        verticesRR[i].Position[1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
         [self calculateModifier:self.mCenterPoint.m_centerLat];
-        verticesRR[i].Position[2] = [self convertAlt:highest Lowest:lowest Alt:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt];
+        verticesRR[i].Position[2] = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt];
         verticesRR[i].Color[0] = 1;
         verticesRR[i].Color[1] = 0;
         verticesRR[i].Color[2] = 0;
