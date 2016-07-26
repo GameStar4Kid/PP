@@ -300,41 +300,6 @@ typedef struct {
     // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
-    
-    // Pin
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    if (_pinTexture == 0) {
-        _pinTexture = [self setupTexture:@"map_marker_icon.png"];
-    }
-    if (_mShouldLoadTexture) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _pinTexture);
-    }
-    
-    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
-    
-    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    // Rotate via z axis
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(90), 1, 0, 0);
-    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
-    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
-    [self calculateModifier:self.mCenterPoint.m_centerLat];
-    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
-
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, markerLng, markerLat, markerAlt);
-    modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
-    // Shader
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    // Draw
-    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    glDisable(GL_BLEND);
-    
     // Blueroute
     // 1
     [self setupVBOInfo:verticesBR];
@@ -412,6 +377,42 @@ typedef struct {
     glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
     // Draw
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    
+    
+    // Pin
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    if (_pinTexture == 0) {
+        _pinTexture = [self setupTexture:@"map_marker_icon.png"];
+    }
+    if (_mShouldLoadTexture) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _pinTexture);
+    }
+    
+    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+    
+    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    // Rotate via z axis
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+    //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(90), 1, 0, 0);
+    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
+    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
+    [self calculateModifier:self.mCenterPoint.m_centerLat];
+    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
+    
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, markerLng, markerLat, markerAlt);
+    modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
+    // Shader
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    // Draw
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    glDisable(GL_BLEND);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
