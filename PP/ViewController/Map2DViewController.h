@@ -31,9 +31,9 @@
 @property (weak, nonatomic) IBOutlet GMSMapView *map2DView;
 @property (weak, nonatomic) IBOutlet Height2DView *mapHeight2DView;
 @property (strong, nonatomic) NSMutableArray *dataRows;
-
 @property (weak, nonatomic) IBOutlet UIButton *btn3D;
 @property (strong, nonatomic) MapLocator *markerPoint;
+@property (strong, nonatomic) GMSMarker *marker;
 // OpenGLES objects
 @property (strong, nonatomic) CADisplayLink *displayLink;
 @property (strong, nonatomic) EAGLContext *context;

@@ -27,8 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Setup x
-    self.x = 0.5f;
+    self.x = -1;
     
     // Disable 3D button firstly
     [_btn3D setEnabled:FALSE];
@@ -49,13 +48,11 @@
     CLLocationCoordinate2D centerPosition = CLLocationCoordinate2DMake(centerLocator.m_centerLat, centerLocator.m_centerLng);
     self.map2DView.delegate = self;
 
-    
     // Create path for polyline
     GMSMutablePath *path = [GMSMutablePath path];
     for (int i = 0; i < [_dataRows count]; i++) {
         [path addCoordinate:CLLocationCoordinate2DMake(((MapLocator*)([_dataRows objectAtIndex:i])).m_lat, ((MapLocator*)([_dataRows objectAtIndex:i])).m_lng)];
     }
-    
     
     // Create polyline
     GMSPolyline *polyline = [GMSPolyline polylineWithPath:path];
@@ -66,9 +63,8 @@
     
     // Create marker
     [self setMarkerPoint:[self.dataRows objectAtIndex:0]];
-    GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng)];
-    [marker setMap:self.map2DView];
-    
+    self.marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng)];
+    [self.marker setMap:self.map2DView];
     
     // Move camera to center position
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:centerPosition zoom:centerLocator.m_zoom-1];
@@ -275,11 +271,11 @@
 }
 
 - (void)setupDisplayLink {
-    // drawFrame is the render trigger function
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
-    // with the frameInterval 0 = max speed , 100 = slow
-    self.displayLink.frameInterval = 2;
-    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//    // drawFrame is the render trigger function
+//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
+//    // with the frameInterval 0 = max speed , 100 = slow
+//    self.displayLink.frameInterval = 2;
+//    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)drawFrame
@@ -346,9 +342,7 @@
     
     
     // WhiteLine
-    NSLog(@"DRAW X:%f", self.x);
     GLfloat vertices[] = { self.x, 1, 0, self.x, 0, 0 };
-    NSLog(@"VERTICES X:%f", vertices[0]);
     glPushMatrix();
     // Counter-clockwise winding.
     glFrontFace(GL_CCW);
@@ -462,20 +456,41 @@ void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     
 }
 
+- (void)setMarkerNewPos:(CGFloat)pXPos {
+    int markerXPos = (int)floorf((pXPos + 1) * [self.dataRows count] / 2 );
+    if(markerXPos < 0){
+        markerXPos = 0;
+    }
+    if(markerXPos >= [self.dataRows count]){
+        markerXPos = [self.dataRows count] - 1;
+    }
+    [self setMarkerPoint:[self.dataRows objectAtIndex:markerXPos]];
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint touchLocation = [touch locationInView:self.mapHeight2DView];
-    
     self.x = touchLocation.x/self.mapHeight2DView.bounds.size.width * 2 - 1;
-    
-    
+    [self drawFrame];
+    [self updateMarker];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint touchLocation = [touch locationInView:self.mapHeight2DView];
-    
     self.x = touchLocation.x/self.mapHeight2DView.bounds.size.width * 2 - 1;
-    NSLog(@"X: %f", self.x);
+    [self drawFrame];
+    [self updateMarker];
+}
+
+- (void)updateMarker {
+    [self setMarkerNewPos:self.x];
+    if (self.marker == nil) {
+        [self.marker setMap:nil];
+        self.marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng)];
+        self.marker.map = self.map2DView;
+    } else {
+        self.marker.position = CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng);
+    }
 }
 @end
