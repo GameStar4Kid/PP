@@ -196,8 +196,8 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
                 
                 break;
             } else {
-                rowDetail[2] = [NSString stringWithFormat:@" %0.3f", model.latitude];
-                rowDetail[3] = [NSString stringWithFormat:@" %0.3f", model.longitude];
+                rowDetail[2] = [NSString stringWithFormat:@" %0.8f", model.latitude];
+                rowDetail[3] = [NSString stringWithFormat:@" %0.8f", model.longitude];
                 NSString *dataInRowEdited = @"";
                 for (int j = 0; j < rowDetail.count; j++) {
                     dataInRowEdited = [dataInRowEdited stringByAppendingFormat:@"%@,", rowDetail[j]];
@@ -219,7 +219,7 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
     }
     
     //3. Save location to file csv
-    NSString *writeString = [NSString stringWithFormat:@"%@, %@, %0.3f, %0.3f\n", status, [CommonMethods stringFromDate:model.date andFormat:kDateFormatForRecordInCSVFile], model.latitude, model.longitude];
+    NSString *writeString = [NSString stringWithFormat:@"%@, %@, %0.8f, %0.8f\n", status, [CommonMethods stringFromDate:model.date andFormat:kDateFormatForRecordInCSVFile], model.latitude, model.longitude];
     
     NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:self.pathFile];
     //say to handle where's the file fo write
@@ -247,7 +247,6 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
                                                         selector:@selector(startUpdatingLocationService)
                                                         userInfo:nil
                                                          repeats:NO];
-    NSLog(@"----Continue to save data");
 }
 
 - (void)createFileCSVWith:(NSString *)name andContent:(NSString *)content{
@@ -310,7 +309,6 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
 - (void)willStopRecordingData:(NSNotification *)noti {
     [self stopRecordingData];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_FOR_STOPPING_RECORDING_LOCATION_BY_POSITION_VIEW_CONTROLLER object:nil];
-    NSLog(@"stop recording - RecordLocationManager");
 }
 
 - (CLLocationAccuracy)accuracyFilterFromSetting {

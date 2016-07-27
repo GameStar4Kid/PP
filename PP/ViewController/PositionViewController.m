@@ -112,7 +112,7 @@
     if (!model.isSuccess) {
         status = @"取得失敗";
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %0.3f-%0.3f", status, [CommonMethods stringFromDate:model.date andFormat:@"yyyy/MM/dd HH:mm" ], model.latitude, model.longitude];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %0.8f-%0.8f", status, [CommonMethods stringFromDate:model.date andFormat:@"yyyy/MM/dd HH:mm" ], model.latitude, model.longitude];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     
     return cell;
@@ -160,7 +160,7 @@
 }
 
 - (void)didStopRecordingLocation:(NSNotification *)noti {
-    [self updateUIWhenStopRecording];NSLog(@"stop recording - PositionViewController");
+    [self updateUIWhenStopRecording];
 }
 
 - (void)updateUIWhenStopRecording {
