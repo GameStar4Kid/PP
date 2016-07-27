@@ -114,19 +114,29 @@
 }
 
 - (NSMutableArray *)read3DData {
-    // Declare empty data array
-    NSMutableArray *dataRows = [[NSMutableArray alloc] init];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    // Read data file
-    NSString *filepath = [[NSBundle mainBundle] pathForResource:@"logtestdata_2sec" ofType:@"csv"];
+    NSString *filePath =  [documentsDirectory stringByAppendingPathComponent:@"logtestdata_2sec.csv"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+    {
+        NSString *myPathInfo = [[NSBundle mainBundle] pathForResource:@"logtestdata_2sec" ofType:@"csv"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager copyItemAtPath:myPathInfo toPath:filePath error:NULL];
+    }
+    
+    //Load from File
     NSError *error;
-    NSString *fileContents = [NSString stringWithContentsOfFile:filepath encoding:NSUTF8StringEncoding error:&error];
-    
+    NSString *fileContents = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+
     if (error)
         NSLog(@"Error reading file: %@", error.localizedDescription);
     NSLog(@"contents: %@", fileContents);
     
     // Separate content by lines
+    // Declare empty data array
+    NSMutableArray *dataRows = [[NSMutableArray alloc] init];
     NSArray *listArray = [fileContents componentsSeparatedByString:@"\n"];
     
     // Remove empty data array
