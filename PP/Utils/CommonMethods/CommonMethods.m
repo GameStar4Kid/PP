@@ -16,4 +16,12 @@
     return size.width;
 }
 
++ (NSString *)stringFromDate:(NSDate *)date andFormat:(NSString *)format {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = format;
+    NSString *string =[formatter stringFromDate:date];
+    
+    return string;
+}
+
 @end

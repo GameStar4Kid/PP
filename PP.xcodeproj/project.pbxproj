@@ -71,6 +71,7 @@
 		3CD374381D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD374371D34C6B80087B2F4 /* SunOrMoonDataTableViewCell.m */; };
 		3CD3743C1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */; };
 		3CE19A881D3F582B0045C3E6 /* LocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE19A871D3F582B0045C3E6 /* LocationModel.m */; };
+		3CE450991D488FEA009F35D6 /* RecordLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE450981D488FEA009F35D6 /* RecordLocationManager.m */; };
 		3CFCA5DD1D37698F00ED30CF /* GPSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */; };
 		3CFCA5E11D376ECC00ED30CF /* CommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */; };
 		A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28AEE531D4335310036CC1A /* GoogleMaps.framework */; };
@@ -177,6 +178,8 @@
 		3CD3743B1D34D2B50087B2F4 /* WeatherInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoTableViewCell.m; sourceTree = "<group>"; };
 		3CE19A861D3F582B0045C3E6 /* LocationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationModel.h; sourceTree = "<group>"; };
 		3CE19A871D3F582B0045C3E6 /* LocationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationModel.m; sourceTree = "<group>"; };
+		3CE450971D488FEA009F35D6 /* RecordLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordLocationManager.h; sourceTree = "<group>"; };
+		3CE450981D488FEA009F35D6 /* RecordLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordLocationManager.m; sourceTree = "<group>"; };
 		3CE476011D38E5FE0009B440 /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enums.h; sourceTree = "<group>"; };
 		3CE476021D38E6140009B440 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3CFCA5DB1D37698F00ED30CF /* GPSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSSettingViewController.h; sourceTree = "<group>"; };
@@ -349,6 +352,7 @@
 		26E555081D3625FA00B1BE52 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3CE450961D488FD1009F35D6 /* RecordLocationManager */,
 				3CE475FF1D38E5FE0009B440 /* Constants */,
 				3CE476001D38E5FE0009B440 /* Enums */,
 				3CFCA5DE1D376E9F00ED30CF /* CommonMethods */,
@@ -457,6 +461,15 @@
 			path = WeatherInfoCell;
 			sourceTree = "<group>";
 		};
+		3CE450961D488FD1009F35D6 /* RecordLocationManager */ = {
+			isa = PBXGroup;
+			children = (
+				3CE450971D488FEA009F35D6 /* RecordLocationManager.h */,
+				3CE450981D488FEA009F35D6 /* RecordLocationManager.m */,
+			);
+			path = RecordLocationManager;
+			sourceTree = "<group>";
+		};
 		3CE475FF1D38E5FE0009B440 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -539,6 +552,7 @@
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
 				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
+				B92C5FEEAA0240B106539790 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -659,6 +673,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		B92C5FEEAA0240B106539790 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -696,6 +725,7 @@
 				269C13C21D339604004865EA /* LeValueAlarmService.m in Sources */,
 				17D932361D34D56600EA323B /* OpenGLView.m in Sources */,
 				26F4B7D41D2FAA1A007FD43C /* WeatherViewController.m in Sources */,
+				3CE450991D488FEA009F35D6 /* RecordLocationManager.m in Sources */,
 				1710B6301D3F80F800507C50 /* UINavigationController+iOSAutorotation.m in Sources */,
 				26E5550B1D3625FA00B1BE52 /* SettingUtils.m in Sources */,
 				17289BF91D337928007C93CE /* CC3Math.m in Sources */,

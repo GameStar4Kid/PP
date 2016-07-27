@@ -12,4 +12,6 @@
 
 + (CGFloat)widthOfLabel:(UILabel *)label andHeightOfLabel:(CGFloat)height;
 
++ (NSString *)stringFromDate:(NSDate *)date andFormat:(NSString *)format;
+
 @end

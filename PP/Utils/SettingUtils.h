@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LocationModel.h"
+#import "Enums.h"
 
 @interface SettingUtils : NSObject
 
@@ -19,11 +19,7 @@
 @property (nonatomic, strong) NSString *savePeriod;
 @property (nonatomic, strong) NSString *accurracyFilter;
 @property (nonatomic, strong) NSString *distanceFilter;
-@property (strong, nonatomic) NSTimer *intervalTimer;
-@property (strong, nonatomic) NSTimer *maxRecordTimer;
-@property (strong, nonatomic) NSTimer *retryTimer;
-@property (strong, nonatomic) NSString *pathFile;
-@property (strong, nonatomic) NSMutableArray *locationDatas;
-@property (strong, nonatomic) LocationModel *latestLocation;
-@property (nonatomic) BOOL hasErrorLine;
+
+- (GPSSavePeriodType)savePeriodFromSetting;
+
 @end

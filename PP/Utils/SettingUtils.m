@@ -81,4 +81,20 @@ __strong static SettingUtils* _sharedInstance = nil;
     _distanceFilter = [[NSUserDefaults standardUserDefaults] stringForKey:@"distanceFilter"];
     _lastSync = [[NSUserDefaults standardUserDefaults] stringForKey:@"lastSync"];
 }
+
+- (GPSSavePeriodType)savePeriodFromSetting {
+    NSString *savePeriod = self.savePeriod;
+    GPSSavePeriodType type = GPSSavePeriodType_Long24h;
+    
+    if ([savePeriod isEqualToString:GPS_SAVE_PERIOD_SHORT_15M]) {
+        type = GPSSavePeriodType_Short15m;
+    } else if ([savePeriod isEqualToString:GPS_SAVE_PERIOD_SHORT_30M]) {
+        type = GPSSavePeriodType_Short30m;
+    } else if ([savePeriod isEqualToString:GPS_SAVE_PERIOD_SHORT_1H]) {
+        type = GPSSavePeriodType_Short1h;
+    }
+    
+    return type;
+}
+
 @end

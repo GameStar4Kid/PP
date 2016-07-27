@@ -25,3 +25,8 @@
 #define MAP_WIDTH   512
 #define MAP_HEIGHT  512
 #define MAP_STYLE   @"png"
+
+#pragma mark - NOTIFICATION NAME
+#define NOTIFICATION_FOR_STOPPING_RECORDING_LOCATION_BY_RECORD_LOCATION_MANAGER @"kNotificationForStoppingRecordingLocationByRecordLocationManager"
+#define NOTIFICATION_FOR_STOPPING_RECORDING_LOCATION_BY_POSITION_VIEW_CONTROLLER @"kNotificationForStoppingRecordingLocationByPositionViewController"
+#define NOTIFICATION_FOR_RELOADING_DATA_ON_THE_TABLEVIEW @"kNotificationForReloadingDataOnTheTableView"   
