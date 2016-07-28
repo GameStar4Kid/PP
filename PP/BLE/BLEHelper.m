@@ -812,7 +812,7 @@ __strong static BLEHelper* _sharedInstance = nil;
     NSArray			*devices;
     devices = [my_BLE_discovery foundPeripherals];
     
-    NSLog( @"Device Count = %ld", devices.count);
+    NSLog( @"Device Count = %ld", (unsigned long)devices.count);
     
     
     //TODO
@@ -1050,9 +1050,9 @@ __strong static BLEHelper* _sharedInstance = nil;
         time_zone_offset = time_zone_offset - dst_offset_minutes;
     }
     
-    NSLog(@"current hour = %ld", hour);
-    NSLog(@"current minute = %ld", minute);
-    NSLog(@"current second = %ld", second);
+    NSLog(@"current hour = %ld", (long)hour);
+    NSLog(@"current minute = %ld", (long)minute);
+    NSLog(@"current second = %ld", (long)second);
     NSLog(@"current second percents = %d", sec_percents);
     
     NSLog(@"current day = %ld", (long)day);

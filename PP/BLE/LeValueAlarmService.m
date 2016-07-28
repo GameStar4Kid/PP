@@ -190,7 +190,7 @@ NSString *kAlarmServiceEnteredForegroundNotification = @"kAlarmServiceEnteredFor
     NSLog(@"didDiscoverCharacteristicsForService");
 	NSArray		*characteristics	= [service characteristics];
 	CBCharacteristic *characteristic;
-    NSLog(@"number of characteristics = %ld", characteristics.count);
+    NSLog(@"number of characteristics = %ld", (unsigned long)characteristics.count);
 
 	if (peripheral != servicePeripheral) {
 		NSLog(@"Wrong Peripheral.\n");

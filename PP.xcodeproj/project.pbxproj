@@ -77,7 +77,7 @@
 		A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28AEE531D4335310036CC1A /* GoogleMaps.framework */; };
 		A28AEE561D4336710036CC1A /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE551D4336710036CC1A /* GoogleMaps.bundle */; };
 		A28AEE7F1D4341970036CC1A /* logtestdata.csv in Resources */ = {isa = PBXBuildFile; fileRef = A28AEE7E1D4341970036CC1A /* logtestdata.csv */; };
-		C1D2D542ED060D0A7B6886E3 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 798CABFFE8E6AAD093306D4C /* libPods-PP.a */; };
+		DB2F21D13FA541E2C79AD719 /* libPods-PP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1DC62AF352D632C92827FC /* libPods-PP.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -186,12 +186,12 @@
 		3CFCA5DC1D37698F00ED30CF /* GPSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSSettingViewController.m; sourceTree = "<group>"; };
 		3CFCA5DF1D376ECC00ED30CF /* CommonMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMethods.h; sourceTree = "<group>"; };
 		3CFCA5E01D376ECC00ED30CF /* CommonMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonMethods.m; sourceTree = "<group>"; };
-		4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
-		798CABFFE8E6AAD093306D4C /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E1DC62AF352D632C92827FC /* libPods-PP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A28AEE531D4335310036CC1A /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework; sourceTree = "<group>"; };
 		A28AEE551D4336710036CC1A /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Pods/GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		A28AEE7E1D4341970036CC1A /* logtestdata.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = logtestdata.csv; path = 3DData/logtestdata.csv; sourceTree = "<group>"; };
-		D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
+		D5229D407F7B163538D154E0 /* Pods-PP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.release.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.release.xcconfig"; sourceTree = "<group>"; };
+		EA808F20DA5FB3E2699500CA /* Pods-PP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PP/Pods-PP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,7 +215,7 @@
 				17C151841D33943C0084CF31 /* QuartzCore.framework in Frameworks */,
 				A28AEE541D4335310036CC1A /* GoogleMaps.framework in Frameworks */,
 				17289BFF1D337B5D007C93CE /* OpenGLES.framework in Frameworks */,
-				C1D2D542ED060D0A7B6886E3 /* libPods-PP.a in Frameworks */,
+				DB2F21D13FA541E2C79AD719 /* libPods-PP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +294,7 @@
 				263CBC0B1D2E62B200AEB3A3 /* Products */,
 				C9F635770A372A9307CC5A0A /* Frameworks */,
 				26E555071D36239300B1BE52 /* Recovered References */,
-				F5AD490CDF11123960F33EBE /* Pods */,
+				B337EA007F302A5240939196 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -504,6 +504,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		B337EA007F302A5240939196 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EA808F20DA5FB3E2699500CA /* Pods-PP.debug.xcconfig */,
+				D5229D407F7B163538D154E0 /* Pods-PP.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		C9F635770A372A9307CC5A0A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -524,18 +533,9 @@
 				17C151851D3394730084CF31 /* UIKit.framework */,
 				17C151831D33943C0084CF31 /* QuartzCore.framework */,
 				17289BFE1D337B5D007C93CE /* OpenGLES.framework */,
-				798CABFFE8E6AAD093306D4C /* libPods-PP.a */,
+				9E1DC62AF352D632C92827FC /* libPods-PP.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		F5AD490CDF11123960F33EBE /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */,
-				4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -552,7 +552,6 @@
 				26F4B7A01D2F88A4007FD43C /* ShellScript */,
 				01DC7DD35652B3D4C8C7CC5F /* [CP] Embed Pods Frameworks */,
 				EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */,
-				B92C5FEEAA0240B106539790 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -671,21 +670,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		B92C5FEEAA0240B106539790 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PP/Pods-PP-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EF8C9F4C092B54000FC48D4D /* [CP] Copy Pods Resources */ = {
@@ -847,7 +831,7 @@
 		};
 		263CBC221D2E62B200AEB3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D54D0D6B061F8A3F51F30B36 /* Pods-PP.debug.xcconfig */;
+			baseConfigurationReference = EA808F20DA5FB3E2699500CA /* Pods-PP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -870,7 +854,7 @@
 		};
 		263CBC231D2E62B200AEB3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4DB7DF7998E5F8E47F591923 /* Pods-PP.release.xcconfig */;
+			baseConfigurationReference = D5229D407F7B163538D154E0 /* Pods-PP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

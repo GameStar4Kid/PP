@@ -23,7 +23,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - DBCamera (~> 2.4)
-  - GoogleMaps
+  - GoogleMaps (= 1.13.2)
   - UIAlertView+Blocks
 
 SPEC CHECKSUMS:
@@ -33,6 +33,6 @@ SPEC CHECKSUMS:
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
 
-PODFILE CHECKSUM: b5423bab91d55c6916ed3ef46c8184750fc27606
+PODFILE CHECKSUM: eb5deccdb4cbad3aeb67553a83411e82afef6373
 
 COCOAPODS: 1.0.1

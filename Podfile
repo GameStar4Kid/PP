@@ -7,7 +7,7 @@ target 'PP' do
 pod 'DBCamera', '~> 2.4'
 pod 'UIAlertView+Blocks'
 
-pod 'GoogleMaps'
+pod 'GoogleMaps', '1.13.2'
 pod 'AFNetworking', '~> 3.0'
 end
 
