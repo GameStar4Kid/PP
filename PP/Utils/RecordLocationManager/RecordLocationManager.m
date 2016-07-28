@@ -54,7 +54,7 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
 - (instancetype)initPrivate {
     self = [super init];
     if (self) {
-        
+        self.locationDatas = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -135,10 +135,8 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
     NSString *fileName = [CommonMethods stringFromDate:[NSDate date] andFormat:kDateFormatForFileName];
     NSString *header = [NSString stringWithFormat:@"取得状況, 日時, 緯度, 経度\n"];
     [self createFileCSVWith:fileName andContent:header];
-    if (self.locationDatas) {
+    if (self.locationDatas.count > 0) {
         [self.locationDatas removeAllObjects];
-    } else {
-        self.locationDatas = [[NSMutableArray alloc] init];
     }
     [self.locationManager startUpdatingLocation];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willStopRecordingData:) name:NOTIFICATION_FOR_STOPPING_RECORDING_LOCATION_BY_POSITION_VIEW_CONTROLLER object:nil];
