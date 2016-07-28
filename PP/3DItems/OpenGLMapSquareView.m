@@ -12,7 +12,8 @@
 #import <OpenGLES/ES1/gl.h>
 
 @interface OpenGLMapSquareView() {
-    
+    BOOL isRendering;
+    BOOL isMoving;
 }
 @property Boolean mShouldLoadTexture;
 @property float mAngle;
@@ -239,6 +240,11 @@ typedef struct {
 }
 
 - (void)render:(CADisplayLink*)displayLink {
+    if(!isMoving)
+    {
+       if(isRendering)return;
+    }
+    isRendering=YES;
     glClearColor(0, 0, 0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Enable Smooth Shading, default not really needed.
@@ -569,6 +575,7 @@ typedef struct {
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    isMoving=YES;
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint touchLocation = [touch locationInView:self];
     
@@ -578,7 +585,10 @@ typedef struct {
     self.mPreviousX = (self.mPreviousX != self.mX) ? self.mX : self.mPreviousX;
     self.mPreviousY = (self.mPreviousY != self.mY) ? self.mY : self.mPreviousY;
 }
-
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    isMoving=NO;
+}
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint touchLocation = [touch locationInView:self];
