@@ -54,12 +54,7 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
 - (instancetype)initPrivate {
     self = [super init];
     if (self) {
-        self.locationManager = [[CLLocationManager alloc] init];
         
-        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-        if (status == kCLAuthorizationStatusNotDetermined) {
-            [self.locationManager requestWhenInUseAuthorization];
-        }
     }
     
     return self;
@@ -103,6 +98,12 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
 #pragma mark - Private Methods
 
 - (void)startLocationServiceAndRecordLocation {
+    self.locationManager = [[CLLocationManager alloc] init];
+    
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusNotDetermined) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = [self accuracyFilterFromSetting];
     self.locationManager.distanceFilter = [self distanceFilterFromSetting];
@@ -300,8 +301,13 @@ static NSString *kFolderNameHoldAllOfCSVFile = @"CSVFolder";
     [self stopUpdatingNewLocation];
     [self.maxRecordTimer invalidate];
     self.maxRecordTimer = nil;
+    if (self.retryTimer) {
+        [self.retryTimer invalidate];
+        self.retryTimer = nil;
+    }
     self.latestLocation = nil;
     self.pathFile = nil;
+    self.locationManager = nil;
     self.hasErrorLine = NO;
     self.isRecordingData = NO;
 }
