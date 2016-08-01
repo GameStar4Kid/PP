@@ -28,6 +28,8 @@
 @property float mHighest;
 @property float mLowest;
 @property float mLatUnit;
+@property float mScaleFactor;
+@property float mTranslateVariable;
 @end
 
 @implementation OpenGLMapSquareView
@@ -572,6 +574,8 @@ typedef struct {
 - (void)initParams {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
+    self.mScaleFactor = 1.0f;
+    self.mTranslateVariable = 0.0f;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

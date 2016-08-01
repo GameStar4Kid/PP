@@ -41,5 +41,7 @@
 @property volatile GLfloat x;
 @property GLfloat mTouchX;
 @property GLfloat *vertexData;
+- (IBAction)handlePinch:(UIPinchGestureRecognizer *)sender;
+@property (weak, nonatomic) IBOutlet UIView *parentHeight2DView;
 @property int numberOfData;
 @end

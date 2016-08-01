@@ -47,6 +47,7 @@
     Locator *centerLocator = [self getCenterLocator];
     CLLocationCoordinate2D centerPosition = CLLocationCoordinate2DMake(centerLocator.m_centerLat, centerLocator.m_centerLng);
     self.map2DView.delegate = self;
+    [self.parentHeight2DView setBackgroundColor:[UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1]];
 
     // Create path for polyline
     GMSMutablePath *path = [GMSMutablePath path];
@@ -502,5 +503,13 @@ void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     } else {
         self.marker.position = CLLocationCoordinate2DMake(self.markerPoint.m_lat, self.markerPoint.m_lng);
     }
+}
+
+- (IBAction)handlePinch:(UIPinchGestureRecognizer *)sender {
+    // Get scale factor
+    GLfloat scaleFactor = sender.scale;
+    NSLog(@"ScaleFactor: %f", scaleFactor);
+    sender.view.transform = CGAffineTransformScale(sender.view.transform, sender.scale, 1);
+    sender.scale = 1;
 }
 @end
