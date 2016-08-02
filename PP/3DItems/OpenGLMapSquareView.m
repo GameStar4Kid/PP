@@ -6,10 +6,10 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "OpenGLMapSquareView.h"
 #include <math.h>
 #import "CC3GLMatrix.h"
-#import <OpenGLES/ES1/gl.h>
+#import "OpenGLMapSquareView.h"
+#import <OpenGLES/EAGL.h>
 
 @interface OpenGLMapSquareView() {
     BOOL isRendering;
@@ -25,11 +25,10 @@
 @property (strong, nonatomic) NSMutableArray *mDataRows;
 @property (strong, nonatomic) Locator *mCenterPoint;
 @property (strong, nonatomic) MapLocator *mMarkerPoint;
+@property (strong, nonatomic) id timer;
 @property float mHighest;
 @property float mLowest;
 @property float mLatUnit;
-@property float mScaleFactor;
-@property float mTranslateVariable;
 @end
 
 @implementation OpenGLMapSquareView
@@ -59,6 +58,8 @@ typedef struct {
     float alt; // New
 } Position;
 
+#pragma ===== Init methods =====
+
 + (Class)layerClass {
     return [CAEAGLLayer class];
 }
@@ -69,12 +70,11 @@ typedef struct {
 }
 
 - (void)setupContext {
-    glFlush();
     if ([EAGLContext currentContext] != nil) {
         [EAGLContext setCurrentContext:nil];
     }
     
-    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
+    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES1;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context) {
         NSLog(@"Failed to initialize OpenGLES 2.0 context");
@@ -88,23 +88,28 @@ typedef struct {
 }
 
 - (void)setupRenderBuffer {
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);        
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];    
+    glGenRenderbuffersOES(1, &_renderBuffer);
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, _renderBuffer);
+}
+
+- (void)setupFrameBuffer {
+    glGenFramebuffersOES(1, &_frameBuffer);
+    glBindFramebufferOES(GL_FRAMEBUFFER_OES, _frameBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, _renderBuffer);
+}
+
+- (void)setupGraphicContext {
+    [_context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:_eaglLayer];
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &_viewportWidth);
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &_viewportHeight);
 }
 
 - (void)setupDepthBuffer {
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-}
-
-- (void)setupFrameBuffer {    
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);   
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    glGenRenderbuffersOES(1, &_depthRenderBuffer);
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, _depthRenderBuffer);
+    glRenderbufferStorageOES(GL_RENDERBUFFER_OES, GL_DEPTH_COMPONENT16, _viewportWidth, _viewportHeight);
+    glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, _depthRenderBuffer);
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, _renderBuffer);
 }
 
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
@@ -247,8 +252,10 @@ typedef struct {
        if(isRendering)return;
     }
     isRendering=YES;
-    glClearColor(0, 0, 0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    //=============================
+    // Set the background color to black ( rgba ).
+    //glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
     // Enable Smooth Shading, default not really needed.
     glShadeModel(GL_SMOOTH);
     // Depth buffer setup.
@@ -259,36 +266,50 @@ typedef struct {
     glDepthFunc(GL_LEQUAL);
     // Really nice perspective calculations.
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    
+    // Sets the current view port to the new size.
+    glViewport(0, 0, _viewportWidth, _viewportHeight);
+    // Select the projection matrix
+    glMatrixMode(GL_PROJECTION);
+    // Reset the projection matrix
+    glLoadIdentity();
+    // Calculate the aspect ratio of the window
+    //        gl.glOrthof(-1, 1, -1, 1, 1.0f, 100.0f);
+    gluPerspective(45.0f, (float) _viewportWidth / (float) _viewportHeight, 0.01f, 100.0f);
+    // Select the modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    // Reset the modelview matrix
+    glLoadIdentity();
+    //		GLU.gluLookAt(gl, 0, 0, 2, 0, 0, 0, 0, 1, 0);
+    gluLookAt1(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Map
     [self setupVBO_Index];
-    [self compileShaders];
+//    [self compileShaders];
     
-    float aspect = fabs(self.frame.size.width / self.frame.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
-
-    
-    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
-    
-    // Rotate via z axis
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-    
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    float aspect = fabs(self.frame.size.width / self.frame.size.height);
+//    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+//    
+//    
+//    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+//    
+//    // Rotate via z axis
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
     
     // 1
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-        
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    //glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     
-    // 2
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
+//    // 2
+//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
     
     // 3
     if (_mapTexture == 0) {
@@ -299,129 +320,214 @@ typedef struct {
     }
     
     if (_mShouldLoadTexture) {
+//        glEnable(GL_TEXTURE_2D);
+//        // Enable the texture state
+//        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//        
+//        // Point to our buffers
+//        glTexCoordPointer(2, GL_FLOAT, 0, _mapTexture);
+//        glBindTexture(GL_TEXTURE_2D, _mapTexture);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, _mapTexture);
     }
-    // Shader
-    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+//    // Shader
+//    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
     // Draw
+//    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
-    // Blueroute
-    // 1
-    [self setupVBOInfo:verticesBR];
-    [self compileFragmentShader:@"RouteFragment"];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+    glDrawElements(GL_LINE_STRIP, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
     
-    // 2
-    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    // Disable the use of UV coordinates.
+//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//    // Disable the use of textures.
+//    glDisable(GL_TEXTURE_2D);
+//    // Disable the vertices buffer.
+//    glDisableClientState(GL_VERTEX_ARRAY);
+//    // Disable face culling.
+//    glDisable(GL_CULL_FACE);
+//    glPopMatrix();
     
-    // 3
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    // 4
-    glLineWidth(5.0f);
-    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
+    [_context presentRenderbuffer: GL_RENDERBUFFER_OES];
+    //=============================
     
     
-    // RedRoute
-    // 1
-    [self setupVBOInfo:verticesRR];
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    // 3
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    // 4
-    glLineWidth(5.0f);
-    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
-    
-    
-    // Compass
-    glViewport(0, self.frame.size.height-100, 100, 100);
-    [self setupVBO_Index];
-    [self compileShaders];
-    
-    aspect = 1.0f;
-    projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
-    
-    
-    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    
-    // Rotate via z axis
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    // 2
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    // 3
-    if (_compassTexture == 0) {
-        _compassTexture = [self setupTexture:@"compass_.png"];
-    }
-    
-    if (_mShouldLoadTexture) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _compassTexture);
-    }
-    // Shader
-    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
-    // Draw
-    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    
-    
-    // Pin
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    if (_pinTexture == 0) {
-        _pinTexture = [self setupTexture:@"map_marker_icon.png"];
-    }
-    if (_mShouldLoadTexture) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _pinTexture);
-    }
-    
-    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
-    
-    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    // Rotate via z axis
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-    //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(90), 1, 0, 0);
-    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
-    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
-    [self calculateModifier:self.mCenterPoint.m_centerLat];
-    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
-    
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, markerLng, markerLat, markerAlt);
-    modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
-    // Shader
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
-    // Draw
-    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    glDisable(GL_BLEND);
-    
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+//    glClearColor(0, 0, 0, 1.0);
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    // Enable Smooth Shading, default not really needed.
+//    glShadeModel(GL_SMOOTH);
+//    // Depth buffer setup.
+//    glClearDepthf(1.0f);
+//    // Enables depth testing.
+//    glEnable(GL_DEPTH_TEST);
+//    // The type of depth testing to do.
+//    glDepthFunc(GL_LEQUAL);
+//    // Really nice perspective calculations.
+//    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+//    
+//    // Map
+//    [self setupVBO_Index];
+//    [self compileShaders];
+//    
+//    float aspect = fabs(self.frame.size.width / self.frame.size.height);
+//    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+//
+//    
+//    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+//    
+//    // Rotate via z axis
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    
+//    // 1
+//    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+//        
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    
+//    // 2
+//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
+//    
+//    // 3
+//    if (_mapTexture == 0) {
+//        NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//        NSString  *documentsDirectory = [paths objectAtIndex:0];
+//        NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
+//        //_mapTexture = [self setupTexture:@"staticmap2.png"];
+//        _mapTexture = [self setupTexture:filePath];
+//    }
+//    
+//    if (_mShouldLoadTexture) {
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_2D, _mapTexture);
+//    }
+//    // Shader
+//    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+//    // Draw
+//    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+//    
+//    // Blueroute
+//    // 1
+//    [self setupVBOInfo:verticesBR];
+//    [self compileFragmentShader:@"RouteFragment"];
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+//    
+//    // 2
+//    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    
+//    // 3
+//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+//    
+//    // 4
+//    glLineWidth(5.0f);
+//    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
+//    
+//    
+//    // RedRoute
+//    // 1
+//    [self setupVBOInfo:verticesRR];
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    
+//    // 3
+//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+//    
+//    // 4
+//    glLineWidth(5.0f);
+//    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
+//    
+//    
+//    // Compass
+//    glViewport(0, self.frame.size.height-100, 100, 100);
+//    [self setupVBO_Index];
+//    [self compileShaders];
+//    
+//    aspect = 1.0f;
+//    projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+//    
+//    
+//    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//    
+//    // Rotate via z axis
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    
+//    // 2
+//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+//    
+//    // 3
+//    if (_compassTexture == 0) {
+//        _compassTexture = [self setupTexture:@"compass_.png"];
+//    }
+//    
+//    if (_mShouldLoadTexture) {
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_2D, _compassTexture);
+//    }
+//    // Shader
+//    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+//    // Draw
+//    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+//    
+//    
+//    // Pin
+//    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    if (_pinTexture == 0) {
+//        _pinTexture = [self setupTexture:@"map_marker_icon.png"];
+//    }
+//    if (_mShouldLoadTexture) {
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_2D, _pinTexture);
+//    }
+//    
+//    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+//    
+//    modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//    // Rotate via z axis
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
+//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
+//    //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(90), 1, 0, 0);
+//    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
+//    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
+//    [self calculateModifier:self.mCenterPoint.m_centerLat];
+//    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
+//    
+//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, markerLng, markerLat, markerAlt);
+//    modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.1f, 0.1f, 0.0f);
+//    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, 0.0f, 1.0f, 0.0f);
+//    // Shader
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+//    // Draw
+//    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+//    glDisable(GL_BLEND);
+//    
+//    [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (void)setupDisplayLink {
@@ -558,11 +664,29 @@ typedef struct {
     return modifier;
 }
 
+- (void)dealloc
+{
+    [self stopGameLoop];
+    
+    if (verticesBR != nil) {
+        free(verticesBR);
+    }
+    
+    if (verticesRR != nil) {
+        free(verticesRR);
+    }
+    
+    if (_context) {
+        glDeleteRenderbuffersOES(1, &_depthRenderBuffer);
+        glDeleteFramebuffersOES(1, &_frameBuffer);
+        glDeleteRenderbuffersOES(1, &_renderBuffer);
+        _context = nil;
+    }
+}
+
 - (void)initParams {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
-    self.mScaleFactor = 1.0f;
-    self.mTranslateVariable = 0.0f;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -623,45 +747,149 @@ typedef struct {
     [self setMMarkerPoint:pMarkerPoint];
     [self setupLayer];
     [self setupContext];
-    [self setupDepthBuffer];
     [self setupRenderBuffer];
     [self setupFrameBuffer];
+    [self setupGraphicContext];
+    [self setupDepthBuffer];
+    //[self setOGLProjection];
     [self setupRoute];
+    [self startGameLoop];
+}
+
+- (void) setOGLProjection {
+    //Set View
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrthof(0, _viewportWidth, _viewportHeight, 0, 0, 1);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnable(GL_DEPTH_TEST); //3D support
+}
+
+- (void) startGameLoop {
+    NSString *deviceOS = [[UIDevice currentDevice] systemVersion];
+    bool forceTimerVariant = TRUE;
+    
+//    if (forceTimerVariant || [deviceOS compare: @"3.1" options: NSNumericSearch] == NSOrderedAscending) {
+//        //33 frames per second -> timestep between the frames = 1/33
+//        NSTimeInterval fpsDelta = 0.0303;
+//        self.timer = [NSTimer scheduledTimerWithTimeInterval: fpsDelta
+//                                                      target: self
+//                                                    selector: @selector( render: )
+//                                                    userInfo: nil
+//                                                     repeats: YES];
+//        
+//    } else {
+//        int frameLink = 2;    // will consider later
+        self.timer = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget: self selector: @selector(render:)];
+//        [self.timer setFrameInterval:frameLink]; // will consider later
+        [self.timer addToRunLoop: [NSRunLoop currentRunLoop] forMode: NSDefaultRunLoopMode];
+//    }
+    
+    NSLog(@"Game Loop timer instance: %@", self.timer);
+}
+
+- (void) stopGameLoop {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void) loop {
     [self setupDisplayLink];
 }
 
-- (void)didReceiveMemoryWarning
+void gluPerspective(double fovy, double aspect, double zNear, double zFar)
 {
-    [self tearDownGL];
-        
-    if ([EAGLContext currentContext] == _context) {
-        [EAGLContext setCurrentContext:nil];
-    }
-    _context = nil;
+    // Start in projection mode.
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    double xmin, xmax, ymin, ymax;
+    ymax = zNear * tan(fovy * M_PI / 360.0);
+    ymin = -ymax;
+    xmin = ymin * aspect;
+    xmax = ymax * aspect;
+    glFrustumf(xmin, xmax, ymin, ymax, zNear, zFar);
 }
 
-- (void)tearDownGL
+void gluLookAt1(GLfloat eyex, GLfloat eyey, GLfloat eyez,
+               GLfloat centerx, GLfloat centery, GLfloat centerz,
+               GLfloat upx, GLfloat upy, GLfloat upz)
 {
-    [EAGLContext setCurrentContext:_context];
-    glDeleteBuffers(1, &_vertexBuffer);
+    GLfloat m[16];
+    GLfloat x[3], y[3], z[3];
+    GLfloat mag;
+    
+    /* Make rotation matrix */
+    
+    /* Z vector */
+    z[0] = eyex - centerx;
+    z[1] = eyey - centery;
+    z[2] = eyez - centerz;
+    mag = sqrt(z[0] * z[0] + z[1] * z[1] + z[2] * z[2]);
+    if (mag) {          /* mpichler, 19950515 */
+        z[0] /= mag;
+        z[1] /= mag;
+        z[2] /= mag;
+    }
+    
+    /* Y vector */
+    y[0] = upx;
+    y[1] = upy;
+    y[2] = upz;
+    
+    /* X vector = Y cross Z */
+    x[0] = y[1] * z[2] - y[2] * z[1];
+    x[1] = -y[0] * z[2] + y[2] * z[0];
+    x[2] = y[0] * z[1] - y[1] * z[0];
+    
+    /* Recompute Y = Z cross X */
+    y[0] = z[1] * x[2] - z[2] * x[1];
+    y[1] = -z[0] * x[2] + z[2] * x[0];
+    y[2] = z[0] * x[1] - z[1] * x[0];
+    
+    /* mpichler, 19950515 */
+    /* cross product gives area of parallelogram, which is < 1.0 for
+     * non-perpendicular unit-length vectors; so normalize x, y here
+     */
+    
+    mag = sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+    if (mag) {
+        x[0] /= mag;
+        x[1] /= mag;
+        x[2] /= mag;
+    }
+    
+    mag = sqrt(y[0] * y[0] + y[1] * y[1] + y[2] * y[2]);
+    if (mag) {
+        y[0] /= mag;
+        y[1] /= mag;
+        y[2] /= mag;
+    }
+    
+#define M(row,col)  m[col*4+row]
+    M(0, 0) = x[0];
+    M(0, 1) = x[1];
+    M(0, 2) = x[2];
+    M(0, 3) = 0.0;
+    M(1, 0) = y[0];
+    M(1, 1) = y[1];
+    M(1, 2) = y[2];
+    M(1, 3) = 0.0;
+    M(2, 0) = z[0];
+    M(2, 1) = z[1];
+    M(2, 2) = z[2];
+    M(2, 3) = 0.0;
+    M(3, 0) = 0.0;
+    M(3, 1) = 0.0;
+    M(3, 2) = 0.0;
+    M(3, 3) = 1.0;
+#undef M
+    glMultMatrixf(m);
+    
+    /* Translate Eye to Origin */
+    glTranslatef(-eyex, -eyey, -eyez);
+    
 }
 
-- (void)dealloc
-{
-    if (verticesBR != nil) {
-        free(verticesBR);
-    }
-    
-    if (verticesRR != nil) {
-        free(verticesRR);
-    }
-    
-    [self tearDownGL];
-    
-    if ([EAGLContext currentContext] == _context) {
-        [EAGLContext setCurrentContext:nil];
-    }
-    
-    _context = nil;
-}
 @end

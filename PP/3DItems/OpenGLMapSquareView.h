@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
-#import <QuartzCore/QuartzCore.h>
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
 #include "Map2DViewController.h"
+#import <QuartzCore/QuartzCore.h>
+#import <OpenGLES/EAGL.h>
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
 
 @class MapLocator;
 @class Locator;
@@ -25,9 +26,6 @@ typedef struct {
 @interface OpenGLMapSquareView : UIView {
     UIImage* _image;
     NSOutputStream* _outputStream;
-    CAEAGLLayer* _eaglLayer;
-    EAGLContext* _context;
-    GLuint _colorRenderBuffer;
     Vertex* verticesBR;
     Vertex* verticesRR;
     GLuint _programHandle;
@@ -37,7 +35,6 @@ typedef struct {
     GLuint _projectionUniform;
     GLuint _modelViewUniform;
     float _currentRotation;
-    GLuint _depthRenderBuffer;
     
     GLuint _mapTexture;
     GLuint _pinTexture;
@@ -48,6 +45,15 @@ typedef struct {
     GLuint _indexBuffer;
     // For BlueRoute
     GLuint _vertexBRBuffer;
+    
+    CAEAGLLayer* _eaglLayer;
+    EAGLContext* _context;
+    GLuint _renderBuffer;
+    GLuint _frameBuffer;
+    GLuint _depthBuffer;
+    GLint _viewportWidth;
+    GLint _viewportHeight;
+    GLuint _depthRenderBuffer;
 }
 - (void)initData:(NSMutableArray *)pDataRows CenterPoint:(Locator *)pCenterPoint MarkerPoint:(MapLocator *)pMarkerPoint;
 @end
