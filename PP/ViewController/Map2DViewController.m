@@ -41,13 +41,17 @@
     
     // Keep height data
     [self getHeightData];
-    self.numberOfData = [self.dataRows count];
     
     // Display map at first locator
     Locator *centerLocator = [self getCenterLocator];
     CLLocationCoordinate2D centerPosition = CLLocationCoordinate2DMake(centerLocator.m_centerLat, centerLocator.m_centerLng);
     self.map2DView.delegate = self;
     [self.parentHeight2DView setBackgroundColor:[UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1]];
+    
+    // Set pan gesture for two fingers only
+    self.panHeight2DView.delegate = self;
+    self.panHeight2DView.minimumNumberOfTouches = 2;
+    self.panHeight2DView.maximumNumberOfTouches = 2;
 
     // Create path for polyline
     GMSMutablePath *path = [GMSMutablePath path];
@@ -72,14 +76,14 @@
     [self.map2DView setCamera:camera];
     
     // Get 2D Image from Google URL
-    NSString *imageUrlStr = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&format=%@&key=%@", centerLocator.m_centerLat, centerLocator.m_centerLng, (int)centerLocator.m_zoom-1, MAP_WIDTH, MAP_HEIGHT, MAP_STYLE, GoogleAPIKey];
-
+    NSString *imageUrlStr = [NSString stringWithFormat:@"http://staticmap.openstreetmap.de/staticmap.php?size=%dx%d&language=jp&zoom=%d&center=%f,%f&format=%@", MAP_WIDTH, MAP_HEIGHT, (int)centerLocator.m_zoom-1, centerLocator.m_centerLat, centerLocator.m_centerLng, MAP_STYLE];
     //download the file in a seperate thread.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"Downloading Started");
         NSString *urlToDownload = imageUrlStr;
         NSURL  *url = [NSURL URLWithString:urlToDownload];
-        NSData *urlData = [NSData dataWithContentsOfURL:url];
+        NSError *error;
+        NSData *urlData = [NSData dataWithContentsOfURL:url options:NSDataReadingMappedIfSafe error:&error];
         if ( urlData )
         {
             NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -111,7 +115,6 @@
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     [EAGLContext setCurrentContext:self.context];
     self.mapHeight2DView.delegate = self;
-    [self setupDisplayLink];
 }
 
 - (NSMutableArray *)read3DData {
@@ -281,13 +284,6 @@
     [self.navigationController pushViewController:glView animated:YES];
 }
 
-- (void)setupDisplayLink {
-//    // drawFrame is the render trigger function
-//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
-//    // with the frameInterval 0 = max speed , 100 = slow
-//    self.displayLink.frameInterval = 2;
-//    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-}
 
 - (void)drawFrame
 {
@@ -511,5 +507,18 @@ void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     NSLog(@"ScaleFactor: %f", scaleFactor);
     sender.view.transform = CGAffineTransformScale(sender.view.transform, sender.scale, 1);
     sender.scale = 1;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+- (IBAction)handlePan:(UIPanGestureRecognizer *)sender {
+    CGPoint translation = [sender translationInView:self.view];
+    sender.view.center = CGPointMake(sender.view.center.x + translation.x,
+                                         sender.view.center.y);
+    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
 }
 @end

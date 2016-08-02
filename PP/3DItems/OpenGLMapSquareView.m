@@ -295,7 +295,6 @@ typedef struct {
         NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString  *documentsDirectory = [paths objectAtIndex:0];
         NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
-        //_mapTexture = [self setupTexture:@"staticmap2.png"];
         _mapTexture = [self setupTexture:filePath];
     }
     
@@ -559,18 +558,6 @@ typedef struct {
     return modifier;
 }
 
-- (void)dealloc
-{
-    if (verticesBR != nil) {
-        free(verticesBR);
-    }
-    
-    if (verticesRR != nil) {
-        free(verticesRR);
-    }
-    _context = nil;
-}
-
 - (void)initParams {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
@@ -641,5 +628,40 @@ typedef struct {
     [self setupFrameBuffer];
     [self setupRoute];
     [self setupDisplayLink];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [self tearDownGL];
+        
+    if ([EAGLContext currentContext] == _context) {
+        [EAGLContext setCurrentContext:nil];
+    }
+    _context = nil;
+}
+
+- (void)tearDownGL
+{
+    [EAGLContext setCurrentContext:_context];
+    glDeleteBuffers(1, &_vertexBuffer);
+}
+
+- (void)dealloc
+{
+    if (verticesBR != nil) {
+        free(verticesBR);
+    }
+    
+    if (verticesRR != nil) {
+        free(verticesRR);
+    }
+    
+    [self tearDownGL];
+    
+    if ([EAGLContext currentContext] == _context) {
+        [EAGLContext setCurrentContext:nil];
+    }
+    
+    _context = nil;
 }
 @end

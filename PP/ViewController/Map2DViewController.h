@@ -27,7 +27,7 @@
 @property GLint m_now;
 @end
 
-@interface Map2DViewController : UIViewController <GMSMapViewDelegate, GLKViewControllerDelegate, GLKViewDelegate>
+@interface Map2DViewController : UIViewController <GMSMapViewDelegate, GLKViewControllerDelegate, GLKViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate>
 @property (weak, nonatomic) IBOutlet GMSMapView *map2DView;
 @property (weak, nonatomic) IBOutlet Height2DView *mapHeight2DView;
 @property (strong, nonatomic) NSMutableArray *dataRows;
@@ -41,7 +41,8 @@
 @property volatile GLfloat x;
 @property GLfloat mTouchX;
 @property GLfloat *vertexData;
+@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panHeight2DView;
 - (IBAction)handlePinch:(UIPinchGestureRecognizer *)sender;
+- (IBAction)handlePan:(UIPanGestureRecognizer *)sender;
 @property (weak, nonatomic) IBOutlet UIView *parentHeight2DView;
-@property int numberOfData;
 @end

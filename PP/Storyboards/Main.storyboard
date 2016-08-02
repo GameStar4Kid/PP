@@ -660,6 +660,7 @@
                                         </variation>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="DJe-2s-ca7" appends="YES" id="oNA-Ox-7Lk"/>
+                                            <outletCollection property="gestureRecognizers" destination="MUA-CR-Dvf" appends="YES" id="V5Y-bn-FdG"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -698,6 +699,7 @@
                         <outlet property="btn3D" destination="3vX-ue-Fod" id="nEQ-1e-gZ3"/>
                         <outlet property="map2DView" destination="xnm-3d-WXV" id="Gog-ty-RWY"/>
                         <outlet property="mapHeight2DView" destination="CqF-hl-oon" id="vCE-aJ-3tM"/>
+                        <outlet property="panHeight2DView" destination="MUA-CR-Dvf" id="G2o-mS-4JR"/>
                         <outlet property="parentHeight2DView" destination="fLR-zq-KiQ" id="jj8-oo-5Ws"/>
                     </connections>
                 </viewController>
@@ -707,6 +709,11 @@
                         <action selector="handlePinch:" destination="z7B-CJ-PDG" id="ErZ-Xi-yQh"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="MUA-CR-Dvf">
+                    <connections>
+                        <action selector="handlePan:" destination="z7B-CJ-PDG" id="vce-mh-Lno"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="841" y="2343"/>
         </scene>
