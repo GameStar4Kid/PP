@@ -36,12 +36,20 @@
 #define TEX_COORD_MAX   1
 const float TOUCH_SCALE_FACTOR = 180.0f / 640;
 
-const Vertex Vertices1[] = {
+//const Vertex Vertices1[] = {
+//    // Front
+//    {{-1.0f, 1.0f, 0.0f}, {1, 0, 0, 1}, {0, 0}},                            // -1  1 0 / 0,0 / Top Left
+//    {{-1.0f, -1.0f, 0.0f}, {0, 1, 0, 1}, {0.0f, TEX_COORD_MAX}},            // -1 -1 0 / 0,0 / Bottom Left
+//    {{1.0f, -1.0f, 0.0f}, {0, 0, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},    //  1 -1 0 / 0,0 / Bottom Right
+//    {{1.0f, 1.0f, 0.0f}, {0, 0, 0, 1}, {TEX_COORD_MAX, 0}},                 //  1  1 0 / 0,0 / Top Right
+//};
+
+const GLfloat Vertices1[] = {
     // Front
-    {{-1.0f, 1.0f, 0.0f}, {1, 0, 0, 1}, {0, 0}},                            // -1  1 0 / 0,0 / Top Left
-    {{-1.0f, -1.0f, 0.0f}, {0, 1, 0, 1}, {0.0f, TEX_COORD_MAX}},            // -1 -1 0 / 0,0 / Bottom Left
-    {{1.0f, -1.0f, 0.0f}, {0, 0, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},    //  1 -1 0 / 0,0 / Bottom Right
-    {{1.0f, 1.0f, 0.0f}, {0, 0, 0, 1}, {TEX_COORD_MAX, 0}},                 //  1  1 0 / 0,0 / Top Right
+    -1.0f, 1.0f, 0.0f,                            // -1  1 0 / 0,0 / Top Left
+    -1.0f, -1.0f, 0.0f,            // -1 -1 0 / 0,0 / Bottom Left
+    1.0f, -1.0f, 0.0f,    //  1 -1 0 / 0,0 / Bottom Right
+    1.0f, 1.0f, 0.0f                 //  1  1 0 / 0,0 / Top Right
 };
 
 const GLubyte Indices1[] = {0, 1, 2, 0, 2, 3 };
@@ -228,23 +236,6 @@ typedef struct {
     glEnableVertexAttribArray(_texCoordSlot);
     _textureUniform = glGetUniformLocation(_programHandle, "Texture");
 }
-// For vertices of triangle
-- (void)setupVBO_Index {
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices1), Vertices1, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices1), Indices1, GL_STATIC_DRAW);
-
-}
-// For vertices of line
-- (void)setupVBOInfo:(Vertex*)vertexData {
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * [self.mDataRows count], vertexData, GL_STATIC_DRAW);
-}
 
 - (void)render:(CADisplayLink*)displayLink {
     if(!isMoving)
@@ -255,7 +246,8 @@ typedef struct {
     
     //=============================
     // Set the background color to black ( rgba ).
-    //glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Enable Smooth Shading, default not really needed.
     glShadeModel(GL_SMOOTH);
     // Depth buffer setup.
@@ -280,75 +272,52 @@ typedef struct {
     glMatrixMode(GL_MODELVIEW);
     // Reset the modelview matrix
     glLoadIdentity();
-    //		GLU.gluLookAt(gl, 0, 0, 2, 0, 0, 0, 0, 1, 0);
     gluLookAt1(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Map
-    [self setupVBO_Index];
-//    [self compileShaders];
+    glPushMatrix();
+    glRotatef(_mVAngle,1,0,0);
+    glRotatef(_mAngle,0,0,1);
+    NSLog(@"VAngle:%f Angel:%f",_mVAngle, _mAngle);
     
-//    float aspect = fabs(self.frame.size.width / self.frame.size.height);
-//    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.01f, 100.0f);
-//    glUniformMatrix4fv(_projectionUniform, 1, 0, projectionMatrix.m);
-//    
-//    
-//    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeLookAt(0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mVAngle), 1, 0, 0);
-//    
-//    // Rotate via z axis
-//    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(self.mAngle), 0, 0, 1);
-//    
-//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelViewMatrix.m);
+    //===== Map =====
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, Vertices1);
     
-    // 1
-    //glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-//    // 2
-//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    // 3
-    if (_mapTexture == 0) {
-        NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *documentsDirectory = [paths objectAtIndex:0];
-        NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
-        _mapTexture = [self setupTexture:filePath];
+    // Texture
+    NSArray       *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString  *documentsDirectory = [paths objectAtIndex:0];
+    NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory,@"map.png"];
+    if (_textureID == -1) {
+         [self createTexFromImage:filePath];
     }
     
     if (_mShouldLoadTexture) {
-//        glEnable(GL_TEXTURE_2D);
-//        // Enable the texture state
-//        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-//        
-//        // Point to our buffers
-//        glTexCoordPointer(2, GL_FLOAT, 0, _mapTexture);
-//        glBindTexture(GL_TEXTURE_2D, _mapTexture);
+        glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _mapTexture);
+        // Point to our buffers
+        glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates);
+        glBindTexture(GL_TEXTURE_2D, _textureID);
     }
-//    // Shader
-//    glUniform1i(_textureUniform, 0);    // Call SimpleFragment & SimpleVertex
+
     // Draw
-//    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, Indices1);
+    glPopMatrix();
     
-    glDrawElements(GL_LINE_STRIP, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, 0);
-    
-//    // Disable the use of UV coordinates.
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-//    // Disable the use of textures.
-//    glDisable(GL_TEXTURE_2D);
-//    // Disable the vertices buffer.
-//    glDisableClientState(GL_VERTEX_ARRAY);
-//    // Disable face culling.
-//    glDisable(GL_CULL_FACE);
-//    glPopMatrix();
-    
+    glDisable(GL_TEXTURE_2D);
+    // Disable the use of UV coordinates.
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    // Disable the use of textures.
+    glDisable(GL_BLEND);
+    // Disable the vertices buffer.
+    glDisableClientState(GL_VERTEX_ARRAY);
+    // Disable face culling.
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
     [_context presentRenderbuffer: GL_RENDERBUFFER_OES];
+    
+    glDeleteTextures(1, &_textureID);
+    _textureID = -1;
     //=============================
     
     
@@ -676,6 +645,8 @@ typedef struct {
         free(verticesRR);
     }
     
+    glDeleteTextures(1, &_textureID);
+    
     if (_context) {
         glDeleteRenderbuffersOES(1, &_depthRenderBuffer);
         glDeleteFramebuffersOES(1, &_frameBuffer);
@@ -687,6 +658,7 @@ typedef struct {
 - (void)initParams {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
+    _textureID = -1;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -751,7 +723,6 @@ typedef struct {
     [self setupFrameBuffer];
     [self setupGraphicContext];
     [self setupDepthBuffer];
-    //[self setOGLProjection];
     [self setupRoute];
     [self startGameLoop];
 }
@@ -788,6 +759,8 @@ typedef struct {
 //    }
     
     NSLog(@"Game Loop timer instance: %@", self.timer);
+    
+//    [self setupDisplayLink];
 }
 
 - (void) stopGameLoop {
@@ -890,6 +863,73 @@ void gluLookAt1(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     /* Translate Eye to Origin */
     glTranslatef(-eyex, -eyey, -eyez);
     
+}
+
+- (void) createTexFromImage: (NSString *) picName {
+    UIImage *pic = [UIImage imageNamed: picName];
+    int scaleFactor = 1;
+    
+    float iOSVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (iOSVersion >= 4.0) {
+        if (pic.scale >= 2) {
+            scaleFactor = pic.scale;
+        }
+    }
+    
+    if (pic) {
+        //Texturabmessungen festlegen
+        _widthTexture = pic.size.width * scaleFactor;
+        _heightTexture = pic.size.height * scaleFactor;
+        if ( (_widthTexture & (_widthTexture-1)) != 0 || (_heightTexture & (_heightTexture-1)) != 0
+            || _widthTexture > 2048 || _heightTexture > 2048) {
+            NSLog(@"ERROR: %@ width und/oder height ist keine 2er Potenz oder > 2048!", picName);
+        }
+        
+        //Pixeldaten erzeugen
+        GLubyte *pixelData = [self generatePixelDataFromImage: pic];
+        
+        //Aus den Pixeldaten die Textur erzeugen und als ID speichern
+        [self generateTexture: pixelData];
+        
+        //Cleanup
+        int memory = _widthTexture*_heightTexture*4;
+        NSLog(@"%@-Pic-Textur erzeugt, Size: %i KB, ID: %i", picName, memory/1024, _textureID);
+        free(pixelData);
+        
+        _widthTexture /= scaleFactor;
+        _heightTexture /= scaleFactor;
+        
+        // Enable flag by true
+        self.mShouldLoadTexture = true;
+    } else {
+        NSLog(@"ERROR: %@ nicht gefunden, Textur nicht erzeugt.", picName);
+    }
+}
+
+- (GLubyte *) generatePixelDataFromImage: (UIImage *) pic {
+    GLubyte *pixelData = (GLubyte *) calloc( _widthTexture*_heightTexture*4, sizeof(GLubyte) );
+    CGColorSpaceRef imageCS = CGImageGetColorSpace(pic.CGImage);
+    CGContextRef gc = CGBitmapContextCreate( pixelData,
+                                            _widthTexture, _heightTexture, 8, _widthTexture*4,
+                                            imageCS,
+                                            kCGImageAlphaPremultipliedLast);
+    CGContextDrawImage(gc, CGRectMake(0, 0, _widthTexture, _heightTexture), pic.CGImage); //Render pic auf gc
+    CGContextRelease(gc);
+    return pixelData;
+}
+
+- (void) generateTexture: (GLubyte *) pixelData {
+    glGenTextures(1, &_textureID);
+    glBindTexture(GL_TEXTURE_2D, _textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _widthTexture, _heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+    
+    //Textur-bezogene States global aktivieren
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 @end
