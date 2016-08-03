@@ -293,7 +293,6 @@ typedef struct {
     
     if (_mShouldLoadTexture) {
         glEnable(GL_TEXTURE_2D);
-        glActiveTexture(GL_TEXTURE0);
         // Point to our buffers
         glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates);
         glBindTexture(GL_TEXTURE_2D, _textureID);
@@ -302,8 +301,120 @@ typedef struct {
     // Draw
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, Indices1);
+//    glPopMatrix();
+    
+
+    // Blueroute
+//    glPushMatrix();
+    // Counter-clockwise winding.
+    glFrontFace(GL_CCW);
+    // Enable face culling.
+    glEnable(GL_CULL_FACE);
+    // What faces to remove with the face culling.
+    glCullFace(GL_BACK);
+    
+    // Enabled the vertices buffer for writing and to be used during
+    // rendering.
+    glEnableClientState(GL_VERTEX_ARRAY);
+    // Specifies the location and data format of an array of vertex
+    // coordinates to use when dssz.
+    glVertexPointer(3, GL_FLOAT, 0, _verticesBR);
+    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
+    
+    // Disable the vertices buffer.
+    glDisableClientState(GL_VERTEX_ARRAY);
+    // Disable face culling.
+    glDisable(GL_CULL_FACE);
+//    glPopMatrix();
+    
+    
+    // Red Route
+    //    glPushMatrix();
+    // Counter-clockwise winding.
+    glFrontFace(GL_CCW);
+    // Enable face culling.
+    glEnable(GL_CULL_FACE);
+    // What faces to remove with the face culling.
+    glCullFace(GL_BACK);
+    
+    // Enabled the vertices buffer for writing and to be used during
+    // rendering.
+    glEnableClientState(GL_VERTEX_ARRAY);
+    // Specifies the location and data format of an array of vertex
+    // coordinates to use when rendering.
+    glVertexPointer(3, GL_FLOAT, 0, _verticesRR);
+    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+    glLineWidth(5.0f);
+    glDrawArrays(GL_LINE_STRIP, 0, [self.mDataRows count]);
+    
+    // Disable the vertices buffer.
+    glDisableClientState(GL_VERTEX_ARRAY);
+    // Disable face culling.
+    glDisable(GL_CULL_FACE);
+    //glPopMatrix();
+    
+    
+    // Pin
+    //glPushMatrix();
+    // Counter-clockwise winding.
+    //glFrontFace(GL_CCW);
+    // Enable face culling.
+    //        gl.glEnable(GL10.GL_CULL_FACE);
+    // What faces to remove with the face culling.
+    glCullFace(GL_BACK);
+    
+    // Enabled the vertices buffer for writing and to be used during
+    // rendering.
+    glEnableClientState(GL_VERTEX_ARRAY);
+    // Specifies the location and data format of an array of vertex
+    // coordinates to use when rendering.
+    glVertexPointer(3, GL_FLOAT, 0, Vertices1);
+    
+    // Texture
+    filePath = @"map_marker_icon.png";
+    if (_pinTexture == -1) {
+        [self createTexFromImage:filePath];
+    }
+    
+    if (_mShouldLoadTexture) {
+        glEnable(GL_TEXTURE_2D);
+        // Point to our buffers
+        glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates);
+        glBindTexture(GL_TEXTURE_2D, _pinTexture);
+    }
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
+    GLfloat markerLng = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:self.mMarkerPoint.m_lng];
+    GLfloat markerLat = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:self.mMarkerPoint.m_lat] *
+    [self calculateModifier:self.mCenterPoint.m_centerLat];
+    GLfloat markerAlt = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:self.mMarkerPoint.m_alt];
+    
+    glTranslatef((float)markerLng, (float)markerLat, (float)markerAlt);
+    
+    glRotatef(-_mVAngle, 1, 0, 0);
+    
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glScalef(0.1f,0.1f,0.0f);
+    glTranslatef(0.0f, 1.0f, 0.0f);
+    
+    glDrawElements(GL_TRIANGLES, sizeof(Indices1)/sizeof(Indices1[0]), GL_UNSIGNED_BYTE, Indices1);
+    
+    glDisable(GL_BLEND);
+    // Disable the use of UV coordinates.
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    // Disable the use of textures.
+    glDisable(GL_TEXTURE_2D);
+    // Disable the vertices buffer.
+    glDisableClientState(GL_VERTEX_ARRAY);
+    // Disable face culling.
+    glDisable(GL_CULL_FACE);
     glPopMatrix();
     
+    
+    // Disable modes
     glDisable(GL_TEXTURE_2D);
     // Disable the use of UV coordinates.
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -318,6 +429,9 @@ typedef struct {
     
     glDeleteTextures(1, &_textureID);
     _textureID = -1;
+    
+    glDeleteTextures(1, &_pinTexture);
+    _pinTexture = -1;
     //=============================
     
     
@@ -575,6 +689,22 @@ typedef struct {
     float latPerPixel = round/pow(2, self.mCenterPoint.m_zoom)/512;
     self.mLatUnit = latPerPixel * 256;
     
+    _verticesBR = malloc(sizeof(GLfloat) * lengthOfArray * 3);
+    _verticesRR = malloc(sizeof(GLfloat) * lengthOfArray * 3);
+    for(int i = 0; i < lengthOfArray; i ++){
+        // Blue Route
+        _verticesBR[i*3] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        _verticesBR[i*3+1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        [self calculateModifier:self.mCenterPoint.m_centerLat];
+        _verticesBR[i*3+2] = 0.0001;
+        
+        // Red Route
+        _verticesRR[i*3] = [self toBaseCoordinate:self.mCenterPoint.m_centerLng Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lng];
+        _verticesRR[i*3+1] = [self toBaseCoordinate:self.mCenterPoint.m_centerLat Unit:self.mLatUnit Val:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_lat] *
+        [self calculateModifier:self.mCenterPoint.m_centerLat];
+        _verticesRR[i*3+2] = [self convertAlt:self.mHighest Lowest:self.mLowest Alt:((MapLocator*)[self.mDataRows objectAtIndex:i]).m_alt];
+    }
+    
     // Allocate memory for vertices
     verticesBR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
     verticesRR = (Vertex *)malloc(sizeof(Vertex) * lengthOfArray);
@@ -645,7 +775,16 @@ typedef struct {
         free(verticesRR);
     }
     
+    if (_verticesBR != nil) {
+        free(_verticesBR);
+    }
+    
+    if (_verticesRR != nil) {
+        free(_verticesRR);
+    }
+    
     glDeleteTextures(1, &_textureID);
+    glDeleteTextures(1, &_pinTexture);
     
     if (_context) {
         glDeleteRenderbuffersOES(1, &_depthRenderBuffer);
@@ -659,6 +798,7 @@ typedef struct {
     self.mShouldLoadTexture = false;
     self.mVAngle = -50.0f;
     _textureID = -1;
+    _pinTexture = -1;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -889,7 +1029,7 @@ void gluLookAt1(GLfloat eyex, GLfloat eyey, GLfloat eyez,
         GLubyte *pixelData = [self generatePixelDataFromImage: pic];
         
         //Aus den Pixeldaten die Textur erzeugen und als ID speichern
-        [self generateTexture: pixelData];
+        [self generateTexture: pixelData FileName:[picName containsString:@"map.png"]?@"map.png":@""];
         
         //Cleanup
         int memory = _widthTexture*_heightTexture*4;
@@ -918,9 +1058,9 @@ void gluLookAt1(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     return pixelData;
 }
 
-- (void) generateTexture: (GLubyte *) pixelData {
-    glGenTextures(1, &_textureID);
-    glBindTexture(GL_TEXTURE_2D, _textureID);
+- (void) generateTexture: (GLubyte *) pixelData FileName:(NSString*)fileName{
+    glGenTextures(1, ([fileName isEqualToString:@"map.png"]?&_textureID:&_pinTexture));
+    glBindTexture(GL_TEXTURE_2D, ([fileName isEqualToString:@"map.png"]?_textureID:_pinTexture));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _widthTexture, _heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
     

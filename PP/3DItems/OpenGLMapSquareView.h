@@ -58,6 +58,9 @@ typedef struct {
     GLuint _textureID;
     GLuint _widthTexture;
     GLuint _heightTexture;
+    
+    GLfloat* _verticesBR;
+    GLfloat* _verticesRR;
 }
 - (void)initData:(NSMutableArray *)pDataRows CenterPoint:(Locator *)pCenterPoint MarkerPoint:(MapLocator *)pMarkerPoint;
 @end
